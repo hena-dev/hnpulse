@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "lastUpdated": "2026-05-06T16:55:45.151Z",
+  "lastUpdated": "2026-05-06T16:57:22.197Z",
   "dataAsOf": "2026-05-05",
   "windowStart": "2024-05-06",
   "windowEnd": "2026-05-05",
   "kpisFile": "/data/kpis.f4747a8.json",
-  "buildSha": "cc886316465b55d41b018915e94f4d598ac6a35e",
+  "buildSha": "23e8ffcd704382bfbbec7685791f33239b4f7035",
   "pipelineVersion": "1.0.0"
 }
