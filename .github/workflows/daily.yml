@@ -41,6 +41,9 @@ jobs:
           git push
       - name: Build web
         run: bun run build
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
       - name: Deploy static assets to Cloudflare
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
