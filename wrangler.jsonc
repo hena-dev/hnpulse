@@ -1,0 +1,12 @@
+{
+  "$schema": "https://unpkg.com/wrangler/config-schema.json",
+  "name": "hnpulse",
+  "compatibility_date": "2026-05-01",
+  // No `main` — assets-only deployment.
+  "assets": {
+    "directory": "./web/dist",
+    "not_found_handling": "404-page"
+  },
+  "routes": [{ "pattern": "hnpulse.hena.dev", "custom_domain": true }],
+  "observability": { "enabled": true }
+}

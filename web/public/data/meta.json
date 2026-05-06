@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "lastUpdated": "2026-05-04T00:00:00Z",
+  "dataAsOf": "2026-05-03",
+  "windowStart": "2024-05-04",
+  "windowEnd": "2026-05-03",
+  "kpisFile": "/data/kpis.0000000.json",
+  "buildSha": "placeholder",
+  "pipelineVersion": "1.0.0"
+}

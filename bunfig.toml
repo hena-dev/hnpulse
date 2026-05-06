@@ -1,0 +1,8 @@
+[install]
+exact = false
+auto = "auto"
+
+[install.scopes]
+
+[test]
+preload = []
