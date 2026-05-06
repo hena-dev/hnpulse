@@ -13,7 +13,17 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - uses: opt-nc/setup-duckdb-action@v1
+      - name: Install DuckDB CLI
+        env:
+          DUCKDB_VERSION: v1.5.2
+          DUCKDB_SHA256: 7b0130422ee15c4c07f85ab75c0e3daf19b912b762258d1724c30f27964fb021
+        run: |
+          curl -fsSLo duckdb.gz "https://github.com/duckdb/duckdb/releases/download/${DUCKDB_VERSION}/duckdb_cli-linux-amd64.gz"
+          printf '%s  duckdb.gz\n' "${DUCKDB_SHA256}" | sha256sum -c -
+          gunzip duckdb.gz
+          chmod +x duckdb
+          sudo mv duckdb /usr/local/bin/duckdb
+          duckdb --version
       - name: Install deps
         run: bun install
       - name: Run pipeline (freshness-checked, no-op if BQ not yet refreshed)
