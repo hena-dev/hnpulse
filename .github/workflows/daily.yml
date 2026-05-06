@@ -1,0 +1,38 @@
+name: daily
+on:
+  schedule:
+    - cron: "0 14 * * *"        # 14:00 UTC daily (~1 h after BQ public dataset refresh)
+  workflow_dispatch: {}         # manual trigger / first bootstrap
+permissions:
+  contents: write               # commit + release manage
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - uses: opt-nc/setup-duckdb-action@v1
+      - name: Install deps
+        run: bun install
+      - name: Run pipeline (freshness-checked, no-op if BQ not yet refreshed)
+        env:
+          GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: bun run start
+        working-directory: pipeline
+      - name: Commit data
+        run: |
+          git config user.name "hnpulse-bot"
+          git config user.email "bot@hena.dev"
+          git add web/public/data
+          git diff --cached --quiet || git commit -m "chore(data): $(date -u +%Y-%m-%d) [skip ci]"
+          git push
+      - name: Build web
+        run: bun run build
+      - name: Deploy static assets to Cloudflare
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          command: deploy --env production

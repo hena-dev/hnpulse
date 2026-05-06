@@ -1,0 +1,32 @@
+{
+  "name": "hnpulse",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HN Pulse — Hacker News, daily vitals (monorepo root)",
+  "license": "MIT",
+  "type": "module",
+  "workspaces": [
+    "pipeline",
+    "web"
+  ],
+  "scripts": {
+    "typecheck": "tsgo --noEmit --checkers 2 && tsgo --noEmit -p pipeline/tsconfig.json --checkers 2 && tsgo --noEmit -p web/tsconfig.json --checkers 2",
+    "lint": "biome ci .",
+    "lint:fix": "biome check --write .",
+    "knip": "knip --no-progress --reporter compact",
+    "filesize": "bun run scripts/check-file-size.ts",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest",
+    "build": "bun run --cwd web build",
+    "ci": "bun run typecheck && bun run lint && bun run knip && bun run filesize && bun run test && bun run build"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.0.6",
+    "@typescript/native-preview": "beta",
+    "@vitest/coverage-v8": "^3.2.4",
+    "knip": "^5.46.0",
+    "sharp": "^0.34.5",
+    "typescript": "npm:typescript@^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

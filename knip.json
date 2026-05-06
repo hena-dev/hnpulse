@@ -1,0 +1,31 @@
+{
+  "$schema": "https://unpkg.com/knip@5/schema.json",
+  "workspaces": {
+    ".": {
+      "entry": ["scripts/*.ts"],
+      "project": ["scripts/**/*.ts"]
+    },
+    "pipeline": {
+      "entry": ["src/index.ts", "src/**/index.ts", "src/**/_test-fixtures.ts", "src/**/real-*.ts"],
+      "project": ["src/**/*.ts"],
+      "ignore": ["src/**/*.test.ts"]
+    },
+    "web": {
+      "entry": [
+        "src/pages/**/*.{astro,ts,tsx}",
+        "src/components/**/index.ts",
+        "src/components/ui/**/*.tsx",
+        "src/lib/**/index.ts",
+        "src/data/index.ts",
+        "astro.config.mjs",
+        "vitest.config.ts",
+        "vitest.setup.ts"
+      ],
+      "project": ["src/**/*.{ts,tsx,astro}"],
+      "ignore": ["src/**/*.test.{ts,tsx}", "src/components/ui/**"]
+    }
+  },
+  "ignoreExportsUsedInFile": true,
+  "ignoreBinaries": ["tsgo", "biome", "wrangler", "duckdb"],
+  "ignoreDependencies": ["@typescript/native-preview", "tailwindcss", "lucide-react"]
+}
