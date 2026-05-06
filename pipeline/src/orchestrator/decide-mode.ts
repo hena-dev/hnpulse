@@ -1,14 +1,18 @@
-import type { ExtractMode } from "../bq/extract.ts";
 import { parseUtcDay } from "../dates/utc-day.ts";
 import { parseParquetAssetDate, pickParquetAssets, type ReleaseAsset } from "../release/index.ts";
 
-export interface ModeDecision {
-  mode: ExtractMode;
-  /** For incremental mode: the most recent UTC day already covered by parquet. */
-  lastMaxTs?: Date;
-  /** Existing parquet asset names recognised in the release. */
-  existingDays: readonly string[];
-}
+export type ModeDecision =
+  | {
+      mode: "bootstrap";
+      existingDays: readonly string[];
+    }
+  | {
+      mode: "incremental";
+      /** The most recent UTC day already covered by parquet. */
+      lastMaxTs: Date;
+      /** Existing parquet asset names recognised in the release. */
+      existingDays: readonly string[];
+    };
 
 const sortedDays = (assets: readonly ReleaseAsset[]): string[] => {
   // pickParquetAssets pre-filters by name shape *and* calendar validity, so

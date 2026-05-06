@@ -1,7 +1,9 @@
+import { aggregateKpisFromBq } from "../bq/aggregate.ts";
 import { computeSinceTimestamp, extractRows } from "../bq/extract.ts";
 import { fetchMaxTimestamp, isFreshAsOf } from "../bq/freshness.ts";
 import { formatUtcDay, startOfUtcDay } from "../dates/utc-day.ts";
 import { writeData } from "../emit/write-data.ts";
+import type { KpisJson } from "../schema/kpis.ts";
 import { findEmptyDays } from "../validate/coverage.ts";
 import { findOutliers } from "../validate/outliers.ts";
 import { runAggregateStep } from "./aggregate-step.ts";
@@ -24,6 +26,22 @@ const buildSeriesForOutliers = (
   metrics: Readonly<Record<string, readonly number[]>>,
 ): Readonly<Record<string, readonly number[]>> => metrics;
 
+const validateKpis = (kpis: KpisJson): void => {
+  const outliers = findOutliers(buildSeriesForOutliers(kpis.metrics));
+  if (outliers.length > 0) {
+    throw new Error(
+      `Validation failed (10× rule): ${outliers.map((o) => `${o.metric}=${o.value} (median=${o.median}, ratio=${o.ratio})`).join("; ")}`,
+    );
+  }
+
+  const emptyDays = findEmptyDays(kpis.days, kpis.metrics.stories);
+  if (emptyDays.length > 0) {
+    throw new Error(
+      `Validation failed (date coverage): ${emptyDays.length} day(s) with 0 stories (first: ${emptyDays[0]})`,
+    );
+  }
+};
+
 export const runOrchestrator = async (
   deps: OrchestratorDeps,
   cfg: OrchestratorConfig,
@@ -35,10 +53,36 @@ export const runOrchestrator = async (
 
   const initialAssets = await deps.release.listAssets();
   const decision = decideMode(initialAssets);
+  const window = computeWindow(cfg.now, cfg.windowDays ?? DEFAULT_WINDOW_DAYS);
+
+  if (decision.mode === "bootstrap") {
+    const kpis = await aggregateKpisFromBq(deps.bq, {
+      windowStart: window.start,
+      windowEnd: window.end,
+      maxBytesBilled: cfg.maxBytesBilled,
+    });
+    validateKpis(kpis);
+    const result = await writeData({
+      outDir: cfg.dataOutDir,
+      kpis,
+      buildSha: cfg.buildSha,
+      pipelineVersion: cfg.pipelineVersion,
+      now: cfg.now,
+    });
+    return {
+      status: "completed",
+      message: "OK (direct BQ bootstrap)",
+      kpisFile: result.kpisFile,
+      rowsExtracted: kpis.days.length,
+      filesUploaded: 0,
+      filesDeleted: 0,
+    };
+  }
+
   const since = computeSinceTimestamp({
     mode: decision.mode,
     now: cfg.now,
-    ...(decision.lastMaxTs !== undefined ? { lastMaxTs: decision.lastMaxTs } : {}),
+    lastMaxTs: decision.lastMaxTs,
   });
   const rows = await extractRows(deps.bq, { since, maxBytesBilled: cfg.maxBytesBilled });
 
@@ -58,7 +102,6 @@ export const runOrchestrator = async (
   });
 
   const assetsAfter = await deps.release.listAssets();
-  const window = computeWindow(cfg.now, cfg.windowDays ?? DEFAULT_WINDOW_DAYS);
   const kpis = await runAggregateStep({
     release: deps.release,
     duckdb: deps.duckdb,
@@ -68,19 +111,7 @@ export const runOrchestrator = async (
     assets: assetsAfter,
   });
 
-  const outliers = findOutliers(buildSeriesForOutliers(kpis.metrics));
-  if (outliers.length > 0) {
-    throw new Error(
-      `Validation failed (10× rule): ${outliers.map((o) => `${o.metric}=${o.value} (median=${o.median}, ratio=${o.ratio})`).join("; ")}`,
-    );
-  }
-
-  const emptyDays = findEmptyDays(kpis.days, kpis.metrics.stories);
-  if (emptyDays.length > 0) {
-    throw new Error(
-      `Validation failed (date coverage): ${emptyDays.length} day(s) with 0 stories (first: ${emptyDays[0]})`,
-    );
-  }
+  validateKpis(kpis);
 
   const result = await writeData({
     outDir: cfg.dataOutDir,

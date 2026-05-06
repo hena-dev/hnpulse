@@ -19,8 +19,9 @@ describe("decideMode", () => {
     ];
     const out = decideMode(assets);
     expect(out.mode).toBe("incremental");
+    if (out.mode !== "incremental") throw new Error("expected incremental mode");
     expect(out.existingDays).toEqual(["2024-05-04", "2026-05-03"]);
-    expect(out.lastMaxTs?.toISOString().slice(0, 10)).toBe("2026-05-03");
+    expect(out.lastMaxTs.toISOString().slice(0, 10)).toBe("2026-05-03");
   });
 
   it("falls back to bootstrap if every parquet name fails calendar validation", () => {

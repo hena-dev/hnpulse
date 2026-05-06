@@ -1,4 +1,5 @@
 import { vi } from "vitest";
+import type { BqAggregateRow } from "../bq/aggregate.ts";
 import type { BqClient } from "../bq/types.ts";
 import type { DuckdbRunner } from "../duckdb/types.ts";
 import type { ReleaseAsset, ReleaseManager } from "../release/types.ts";
@@ -29,7 +30,7 @@ export const bqRow = (
   ...extra,
 });
 
-export const stubBq = (rows: BqRow[], maxTs: Date | null = NOW): BqClient => ({
+export const stubBq = (rows: readonly unknown[], maxTs: Date | null = NOW): BqClient => ({
   async query<T = Record<string, unknown>>(sql: string): Promise<readonly T[]> {
     if (sql.includes("MAX(timestamp)")) {
       return [{ max_ts: maxTs?.toISOString() ?? null }] as unknown as readonly T[];
@@ -89,6 +90,11 @@ export const stableDailyRow = (day: string, stories = 5) => ({
   ask_hn: 0,
   jobs: 0,
   dead_flagged_ratio: 0,
+});
+
+export const stableBqAggregateRow = (day: string, stories = 5): BqAggregateRow => ({
+  ...stableDailyRow(day, stories),
+  top_domains: stories > 0 ? [{ name: "github.com", stories, share: 1 }] : [],
 });
 
 export const trailingDays = (count: number, from: string): string[] =>

@@ -15,8 +15,8 @@ export interface DualCardProps {
 }
 
 const deltaClass = (cls: ReturnType<typeof classifyDelta>): string => {
-  if (cls === "up") return "text-emerald-500 dark:text-emerald-400";
-  if (cls === "down") return "text-rose-500 dark:text-rose-400";
+  if (cls === "up") return "text-emerald-500 dark:text-emerald-300";
+  if (cls === "down") return "text-rose-500 dark:text-rose-300";
   return "text-muted-foreground";
 };
 

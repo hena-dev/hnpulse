@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   bqRow,
   NOW,
+  stableBqAggregateRow,
   stableDailyRow,
   stubBq,
   stubDuckdb,
@@ -63,13 +64,24 @@ describe("runOrchestrator — happy path (incremental)", () => {
 });
 
 describe("runOrchestrator — bootstrap path", () => {
-  it("triggers bootstrap when no existing parquet assets are present", async () => {
-    const bq = stubBq([bqRow(1, "2026-05-03T12:00:00Z")]);
+  it("uses direct BigQuery aggregation when no parquet assets are present", async () => {
+    const bq = stubBq(trailingDays(7, "2026-05-03").map((d) => stableBqAggregateRow(d, 1)));
     const release = stubRelease([]);
-    const days = trailingDays(7, "2026-05-03");
-    const duck = stubDuckdb(days.map((d) => stableDailyRow(d, 1)));
+    const duck = stubDuckdb([]);
     const result = await runOrchestrator({ bq, release, duckdb: duck }, baseCfg());
     expect(result.status).toBe("completed");
+    expect(result.message).toBe("OK (direct BQ bootstrap)");
+    expect(release.uploads).toEqual([]);
+  });
+
+  it("defaults bootstrap output to the full retention window", async () => {
+    const { windowDays: _windowDays, ...cfg } = baseCfg();
+    const bq = stubBq(trailingDays(730, "2026-05-03").map((d) => stableBqAggregateRow(d, 1)));
+    const result = await runOrchestrator(
+      { bq, release: stubRelease([]), duckdb: stubDuckdb([]) },
+      cfg,
+    );
+    expect(result.rowsExtracted).toBe(730);
   });
 });
 
@@ -87,23 +99,22 @@ describe("runOrchestrator — no-rows path", () => {
 
 describe("runOrchestrator — validation gate", () => {
   it("throws when a metric is wildly off the 7-day median", async () => {
-    const bq = stubBq([bqRow(1, "2026-05-03T12:00:00Z", "story")]);
-    const release = stubRelease([]);
     const days = trailingDays(8, "2026-05-03");
-    const rows = days.map((d, i) => stableDailyRow(d, i === days.length - 1 ? 1000 : 10));
-    const duck = stubDuckdb(rows);
+    const bq = stubBq(
+      days.map((d, i) => stableBqAggregateRow(d, i === days.length - 1 ? 1000 : 10)),
+    );
+    const release = stubRelease([]);
+    const duck = stubDuckdb([]);
     await expect(
       runOrchestrator({ bq, release, duckdb: duck }, baseCfg({ windowDays: 8 })),
     ).rejects.toThrow(/Validation failed/);
   });
 
   it("throws when the date-coverage check finds an empty day", async () => {
-    const bq = stubBq([bqRow(1, "2026-05-03T12:00:00Z", "story")]);
-    const release = stubRelease([]);
     const days = trailingDays(7, "2026-05-03");
-    // Last day has 0 stories → should fail coverage check
-    const rows = days.map((d, i) => stableDailyRow(d, i === days.length - 1 ? 0 : 10));
-    const duck = stubDuckdb(rows);
+    const bq = stubBq(days.map((d, i) => stableBqAggregateRow(d, i === days.length - 1 ? 0 : 10)));
+    const release = stubRelease([]);
+    const duck = stubDuckdb([]);
     await expect(runOrchestrator({ bq, release, duckdb: duck }, baseCfg())).rejects.toThrow(
       /date coverage/,
     );
