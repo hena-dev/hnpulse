@@ -31,7 +31,7 @@ const ranges = buildDashboardDataByRange(kpis);
       <a href="/1m" data-astro-prefetch="load" class="font-semibold text-lg">HN Pulse</a>
       <div class="flex items-center gap-3">
         <ThemeToggle client:load />
-        <a href="https://github.com/hena-dev/hnpulse" target="_blank" rel="noopener" class="text-sm text-muted-foreground hover:text-foreground">GitHub</a>
+        <a href="https://github.com/hena-dev/hnpulse" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground">GitHub</a>
         <a href="/about" data-astro-prefetch="load" class="text-sm text-muted-foreground hover:text-foreground">About</a>
       </div>
     </div>
@@ -40,6 +40,6 @@ const ranges = buildDashboardDataByRange(kpis);
     <DashboardApp initialRange={range} ranges={ranges} meta={meta} client:load />
   </main>
   <footer class="mx-auto max-w-6xl px-4 py-8 text-xs text-muted-foreground">
-    Built by hena · <a href="https://github.com/hena-dev/hnpulse" class="underline">Repo</a> · last updated {meta.lastUpdated}
+    Built by hena · <a href="https://github.com/hena-dev/hnpulse" target="_blank" rel="noopener noreferrer" class="underline">Repo</a> · last updated {meta.lastUpdated}
   </footer>
 </BaseLayout>
