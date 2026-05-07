@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "lastUpdated": "2026-05-06T19:13:44.405Z",
-  "dataAsOf": "2026-05-05",
-  "windowStart": "2024-05-06",
-  "windowEnd": "2026-05-05",
-  "kpisFile": "/data/kpis.f4747a8.json",
-  "buildSha": "e8d0ad2bbaab8a357c3f79d00896557dcbb2ff06",
+  "lastUpdated": "2026-05-07T19:57:22.038Z",
+  "dataAsOf": "2026-05-06",
+  "windowStart": "2024-05-07",
+  "windowEnd": "2026-05-06",
+  "kpisFile": "/data/kpis.56b257a.json",
+  "buildSha": "2f7203af8344bafd613823c2e82ed3e12181ee5b",
   "pipelineVersion": "1.0.0"
 }
