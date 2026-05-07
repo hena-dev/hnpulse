@@ -3,16 +3,16 @@ import type { KpisJson, MetaJson } from "../../data/types.ts";
 import { type KpiEntry, primaryKpis, secondaryKpis } from "../../lib/kpi/catalog.ts";
 import { kpiSummary } from "../../lib/kpi/kpi-card.ts";
 import { topDomainsForRange } from "../../lib/kpi/top-domains.ts";
-import { RANGE_DAYS } from "../../lib/range/range.ts";
+import { RANGE_DAYS, type RangeId } from "../../lib/range/range.ts";
 import { DualCard } from "../kpi-card/dual-card.tsx";
 import { SingleCard } from "../kpi-card/single-card.tsx";
 import { TopDomainCard } from "../kpi-card/top-domain-card.tsx";
 import { RangeSelector } from "../range-selector/range-selector.tsx";
-import { useCurrentRange } from "./use-current-range.ts";
 
 export interface KpiGridProps {
   kpis: KpisJson;
   meta: MetaJson;
+  range: RangeId;
 }
 
 const renderCard = (entry: KpiEntry, kpis: KpisJson, days: number): JSX.Element => {
@@ -48,13 +48,12 @@ const renderCard = (entry: KpiEntry, kpis: KpisJson, days: number): JSX.Element 
   return <TopDomainCard key={entry.id} entry={entry} top={top} />;
 };
 
-export const KpiGrid = ({ kpis, meta }: KpiGridProps): JSX.Element => {
-  const [range, setRange] = useCurrentRange();
+export const KpiGrid = ({ kpis, meta, range }: KpiGridProps): JSX.Element => {
   const days = RANGE_DAYS[range];
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between flex-wrap gap-2">
-        <RangeSelector value={range} onChange={setRange} />
+        <RangeSelector value={range} />
         <span className="text-xs text-muted-foreground">as of {meta.dataAsOf}</span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

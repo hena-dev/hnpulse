@@ -25,6 +25,7 @@ export default defineConfig({
         "src/components/**/*.astro",
         "src/components/charts/**",
         "src/components/dashboard/**",
+        "src/components/ui/**",
       ],
       thresholds: {
         lines: 90,

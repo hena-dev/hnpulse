@@ -2,19 +2,18 @@ import { type JSX, useMemo } from "react";
 import type { KpisJson } from "../../data/types.ts";
 import { topDomainsForRange } from "../../lib/kpi/top-domains.ts";
 import { bucketForRange, bucketSeries } from "../../lib/range/bucket.ts";
-import { RANGE_DAYS, sliceSeries } from "../../lib/range/range.ts";
+import { RANGE_DAYS, type RangeId, sliceSeries } from "../../lib/range/range.ts";
 import { ActiveUsers } from "../charts/active-users.tsx";
 import { ScoreTrend } from "../charts/score-trend.tsx";
 import { StoriesVsComments } from "../charts/stories-vs-comments.tsx";
 import { TopDomainsChart } from "../charts/top-domains.tsx";
-import { useCurrentRange } from "./use-current-range.ts";
 
 export interface DetailChartsProps {
   kpis: KpisJson;
+  range: RangeId;
 }
 
-export const DetailCharts = ({ kpis }: DetailChartsProps): JSX.Element => {
-  const [range] = useCurrentRange();
+export const DetailCharts = ({ kpis, range }: DetailChartsProps): JSX.Element => {
   const days = RANGE_DAYS[range];
   const bucket = bucketForRange(range);
   const dayLabels = useMemo(() => sliceSeries(kpis.days, days), [kpis.days, days]);

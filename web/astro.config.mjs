@@ -5,6 +5,9 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   output: "static",
   site: "https://hnpulse.hena.dev",
+  redirects: {
+    "/": "/1m",
+  },
   integrations: [react()],
   server: {
     host: true,
