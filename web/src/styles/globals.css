@@ -103,10 +103,6 @@
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
   }
-  ::view-transition-old(root),
-  ::view-transition-new(root) {
-    animation: none;
-  }
   .sr-only {
     position: absolute;
     width: 1px;

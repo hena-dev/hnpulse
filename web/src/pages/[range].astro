@@ -1,8 +1,7 @@
 ---
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { DashboardApp } from "../components/dashboard/dashboard-app.tsx";
-import { ThemeToggle } from "../components/theme-toggle/theme-toggle.tsx";
+import { SiteApp } from "../components/site/site-app.tsx";
 import { parseKpis, parseMeta } from "../data/schema.ts";
 import BaseLayout from "../layouts/base.astro";
 import { buildDashboardDataByRange } from "../lib/dashboard-data.ts";
@@ -26,20 +25,5 @@ const kpis = parseKpis(JSON.parse(readFileSync(join(dataDir, kpisFileName), "utf
 const ranges = buildDashboardDataByRange(kpis);
 ---
 <BaseLayout title="HN Pulse — Hacker News, daily vitals" description="A daily-updated dashboard of Hacker News' most important community vitals: submissions, comments, active users, top domains, and more.">
-  <header class="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
-    <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
-      <a href="/1m" data-astro-prefetch="load" class="font-semibold text-lg">HN Pulse</a>
-      <div class="flex items-center gap-3">
-        <ThemeToggle client:load />
-        <a href="https://github.com/hena-dev/hnpulse" target="_blank" rel="noopener noreferrer" class="text-sm text-muted-foreground hover:text-foreground">GitHub</a>
-        <a href="/about" data-astro-prefetch="load" class="text-sm text-muted-foreground hover:text-foreground">About</a>
-      </div>
-    </div>
-  </header>
-  <main class="mx-auto max-w-6xl px-4 py-6 flex flex-col gap-6">
-    <DashboardApp initialRange={range} ranges={ranges} meta={meta} client:load />
-  </main>
-  <footer class="mx-auto max-w-6xl px-4 py-8 text-xs text-muted-foreground">
-    Built by hena · <a href="https://github.com/hena-dev/hnpulse" target="_blank" rel="noopener noreferrer" class="underline">Repo</a> · last updated {meta.lastUpdated}
-  </footer>
+  <SiteApp initialPage="dashboard" initialRange={range} ranges={ranges} meta={meta} client:load />
 </BaseLayout>

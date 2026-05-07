@@ -1,5 +1,4 @@
 ---
-import { ClientRouter } from "astro:transitions";
 import "../styles/globals.css";
 const { title, description } = Astro.props as { title: string; description: string };
 const canonical = new URL(Astro.url.pathname, "https://hnpulse.hena.dev").toString();
@@ -24,7 +23,6 @@ const cwaToken = (import.meta.env as Record<string, string | undefined>).PUBLIC_
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="alternate" type="application/json" href="/data/meta.json" title="HN Pulse data feed" />
-    <ClientRouter />
     <script is:inline>
       try {
         const stored = localStorage.getItem("hnpulse.theme");

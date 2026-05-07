@@ -26,7 +26,6 @@ export const RangeSelector = ({
         <a
           key={id}
           href={`/${id}`}
-          data-astro-prefetch="load"
           onClick={(event) => {
             if (onRangeChange === undefined || !shouldHandleClick(event)) return;
             event.preventDefault();

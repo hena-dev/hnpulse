@@ -5,9 +5,6 @@ import { defineConfig } from "astro/config";
 export default defineConfig({
   output: "static",
   site: "https://hnpulse.hena.dev",
-  prefetch: {
-    defaultStrategy: "hover",
-  },
   redirects: {
     "/": "/1m",
   },
