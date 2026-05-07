@@ -12,9 +12,7 @@ export interface SiteHeaderProps {
 
 export const SiteHeader = ({ page, onNavigate }: SiteHeaderProps): JSX.Element => (
   <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
-    <div
-      className={`${page === "about" ? "max-w-3xl" : "max-w-6xl"} mx-auto flex items-center justify-between px-4 py-3`}
-    >
+    <div className="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
       <a href="/1m" onClick={onNavigate("/1m")} className="font-semibold text-lg">
         HN Pulse
       </a>
