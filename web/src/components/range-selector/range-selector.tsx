@@ -18,6 +18,7 @@ export const RangeSelector = ({ value, className }: RangeSelectorProps): JSX.Ele
         <a
           key={id}
           href={`/${id}`}
+          data-astro-prefetch="load"
           aria-current={isActive ? "page" : undefined}
           className={cn(
             "px-3 py-1 text-sm font-medium rounded-sm transition-colors",

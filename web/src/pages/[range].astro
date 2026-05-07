@@ -29,38 +29,17 @@ const dashboard = buildDashboardData(kpis, range);
 <BaseLayout title="HN Pulse — Hacker News, daily vitals" description="A daily-updated dashboard of Hacker News' most important community vitals: submissions, comments, active users, top domains, and more.">
   <header class="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
     <div class="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
-      <a href="/1m" class="font-semibold text-lg">HN Pulse</a>
+      <a href="/1m" data-astro-prefetch="load" class="font-semibold text-lg">HN Pulse</a>
       <div class="flex items-center gap-3">
         <ThemeToggle client:load />
         <a href="https://github.com/hena-dev/hnpulse" target="_blank" rel="noopener" class="text-sm text-muted-foreground hover:text-foreground">GitHub</a>
-        <a href="/about" class="text-sm text-muted-foreground hover:text-foreground">About</a>
+        <a href="/about" data-astro-prefetch="load" class="text-sm text-muted-foreground hover:text-foreground">About</a>
       </div>
     </div>
   </header>
   <main class="mx-auto max-w-6xl px-4 py-6 flex flex-col gap-6">
     <KpiGrid summaries={dashboard.summaries} topDomain={dashboard.topDomain} meta={meta} range={range} />
-    <DetailCharts series={dashboard.detailSeries} topDomains={dashboard.topDomains} client:only="react">
-      <div slot="fallback" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {[
-          ["Stories vs Comments", "Stacked area"],
-          ["Active users", "Distinct authors per day"],
-          ["Top 10 domains", "Story count over the selected range"],
-          ["Story score (median + p90)", "Daily quantiles"],
-        ].map(([title, description]) => (
-          <section class="rounded-md border bg-card p-4">
-            <header class="mb-3 flex items-start justify-between gap-2">
-              <div>
-                <h2 class="text-sm font-semibold">{title}</h2>
-                <p class="text-xs text-muted-foreground">{description}</p>
-              </div>
-            </header>
-            <div class="h-[260px] w-full rounded-sm border border-dashed border-border/70 flex items-center justify-center text-xs text-muted-foreground">
-              Charts load when JavaScript is available.
-            </div>
-          </section>
-        ))}
-      </div>
-    </DetailCharts>
+    <DetailCharts series={dashboard.detailSeries} topDomains={dashboard.topDomains} client:load transition:persist="detail-charts" />
   </main>
   <footer class="mx-auto max-w-6xl px-4 py-8 text-xs text-muted-foreground">
     Built by hena · <a href="https://github.com/hena-dev/hnpulse" class="underline">Repo</a> · last updated {meta.lastUpdated}
