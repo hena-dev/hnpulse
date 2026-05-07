@@ -1,16 +1,9 @@
 import { type JSX, useState } from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import type { BucketPoint } from "../../lib/range/bucket.ts";
 import { shouldOfferLogScale } from "../../lib/range/scale.ts";
 import { ChartContainer, type YScale } from "./chart-container.tsx";
+import { ChartTooltip } from "./chart-tooltip.tsx";
 
 export interface StoriesVsCommentsProps {
   stories: readonly BucketPoint[];
@@ -42,7 +35,7 @@ export const StoriesVsComments = ({ stories, comments }: StoriesVsCommentsProps)
             domain={scale === "log" ? [1, "auto"] : ["auto", "auto"]}
             allowDataOverflow={scale === "log"}
           />
-          <Tooltip />
+          <ChartTooltip />
           <Area
             type="monotone"
             stackId="1"

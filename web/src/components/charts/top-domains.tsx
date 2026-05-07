@@ -1,7 +1,8 @@
 import type { JSX } from "react";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
 import type { TopDomainEntry } from "../../data/types.ts";
 import { ChartContainer } from "./chart-container.tsx";
+import { ChartTooltip } from "./chart-tooltip.tsx";
 
 export interface TopDomainsChartProps {
   entries: readonly TopDomainEntry[];
@@ -16,7 +17,7 @@ export const TopDomainsChart = ({ entries }: TopDomainsChartProps): JSX.Element 
           <CartesianGrid strokeDasharray="3 3" opacity={0.2} />
           <XAxis type="number" tick={{ fontSize: 10 }} />
           <YAxis type="category" dataKey="name" tick={{ fontSize: 10 }} width={120} />
-          <Tooltip />
+          <ChartTooltip />
           <Bar dataKey="stories" fill="var(--chart-1)" />
         </BarChart>
       </ResponsiveContainer>

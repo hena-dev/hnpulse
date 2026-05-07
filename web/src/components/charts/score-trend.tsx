@@ -5,13 +5,13 @@ import {
   Line,
   LineChart,
   ResponsiveContainer,
-  Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import type { BucketPoint } from "../../lib/range/bucket.ts";
 import { shouldOfferLogScale } from "../../lib/range/scale.ts";
 import { ChartContainer, type YScale } from "./chart-container.tsx";
+import { ChartTooltip } from "./chart-tooltip.tsx";
 
 export interface ScoreTrendProps {
   median: readonly BucketPoint[];
@@ -42,7 +42,7 @@ export const ScoreTrend = ({ median, p90 }: ScoreTrendProps): JSX.Element => {
             domain={scale === "log" ? [1, "auto"] : ["auto", "auto"]}
             allowDataOverflow={scale === "log"}
           />
-          <Tooltip />
+          <ChartTooltip />
           <Legend />
           <Line type="monotone" dataKey="median" stroke="var(--chart-1)" dot={false} />
           <Line
