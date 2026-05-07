@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { type KpisJson, METRIC_KEYS } from "../data/types.ts";
-import { buildDashboardData } from "./dashboard-data.ts";
+import { buildDashboardData, buildDashboardDataByRange } from "./dashboard-data.ts";
 
 const dateAt = (offset: number): string =>
   new Date(Date.UTC(2024, 0, offset + 1)).toISOString().slice(0, 10);
@@ -63,5 +63,13 @@ describe("buildDashboardData", () => {
 
     expect(data.topDomain).toBeNull();
     expect(data.topDomains).toEqual([]);
+  });
+
+  it("builds derived dashboard data for every supported range", () => {
+    const data = buildDashboardDataByRange(makeKpis(Array.from({ length: 100 }, (_, i) => i + 1)));
+
+    expect(Object.keys(data)).toEqual(["1w", "1m", "3m", "6m", "1y", "2y"]);
+    expect(data["1w"].detailSeries.stories).toHaveLength(7);
+    expect(data["1m"].detailSeries.stories).toHaveLength(30);
   });
 });

@@ -13,6 +13,7 @@ export interface KpiGridProps {
   meta: MetaJson;
   range: RangeId;
   topDomain: TopDomainEntry | null;
+  onRangeChange?: (range: RangeId) => void;
 }
 
 const renderCard = (
@@ -50,10 +51,16 @@ const renderCard = (
   return <TopDomainCard key={entry.id} entry={entry} top={topDomain} />;
 };
 
-export const KpiGrid = ({ summaries, meta, range, topDomain }: KpiGridProps): JSX.Element => (
+export const KpiGrid = ({
+  summaries,
+  meta,
+  range,
+  topDomain,
+  onRangeChange,
+}: KpiGridProps): JSX.Element => (
   <div className="flex flex-col gap-4">
     <div className="flex items-center justify-between flex-wrap gap-2">
-      <RangeSelector value={range} />
+      <RangeSelector value={range} {...(onRangeChange === undefined ? {} : { onRangeChange })} />
       <span className="text-xs text-muted-foreground">as of {meta.dataAsOf}</span>
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">

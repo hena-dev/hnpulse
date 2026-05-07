@@ -15,4 +15,26 @@ describe("RangeSelector", () => {
     expect(screen.getByRole("link", { name: "3m" })).toHaveAttribute("aria-current", "page");
     expect(screen.getByRole("link", { name: "1w" })).not.toHaveAttribute("aria-current");
   });
+
+  it("intercepts plain clicks when a range change handler is provided", () => {
+    const calls: string[] = [];
+    render(<RangeSelector value="1m" onRangeChange={(range) => calls.push(range)} />);
+    const event = new MouseEvent("click", { bubbles: true, cancelable: true, button: 0 });
+
+    screen.getByRole("link", { name: "1w" }).dispatchEvent(event);
+
+    expect(calls).toEqual(["1w"]);
+    expect(event.defaultPrevented).toBe(true);
+  });
+
+  it("does not intercept modified clicks", () => {
+    const calls: string[] = [];
+    render(<RangeSelector value="1m" onRangeChange={(range) => calls.push(range)} />);
+    const link = screen.getByRole("link", { name: "1w" });
+    link.addEventListener("click", (event) => event.preventDefault());
+
+    link.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, metaKey: true }));
+
+    expect(calls).toEqual([]);
+  });
 });

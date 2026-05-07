@@ -1,12 +1,11 @@
 ---
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import { DetailCharts } from "../components/dashboard/detail-charts.tsx";
-import { KpiGrid } from "../components/dashboard/kpi-grid.tsx";
+import { DashboardApp } from "../components/dashboard/dashboard-app.tsx";
 import { ThemeToggle } from "../components/theme-toggle/theme-toggle.tsx";
 import { parseKpis, parseMeta } from "../data/schema.ts";
 import BaseLayout from "../layouts/base.astro";
-import { buildDashboardData } from "../lib/dashboard-data.ts";
+import { buildDashboardDataByRange } from "../lib/dashboard-data.ts";
 import { RANGE_IDS, type RangeId } from "../lib/range/range.ts";
 
 export const getStaticPaths = () =>
@@ -24,7 +23,7 @@ const dataDir = join(process.cwd(), "public", "data");
 const meta = parseMeta(JSON.parse(readFileSync(join(dataDir, "meta.json"), "utf8")));
 const kpisFileName = meta.kpisFile.replace(/^\/data\//, "");
 const kpis = parseKpis(JSON.parse(readFileSync(join(dataDir, kpisFileName), "utf8")));
-const dashboard = buildDashboardData(kpis, range);
+const ranges = buildDashboardDataByRange(kpis);
 ---
 <BaseLayout title="HN Pulse — Hacker News, daily vitals" description="A daily-updated dashboard of Hacker News' most important community vitals: submissions, comments, active users, top domains, and more.">
   <header class="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
@@ -38,8 +37,7 @@ const dashboard = buildDashboardData(kpis, range);
     </div>
   </header>
   <main class="mx-auto max-w-6xl px-4 py-6 flex flex-col gap-6">
-    <KpiGrid summaries={dashboard.summaries} topDomain={dashboard.topDomain} meta={meta} range={range} />
-    <DetailCharts series={dashboard.detailSeries} topDomains={dashboard.topDomains} client:load transition:persist="detail-charts" />
+    <DashboardApp initialRange={range} ranges={ranges} meta={meta} client:load />
   </main>
   <footer class="mx-auto max-w-6xl px-4 py-8 text-xs text-muted-foreground">
     Built by hena · <a href="https://github.com/hena-dev/hnpulse" class="underline">Repo</a> · last updated {meta.lastUpdated}
