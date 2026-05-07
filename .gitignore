@@ -79,3 +79,6 @@ gcp-key*.json
 # Local Wrangler state
 .dev.vars
 wrangler.toml.local
+
+# Internal docs (not published)
+docs/
