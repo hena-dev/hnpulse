@@ -38,17 +38,19 @@ export const SingleCard = ({ entry, value, delta, sparkline }: SingleCardProps):
       <div className="text-muted-foreground/60">
         <Sparkline values={sparkline} ariaLabel={`${entry.label} sparkline`} />
       </div>
-      <table className="sr-only">
-        <caption>{entry.label}</caption>
-        <tbody>
-          {sparkline.map((v, i) => (
-            <tr key={`${entry.id}-${String(i)}`}>
-              <td>{i}</td>
-              <td>{v}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="sr-only">
+        <table>
+          <caption>{entry.label}</caption>
+          <tbody>
+            {sparkline.map((v, i) => (
+              <tr key={`${entry.id}-${String(i)}`}>
+                <td>{i}</td>
+                <td>{v}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </article>
   );
 };
