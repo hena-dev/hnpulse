@@ -2,7 +2,12 @@ name: daily
 on:
   schedule:
     - cron: "0 14 * * *"        # 14:00 UTC daily (~1 h after BQ public dataset refresh)
-  workflow_dispatch: {}         # manual trigger / first bootstrap
+  workflow_dispatch:
+    inputs:
+      pipeline_now_utc:
+        description: "Optional ISO timestamp for manual data repair/backfill"
+        required: false
+        type: string
 permissions:
   contents: write               # commit + release manage
 
@@ -34,6 +39,7 @@ jobs:
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PIPELINE_NOW: ${{ inputs.pipeline_now_utc }}
         run: bun run start
         working-directory: pipeline
       - name: Build web

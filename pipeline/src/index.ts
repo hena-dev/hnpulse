@@ -16,6 +16,14 @@ const MAX_BYTES_BILLED = 50 * 2 ** 30; // 50 GB cap (§8.3)
 const repoRoot = process.env.GITHUB_WORKSPACE ?? join(import.meta.dir, "..", "..");
 const buildSha = process.env.GITHUB_SHA ?? "local";
 
+const pipelineNow = (): Date => {
+  const raw = process.env.PIPELINE_NOW;
+  if (raw === undefined || raw.length === 0) return new Date();
+  const now = new Date(raw);
+  if (Number.isNaN(now.getTime())) throw new Error(`invalid PIPELINE_NOW: ${raw}`);
+  return now;
+};
+
 const result = await runOrchestrator(
   {
     bq: createRealBqClient(),
@@ -28,7 +36,7 @@ const result = await runOrchestrator(
     dataOutDir: join(repoRoot, "web", "public", "data"),
     buildSha,
     pipelineVersion: PIPELINE_VERSION,
-    now: new Date(),
+    now: pipelineNow(),
   },
 );
 
