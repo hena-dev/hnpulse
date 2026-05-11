@@ -1,7 +1,7 @@
 import { startOfUtcDay } from "../dates/utc-day.ts";
 import type { BqClient, BqQueryOptions } from "./types.ts";
 
-const MS_PER_DAY = 86_400_000;
+const END_OF_YESTERDAY_GRACE_MS = 15 * 60 * 1000;
 
 const FRESHNESS_SQL = `
 SELECT MAX(timestamp) AS max_ts
@@ -35,6 +35,6 @@ export const fetchMaxTimestamp = async (
  */
 export const isFreshAsOf = (maxTs: Date, now: Date): boolean => {
   const startOfToday = startOfUtcDay(now);
-  const startOfYesterday = new Date(startOfToday.getTime() - MS_PER_DAY);
-  return maxTs.getTime() >= startOfYesterday.getTime();
+  // MAX(timestamp) is row-based, so allow a small gap before midnight.
+  return maxTs.getTime() >= startOfToday.getTime() - END_OF_YESTERDAY_GRACE_MS;
 };

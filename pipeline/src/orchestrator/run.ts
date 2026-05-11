@@ -26,21 +26,23 @@ const buildSeriesForOutliers = (
   metrics: Readonly<Record<string, readonly number[]>>,
 ): Readonly<Record<string, readonly number[]>> => metrics;
 
-const validateKpis = (kpis: KpisJson): void => {
+const validateKpis = (kpis: KpisJson): string | null => {
   const outliers = findOutliers(buildSeriesForOutliers(kpis.metrics));
   if (outliers.length > 0) {
-    throw new Error(
-      `Validation failed (10× rule): ${outliers.map((o) => `${o.metric}=${o.value} (median=${o.median}, ratio=${o.ratio})`).join("; ")}`,
-    );
+    return `Validation failed (10× rule): ${outliers.map((o) => `${o.metric}=${o.value} (median=${o.median}, ratio=${o.ratio})`).join("; ")}`;
   }
 
   const emptyDays = findEmptyDays(kpis.days, kpis.metrics.stories);
   if (emptyDays.length > 0) {
-    throw new Error(
-      `Validation failed (date coverage): ${emptyDays.length} day(s) with 0 stories (first: ${emptyDays[0]})`,
-    );
+    return `Validation failed (date coverage): ${emptyDays.length} day(s) with 0 stories (first: ${emptyDays[0]})`;
   }
+  return null;
 };
+
+const invalidSource = (message: string): OrchestratorResult => ({
+  status: "invalid-source",
+  message: `Skipped publish: ${message}`,
+});
 
 export const runOrchestrator = async (
   deps: OrchestratorDeps,
@@ -61,7 +63,8 @@ export const runOrchestrator = async (
       windowEnd: window.end,
       maxBytesBilled: cfg.maxBytesBilled,
     });
-    validateKpis(kpis);
+    const validationFailure = validateKpis(kpis);
+    if (validationFailure !== null) return invalidSource(validationFailure);
     const result = await writeData({
       outDir: cfg.dataOutDir,
       kpis,
@@ -111,7 +114,8 @@ export const runOrchestrator = async (
     assets: assetsAfter,
   });
 
-  validateKpis(kpis);
+  const validationFailure = validateKpis(kpis);
+  if (validationFailure !== null) return invalidSource(validationFailure);
 
   const result = await writeData({
     outDir: cfg.dataOutDir,

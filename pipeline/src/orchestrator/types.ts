@@ -28,7 +28,7 @@ export interface OrchestratorConfig {
 }
 
 export interface OrchestratorResult {
-  status: "completed" | "stale-source" | "no-rows";
+  status: "completed" | "stale-source" | "invalid-source" | "no-rows";
   message: string;
   kpisFile?: string;
   rowsExtracted?: number;

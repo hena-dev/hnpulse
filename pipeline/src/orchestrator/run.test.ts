@@ -98,25 +98,25 @@ describe("runOrchestrator — no-rows path", () => {
 });
 
 describe("runOrchestrator — validation gate", () => {
-  it("throws when a metric is wildly off the 7-day median", async () => {
+  it("returns invalid-source when a metric is wildly off the 7-day median", async () => {
     const days = trailingDays(8, "2026-05-03");
     const bq = stubBq(
       days.map((d, i) => stableBqAggregateRow(d, i === days.length - 1 ? 1000 : 10)),
     );
     const release = stubRelease([]);
     const duck = stubDuckdb([]);
-    await expect(
-      runOrchestrator({ bq, release, duckdb: duck }, baseCfg({ windowDays: 8 })),
-    ).rejects.toThrow(/Validation failed/);
+    const result = await runOrchestrator({ bq, release, duckdb: duck }, baseCfg({ windowDays: 8 }));
+    expect(result.status).toBe("invalid-source");
+    expect(result.message).toMatch(/Validation failed/);
   });
 
-  it("throws when the date-coverage check finds an empty day", async () => {
+  it("returns invalid-source when the date-coverage check finds an empty day", async () => {
     const days = trailingDays(7, "2026-05-03");
     const bq = stubBq(days.map((d, i) => stableBqAggregateRow(d, i === days.length - 1 ? 0 : 10)));
     const release = stubRelease([]);
     const duck = stubDuckdb([]);
-    await expect(runOrchestrator({ bq, release, duckdb: duck }, baseCfg())).rejects.toThrow(
-      /date coverage/,
-    );
+    const result = await runOrchestrator({ bq, release, duckdb: duck }, baseCfg());
+    expect(result.status).toBe("invalid-source");
+    expect(result.message).toMatch(/date coverage/);
   });
 });

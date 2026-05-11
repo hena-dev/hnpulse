@@ -34,6 +34,10 @@ const result = await runOrchestrator(
 
 console.info(JSON.stringify(result, null, 2));
 
-if (result.status === "stale-source" || result.status === "no-rows") {
+if (
+  result.status === "stale-source" ||
+  result.status === "invalid-source" ||
+  result.status === "no-rows"
+) {
   process.exit(0);
 }

@@ -5,15 +5,13 @@ import type { BqClient } from "./types.ts";
 describe("isFreshAsOf", () => {
   const now = new Date("2026-05-04T14:00:00Z"); // 14:00 UTC today
 
-  it("returns true when maxTs is the start of yesterday or later", () => {
-    const yesterdayStart = new Date("2026-05-03T00:00:00Z");
-    expect(isFreshAsOf(yesterdayStart, now)).toBe(true);
-    expect(isFreshAsOf(new Date("2026-05-03T13:06:00Z"), now)).toBe(true);
+  it("returns true when maxTs reaches the end of yesterday or later", () => {
+    expect(isFreshAsOf(new Date("2026-05-03T23:45:00Z"), now)).toBe(true);
     expect(isFreshAsOf(new Date("2026-05-04T00:00:00Z"), now)).toBe(true);
   });
 
-  it("returns false when maxTs is older than the start of yesterday", () => {
-    expect(isFreshAsOf(new Date("2026-05-02T23:59:59Z"), now)).toBe(false);
+  it("returns false when maxTs does not reach the end of yesterday", () => {
+    expect(isFreshAsOf(new Date("2026-05-03T23:44:59Z"), now)).toBe(false);
   });
 });
 
