@@ -12,4 +12,5 @@ export interface BqQueryOptions {
 
 export interface BqClient {
   query<T = Record<string, unknown>>(sql: string, options: BqQueryOptions): Promise<readonly T[]>;
+  queryStream?<T = Record<string, unknown>>(sql: string, options: BqQueryOptions): AsyncIterable<T>;
 }

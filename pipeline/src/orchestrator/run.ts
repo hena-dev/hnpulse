@@ -1,15 +1,16 @@
-import { aggregateKpisFromBq } from "../bq/aggregate.ts";
-import { computeSinceTimestamp, extractRows } from "../bq/extract.ts";
+import { join } from "node:path";
+import { computeSinceTimestamp, extractRowsStream } from "../bq/extract.ts";
 import { fetchMaxTimestamp, isFreshAsOf } from "../bq/freshness.ts";
 import { formatUtcDay, startOfUtcDay } from "../dates/utc-day.ts";
 import { writeData } from "../emit/write-data.ts";
+import { writeNdjsonByDayFromRows } from "../parquet/write-by-day.ts";
 import type { KpisJson } from "../schema/kpis.ts";
 import { findEmptyDays } from "../validate/coverage.ts";
 import { findOutliers } from "../validate/outliers.ts";
 import { runAggregateStep } from "./aggregate-step.ts";
 import { decideMode } from "./decide-mode.ts";
 import type { OrchestratorConfig, OrchestratorDeps, OrchestratorResult } from "./types.ts";
-import { runUploadStep } from "./upload-step.ts";
+import { runUploadNdjsonStep } from "./upload-step.ts";
 
 const MS_PER_DAY = 86_400_000;
 const DEFAULT_RETENTION_DAYS = 730;
@@ -21,6 +22,12 @@ const computeWindow = (now: Date, windowDays: number): { start: string; end: str
   const start = new Date(end.getTime() - (windowDays - 1) * MS_PER_DAY);
   return { start: formatUtcDay(start), end: formatUtcDay(end) };
 };
+
+const computeBootstrapSince = (now: Date, retentionDays: number): Date =>
+  new Date(startOfUtcDay(now).getTime() - retentionDays * MS_PER_DAY);
+
+const sumNdjsonRows = (files: readonly { rows: number }[]): number =>
+  files.reduce((sum, file) => sum + file.rows, 0);
 
 const buildSeriesForOutliers = (
   metrics: Readonly<Record<string, readonly number[]>>,
@@ -56,46 +63,39 @@ export const runOrchestrator = async (
   const initialAssets = await deps.release.listAssets();
   const decision = decideMode(initialAssets);
   const window = computeWindow(cfg.now, cfg.windowDays ?? DEFAULT_WINDOW_DAYS);
+  const retentionDays = cfg.retentionDays ?? DEFAULT_RETENTION_DAYS;
 
-  if (decision.mode === "bootstrap") {
-    const kpis = await aggregateKpisFromBq(deps.bq, {
-      windowStart: window.start,
-      windowEnd: window.end,
-      maxBytesBilled: cfg.maxBytesBilled,
-    });
-    const validationFailure = validateKpis(kpis);
-    if (validationFailure !== null) return invalidSource(validationFailure);
-    const result = await writeData({
-      outDir: cfg.dataOutDir,
-      kpis,
-      buildSha: cfg.buildSha,
-      pipelineVersion: cfg.pipelineVersion,
-      now: cfg.now,
-    });
+  const since =
+    decision.mode === "bootstrap"
+      ? computeBootstrapSince(cfg.now, retentionDays)
+      : computeSinceTimestamp({
+          mode: "incremental",
+          now: cfg.now,
+          lastMaxTs: decision.lastMaxTs,
+        });
+  const until = startOfUtcDay(cfg.now);
+  if (decision.mode === "incremental" && since.getTime() >= until.getTime()) {
+    return { status: "no-rows", message: "No new closed UTC day since last run", rowsExtracted: 0 };
+  }
+  const ndjsons = await writeNdjsonByDayFromRows(
+    extractRowsStream(deps.bq, { since, until, maxBytesBilled: cfg.maxBytesBilled }),
+    join(cfg.tmpDir, "ndjson"),
+  );
+  const rowsExtracted = sumNdjsonRows(ndjsons);
+
+  if (rowsExtracted === 0) {
     return {
-      status: "completed",
-      message: "OK (direct BQ bootstrap)",
-      kpisFile: result.kpisFile,
-      rowsExtracted: kpis.days.length,
-      filesUploaded: 0,
-      filesDeleted: 0,
+      status: "no-rows",
+      message:
+        decision.mode === "bootstrap"
+          ? "No rows available to bootstrap"
+          : "No new rows since last run",
+      rowsExtracted: 0,
     };
   }
 
-  const since = computeSinceTimestamp({
-    mode: decision.mode,
-    now: cfg.now,
-    lastMaxTs: decision.lastMaxTs,
-  });
-  const rows = await extractRows(deps.bq, { since, maxBytesBilled: cfg.maxBytesBilled });
-
-  if (rows.length === 0 && decision.mode === "incremental") {
-    return { status: "no-rows", message: "No new rows since last run", rowsExtracted: 0 };
-  }
-
-  const retentionDays = cfg.retentionDays ?? DEFAULT_RETENTION_DAYS;
-  const upload = await runUploadStep({
-    rows,
+  const upload = await runUploadNdjsonStep({
+    ndjsons,
     tmpDir: cfg.tmpDir,
     release: deps.release,
     duckdb: deps.duckdb,
@@ -127,9 +127,9 @@ export const runOrchestrator = async (
 
   return {
     status: "completed",
-    message: "OK",
+    message: decision.mode === "bootstrap" ? "OK (bootstrap)" : "OK",
     kpisFile: result.kpisFile,
-    rowsExtracted: rows.length,
+    rowsExtracted,
     filesUploaded: upload.uploaded.length,
     filesDeleted: upload.deleted.length,
   };

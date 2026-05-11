@@ -26,8 +26,8 @@ export const decideMode = (assets: readonly ReleaseAsset[]): ModeDecision => {
   if (days.length === 0) return { mode: "bootstrap", existingDays: [] };
   // "last" is guaranteed by the length check above.
   const last = days[days.length - 1] as string;
-  // The last parquet covers a full UTC day; treat its end-of-day as the
-  // effective lastMaxTs so the 7-day overlap window starts there.
+  // The last parquet covers a full UTC day; the next incremental extract starts
+  // immediately after this timestamp.
   const endOfLast = new Date(parseUtcDay(last).getTime() + 86_400_000 - 1);
   return { mode: "incremental", lastMaxTs: endOfLast, existingDays: days };
 };

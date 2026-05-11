@@ -91,4 +91,42 @@ describe("runUploadStep", () => {
     expect(out.deleted).toContain("items-2023-01-01.parquet");
     expect(deletes).toContain("items-2023-01-01.parquet");
   });
+
+  it("replaces an existing asset before uploading the same day", async () => {
+    const { release, deletes, uploads } = stubRelease();
+    const duckdb: DuckdbRunner = {
+      execute: vi.fn(async () => ""),
+      queryJson: vi.fn(async () => []),
+    };
+    const out = await runUploadStep({
+      rows: [row(1, "2026-05-03T01:00:00Z")],
+      tmpDir: dir,
+      release,
+      duckdb,
+      now: new Date("2026-05-04T14:00:00Z"),
+      retentionDays: 730,
+      existingAssets: [{ name: "items-2026-05-03.parquet", size: 1, url: "u" }],
+    });
+    expect(deletes).toEqual(["items-2026-05-03.parquet"]);
+    expect(uploads).toEqual(["items-2026-05-03.parquet"]);
+    expect(out.deleted).toEqual(["items-2026-05-03.parquet"]);
+  });
+
+  it("does not delete the same asset twice when replacement is also stale", async () => {
+    const { release, deletes } = stubRelease();
+    const duckdb: DuckdbRunner = {
+      execute: vi.fn(async () => ""),
+      queryJson: vi.fn(async () => []),
+    };
+    await runUploadStep({
+      rows: [row(1, "2023-01-01T01:00:00Z")],
+      tmpDir: dir,
+      release,
+      duckdb,
+      now: new Date("2026-05-04T14:00:00Z"),
+      retentionDays: 730,
+      existingAssets: [{ name: "items-2023-01-01.parquet", size: 1, url: "u" }],
+    });
+    expect(deletes).toEqual(["items-2023-01-01.parquet"]);
+  });
 });

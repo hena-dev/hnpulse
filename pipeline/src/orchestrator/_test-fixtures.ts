@@ -58,6 +58,8 @@ export const stubRelease = (initial: ReleaseAsset[] = []): StubReleaseHandle => 
     },
     deleteAsset: async (name) => {
       deletes.push(name);
+      const index = assets.findIndex((a) => a.name === name);
+      if (index >= 0) assets.splice(index, 1);
     },
     downloadAsset: async () => undefined,
     uploads,

@@ -3,7 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { BqRow } from "../schema/bq-row.ts";
-import { groupRowsByUtcDay, writeNdjsonByDay } from "./write-by-day.ts";
+import { groupRowsByUtcDay, writeNdjsonByDay, writeNdjsonByDayFromRows } from "./write-by-day.ts";
 
 const row = (id: number, ts: string, type: BqRow["type"] = "story"): BqRow => ({
   id,
@@ -66,5 +66,26 @@ describe("writeNdjsonByDay", () => {
   it("returns an empty array when there are no rows", async () => {
     const files = await writeNdjsonByDay([], dir);
     expect(files).toEqual([]);
+  });
+
+  it("writes rows from an async iterable", async () => {
+    async function* rows() {
+      yield row(1, "2024-05-04T00:00:00Z");
+      yield row(2, "2024-05-05T00:00:00Z");
+    }
+
+    const files = await writeNdjsonByDayFromRows(rows(), dir);
+
+    expect(files.map((f) => f.day)).toEqual(["2024-05-04", "2024-05-05"]);
+    expect(files.map((f) => f.rows)).toEqual([1, 1]);
+  });
+
+  it("closes open streams when the source iterable fails", async () => {
+    async function* rows() {
+      yield row(1, "2024-05-04T00:00:00Z");
+      throw new Error("boom");
+    }
+
+    await expect(writeNdjsonByDayFromRows(rows(), dir)).rejects.toThrow("boom");
   });
 });

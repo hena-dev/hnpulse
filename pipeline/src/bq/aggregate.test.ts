@@ -48,6 +48,8 @@ describe("aggregateKpisFromBq", () => {
       row("2026-05-02", 3, [{ name: "github.com", stories: 2, share: 2 / 3 }]),
       row("2026-05-03", 4, null, [
         { range_id: "1w", domains: [{ name: "github.com", stories: 6, share: 0.6 }] },
+        { range_id: "1m", domains: null },
+        { range_id: "invalid", domains: [{ name: "example.com", stories: 1, share: 0.1 }] },
       ]),
     ]);
     const client: BqClient = {
@@ -74,6 +76,7 @@ describe("aggregateKpisFromBq", () => {
       { date: "2026-05-03", domains: [] },
     ]);
     expect(kpis.topDomainsByRange["1w"]).toEqual([{ name: "github.com", stories: 6, share: 0.6 }]);
+    expect(kpis.topDomainsByRange["1m"]).toEqual([]);
     expect(kpis.topDomainsByRange["2y"]).toEqual([]);
   });
 });

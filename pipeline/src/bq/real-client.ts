@@ -30,18 +30,27 @@ export const createRealBqClient = (): BqClient => {
     projectId: PROJECT_ID,
     ...(credentials !== undefined ? { credentials } : {}),
   });
+  const queryOptions = (sql: string, options: BqQueryOptions) => ({
+    query: sql,
+    params: (options.params ?? {}) as Record<string, unknown>,
+    maximumBytesBilled: String(options.maxBytesBilled),
+  });
   return {
     async query<T = Record<string, unknown>>(
       sql: string,
       options: BqQueryOptions,
     ): Promise<readonly T[]> {
-      const params = options.params ?? {};
-      const [rows] = await bq.query({
-        query: sql,
-        params: params as Record<string, unknown>,
-        maximumBytesBilled: String(options.maxBytesBilled),
-      });
+      const [rows] = await bq.query(queryOptions(sql, options));
       return rows as readonly T[];
+    },
+    async *queryStream<T = Record<string, unknown>>(
+      sql: string,
+      options: BqQueryOptions,
+    ): AsyncIterable<T> {
+      const [job] = await bq.createQueryJob(queryOptions(sql, options));
+      for await (const row of job.getQueryResultsStream() as AsyncIterable<T>) {
+        yield row;
+      }
     },
   };
 };

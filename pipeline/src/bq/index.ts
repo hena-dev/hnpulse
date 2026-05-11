@@ -1,4 +1,10 @@
 export {
+  aggregateKpisFromBq,
+  type BqAggregateArgs,
+  type BqAggregateRow,
+  buildBqAggregateSql,
+} from "./aggregate.ts";
+export {
   BOOTSTRAP_DAYS,
   buildExtractSql,
   type ComputeSinceArgs,
@@ -6,7 +12,7 @@ export {
   type ExtractMode,
   type ExtractRowsArgs,
   extractRows,
-  OVERLAP_DAYS,
+  extractRowsStream,
 } from "./extract.ts";
 export { fetchMaxTimestamp, isFreshAsOf } from "./freshness.ts";
 export type { BqClient, BqQueryOptions } from "./types.ts";
