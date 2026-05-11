@@ -1,6 +1,7 @@
 import type { RangeId } from "./range.ts";
 
 export type Bucket = "daily" | "weekly" | "monthly";
+export type BucketReducer = "sum" | "mean";
 
 export interface BucketPoint {
   date: string;
@@ -37,28 +38,34 @@ const groupBy = (
   days: readonly string[],
   values: readonly number[],
   keyOf: (d: Date) => string,
+  reducer: BucketReducer,
 ): BucketPoint[] => {
-  const map = new Map<string, number>();
+  const map = new Map<string, { sum: number; count: number }>();
   for (let i = 0; i < days.length; i += 1) {
     const d = days[i];
     const v = values[i];
     if (d === undefined || v === undefined) continue;
     const key = keyOf(parseUtc(d));
-    map.set(key, (map.get(key) ?? 0) + v);
+    const current = map.get(key) ?? { sum: 0, count: 0 };
+    map.set(key, { sum: current.sum + v, count: current.count + 1 });
   }
   return [...map.entries()]
     .sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
-    .map(([date, value]) => ({ date, value }));
+    .map(([date, value]) => ({
+      date,
+      value: reducer === "mean" && value.count > 0 ? value.sum / value.count : value.sum,
+    }));
 };
 
 export const bucketSeries = (
   days: readonly string[],
   values: readonly number[],
   bucket: Bucket,
+  reducer: BucketReducer = "sum",
 ): BucketPoint[] => {
   if (bucket === "daily") {
     return days.map((date, i) => ({ date, value: values[i] ?? 0 }));
   }
   const keyOf = bucket === "weekly" ? startOfIsoWeek : startOfMonth;
-  return groupBy(days, values, (d) => fmtUtc(keyOf(d)));
+  return groupBy(days, values, (d) => fmtUtc(keyOf(d)), reducer);
 };

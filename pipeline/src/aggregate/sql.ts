@@ -56,8 +56,8 @@ const dailyCtes = (): string => `
     SELECT timestamp::DATE AS day,
       COUNT(*) FILTER (WHERE type IN ('story','poll','pollopt')) AS stories,
       COUNT(*) FILTER (WHERE type = 'comment') AS comments,
-      COUNT(DISTINCT by) FILTER (WHERE type = 'comment') AS active_commenters,
-      COUNT(DISTINCT by) FILTER (WHERE type IN ('story','poll','pollopt')) AS active_submitters,
+      COUNT(DISTINCT "by") FILTER (WHERE type = 'comment') AS active_commenters,
+      COUNT(DISTINCT "by") FILTER (WHERE type IN ('story','poll','pollopt')) AS active_submitters,
       APPROX_QUANTILE(score, 0.50) FILTER (WHERE type IN ('story','poll','pollopt')) AS median_score,
       APPROX_QUANTILE(score, 0.90) FILTER (WHERE type IN ('story','poll','pollopt')) AS p90_score,
       COUNT(*) FILTER (

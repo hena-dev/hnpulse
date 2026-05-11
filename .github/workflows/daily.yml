@@ -6,6 +6,10 @@ on:
 permissions:
   contents: write               # commit + release manage
 
+concurrency:
+  group: daily-publish
+  cancel-in-progress: false
+
 jobs:
   run:
     runs-on: ubuntu-latest
@@ -25,13 +29,15 @@ jobs:
           sudo mv duckdb /usr/local/bin/duckdb
           duckdb --version
       - name: Install deps
-        run: bun install
+        run: bun install --frozen-lockfile
       - name: Run pipeline (freshness-checked, no-op if BQ not yet refreshed)
         env:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: bun run start
         working-directory: pipeline
+      - name: Build web
+        run: bun run build
       - name: Commit data
         run: |
           git config user.name "hnpulse-bot"
@@ -39,8 +45,6 @@ jobs:
           git add web/public/data
           git diff --cached --quiet || git commit -m "chore(data): $(date -u +%Y-%m-%d) [skip ci]"
           git push
-      - name: Build web
-        run: bun run build
       - uses: actions/setup-node@v4
         with:
           node-version: 24

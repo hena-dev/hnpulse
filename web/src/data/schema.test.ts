@@ -24,6 +24,14 @@ describe("KpisJsonSchema (web)", () => {
   it("rejects mismatched series length", () => {
     expect(() => KpisJsonSchema.parse({ ...goodKpis, days: ["2024-05-04"] })).toThrow();
   });
+  it("accepts optional exact range-level top domains", () => {
+    expect(
+      KpisJsonSchema.parse({
+        ...goodKpis,
+        topDomainsByRange: { "1w": [], "1m": [], "3m": [], "6m": [], "1y": [], "2y": [] },
+      }),
+    ).toMatchObject({ topDomainsByRange: { "1w": [] } });
+  });
 });
 
 describe("MetaJsonSchema (web)", () => {

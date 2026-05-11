@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { METRIC_KEYS } from "../schema/metrics.ts";
-import { alignDailyMetrics, assembleKpisJson, computeTopDomainsByDay } from "./assemble.ts";
+import {
+  alignDailyMetrics,
+  assembleKpisJson,
+  computeTopDomainsByDay,
+  computeTopDomainsByRange,
+} from "./assemble.ts";
 
 const dailyRow = (day: string, overrides: Record<string, number> = {}) => ({
   day,
@@ -70,6 +75,20 @@ describe("computeTopDomainsByDay", () => {
   });
 });
 
+describe("computeTopDomainsByRange", () => {
+  it("uses all domain rows in the selected trailing range, not daily top-N rows", () => {
+    const rows = [
+      { day: "2024-01-01", url: "https://a.com/1" },
+      { day: "2024-01-02", url: "https://a.com/2" },
+      { day: "2024-01-02", url: "https://b.com/1" },
+      { day: "2024-01-03", url: "https://b.com/2" },
+    ];
+    const out = computeTopDomainsByRange(["2024-01-01", "2024-01-02", "2024-01-03"], rows, 10);
+    expect(out["1w"]?.[0]).toEqual({ name: "a.com", stories: 2, share: 0.5 });
+    expect(out["2y"]).toHaveLength(2);
+  });
+});
+
 describe("assembleKpisJson", () => {
   it("produces a schema-valid object", () => {
     const days = ["2024-01-01", "2024-01-02"];
@@ -85,6 +104,7 @@ describe("assembleKpisJson", () => {
     expect(obj.days).toEqual(days);
     expect(obj.metrics.stories).toEqual([10, 10]);
     expect(obj.topDomainsByDay).toHaveLength(2);
+    expect(obj.topDomainsByRange["1w"]?.[0]?.name).toBe("github.com");
   });
 
   it("throws when days is empty", () => {

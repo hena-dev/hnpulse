@@ -12,46 +12,58 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun install
-      - run: bunx tsgo --noEmit --checkers 2
+      - run: bun install --frozen-lockfile
+      - run: bun run typecheck
 
   lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun install
-      - run: bunx biome ci .
+      - run: bun install --frozen-lockfile
+      - run: bun run lint
 
   knip:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun install
-      - run: bunx knip --no-progress --reporter compact
+      - run: bun install --frozen-lockfile
+      - run: bun run knip
 
   filesize:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun run scripts/check-file-size.ts
+      - run: bun install --frozen-lockfile
+      - run: bun run filesize
 
   test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun install
-      - run: bunx vitest run --coverage
+      - name: Install DuckDB CLI
+        env:
+          DUCKDB_VERSION: v1.5.2
+          DUCKDB_SHA256: 7b0130422ee15c4c07f85ab75c0e3daf19b912b762258d1724c30f27964fb021
+        run: |
+          curl -fsSLo duckdb.gz "https://github.com/duckdb/duckdb/releases/download/${DUCKDB_VERSION}/duckdb_cli-linux-amd64.gz"
+          printf '%s  duckdb.gz\n' "${DUCKDB_SHA256}" | sha256sum -c -
+          gunzip duckdb.gz
+          chmod +x duckdb
+          sudo mv duckdb /usr/local/bin/duckdb
+          duckdb --version
+      - run: bun install --frozen-lockfile
+      - run: bun run test
 
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun install
+      - run: bun install --frozen-lockfile
       - run: bun run build
 
   lighthouse:
@@ -60,7 +72,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun install
+      - run: bun install --frozen-lockfile
       - run: bun run build
       - name: Lighthouse CI
         run: |

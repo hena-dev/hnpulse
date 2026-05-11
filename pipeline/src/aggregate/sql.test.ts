@@ -40,6 +40,10 @@ describe("buildDailyMetricsSql", () => {
     }
   });
 
+  it("quotes the Hacker News author column for DuckDB", () => {
+    expect(sql).toContain('COUNT(DISTINCT "by")');
+  });
+
   it("treats poll/pollopt as stories per §5.2", () => {
     expect(sql).toContain("'story','poll','pollopt'");
   });

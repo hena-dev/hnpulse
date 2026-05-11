@@ -11,6 +11,14 @@ const seq = (base: number, amp: number) =>
   days.map((_, i) => Math.round(base + amp * Math.sin(i / 30)));
 const seqf = (base: number, amp: number) =>
   days.map((_, i) => +(base + amp * Math.sin(i / 30)).toFixed(3));
+const topDomains = [
+  { name: "github.com", stories: 40, share: 0.05 },
+  { name: "nytimes.com", stories: 22, share: 0.027 },
+  { name: "medium.com", stories: 18, share: 0.022 },
+  { name: "substack.com", stories: 14, share: 0.017 },
+  { name: "arxiv.org", stories: 12, share: 0.015 },
+];
+const rangeTopDomains = (n: number) => topDomains.map((d) => ({ ...d, stories: d.stories * n }));
 
 const kpis = {
   schemaVersion: 1,
@@ -33,14 +41,16 @@ const kpis = {
   },
   topDomainsByDay: days.map((d) => ({
     date: d,
-    domains: [
-      { name: "github.com", stories: 40, share: 0.05 },
-      { name: "nytimes.com", stories: 22, share: 0.027 },
-      { name: "medium.com", stories: 18, share: 0.022 },
-      { name: "substack.com", stories: 14, share: 0.017 },
-      { name: "arxiv.org", stories: 12, share: 0.015 },
-    ],
+    domains: topDomains,
   })),
+  topDomainsByRange: {
+    "1w": rangeTopDomains(7),
+    "1m": rangeTopDomains(30),
+    "3m": rangeTopDomains(90),
+    "6m": rangeTopDomains(180),
+    "1y": rangeTopDomains(365),
+    "2y": rangeTopDomains(730),
+  },
 };
 
 writeFileSync("web/public/data/kpis.0000000.json", JSON.stringify(kpis));

@@ -1,6 +1,7 @@
 import { computeDomainShares, extractRegistrableDomain } from "../domains/extract.ts";
-import type { KpisJson, TopDomainsDay } from "../schema/kpis.ts";
+import type { KpisJson, TopDomainsByRange, TopDomainsDay } from "../schema/kpis.ts";
 import { METRIC_KEYS, type MetricSeries } from "../schema/metrics.ts";
+import { RANGE_DAYS, RANGE_IDS } from "../schema/range.ts";
 
 export interface DailyRow {
   day: string;
@@ -21,6 +22,12 @@ export interface DailyRow {
 export interface DomainRow {
   day: string;
   url: string | null;
+}
+
+interface DomainEntry {
+  day: string;
+  dayIndex: number;
+  domain: string;
 }
 
 const SQL_TO_METRIC: Readonly<Record<string, keyof MetricSeries>> = {
@@ -58,6 +65,22 @@ export const alignDailyMetrics = (
   return series;
 };
 
+const extractDomainEntries = (
+  days: readonly string[],
+  rows: readonly DomainRow[],
+): DomainEntry[] => {
+  const indexByDay = new Map(days.map((d, i) => [d, i] as const));
+  const entries: DomainEntry[] = [];
+  for (const row of rows) {
+    const dayIndex = indexByDay.get(row.day);
+    if (dayIndex === undefined) continue;
+    const domain = extractRegistrableDomain(row.url);
+    if (domain === null) continue;
+    entries.push({ day: row.day, dayIndex, domain });
+  }
+  return entries;
+};
+
 export const computeTopDomainsByDay = (
   days: readonly string[],
   rows: readonly DomainRow[],
@@ -66,18 +89,40 @@ export const computeTopDomainsByDay = (
   const counts = new Map<string, Map<string, number>>();
   const totals = new Map<string, number>();
   for (const day of days) counts.set(day, new Map());
-  for (const row of rows) {
-    const dayMap = counts.get(row.day);
+  for (const entry of extractDomainEntries(days, rows)) {
+    const dayMap = counts.get(entry.day);
     if (dayMap === undefined) continue;
-    const dom = extractRegistrableDomain(row.url);
-    if (dom === null) continue;
-    dayMap.set(dom, (dayMap.get(dom) ?? 0) + 1);
-    totals.set(row.day, (totals.get(row.day) ?? 0) + 1);
+    dayMap.set(entry.domain, (dayMap.get(entry.domain) ?? 0) + 1);
+    totals.set(entry.day, (totals.get(entry.day) ?? 0) + 1);
   }
   return days.map((date) => ({
     date,
     domains: computeDomainShares(counts.get(date) ?? new Map(), totals.get(date) ?? 0, topN),
   }));
+};
+
+const emptyTopDomainsByRange = (): TopDomainsByRange =>
+  Object.fromEntries(RANGE_IDS.map((id) => [id, []] as const)) as unknown as TopDomainsByRange;
+
+export const computeTopDomainsByRange = (
+  days: readonly string[],
+  rows: readonly DomainRow[],
+  topN: number,
+): TopDomainsByRange => {
+  const out = emptyTopDomainsByRange();
+  const entries = extractDomainEntries(days, rows);
+  for (const range of RANGE_IDS) {
+    const startIndex = Math.max(0, days.length - RANGE_DAYS[range]);
+    const counts = new Map<string, number>();
+    let total = 0;
+    for (const entry of entries) {
+      if (entry.dayIndex < startIndex) continue;
+      counts.set(entry.domain, (counts.get(entry.domain) ?? 0) + 1);
+      total += 1;
+    }
+    out[range] = computeDomainShares(counts, total, topN);
+  }
+  return out;
 };
 
 export interface AssembleArgs {
@@ -99,5 +144,6 @@ export const assembleKpisJson = (args: AssembleArgs): KpisJson => {
     days,
     metrics: alignDailyMetrics(days, args.dailyRows),
     topDomainsByDay: computeTopDomainsByDay(days, args.domainRows, args.topN ?? 10),
+    topDomainsByRange: computeTopDomainsByRange(days, args.domainRows, args.topN ?? 10),
   };
 };

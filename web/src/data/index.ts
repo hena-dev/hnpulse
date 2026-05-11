@@ -7,5 +7,6 @@ export {
   type MetricKey,
   type MetricSeries,
   type TopDomainEntry,
+  type TopDomainsByRange,
   type TopDomainsDay,
 } from "./types.ts";

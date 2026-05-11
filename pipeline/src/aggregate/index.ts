@@ -3,6 +3,7 @@ export {
   alignDailyMetrics,
   assembleKpisJson,
   computeTopDomainsByDay,
+  computeTopDomainsByRange,
   type DailyRow,
   type DomainRow,
 } from "./assemble.ts";

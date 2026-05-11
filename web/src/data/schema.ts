@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { RANGE_IDS } from "../lib/range/range.ts";
 import type { KpisJson, MetaJson } from "./types.ts";
 import { METRIC_KEYS } from "./types.ts";
 
@@ -18,6 +19,10 @@ const TopDomainsDay = z.object({
   domains: z.array(TopDomain).max(10),
 });
 
+const TopDomainsByRange = z.object(
+  Object.fromEntries(RANGE_IDS.map((id) => [id, z.array(TopDomain).max(10)] as const)),
+);
+
 export const KpisJsonSchema = z
   .object({
     schemaVersion: z.literal(1),
@@ -26,6 +31,7 @@ export const KpisJsonSchema = z
     days: z.array(date).min(1),
     metrics: series,
     topDomainsByDay: z.array(TopDomainsDay),
+    topDomainsByRange: TopDomainsByRange.optional(),
   })
   .superRefine((v, ctx) => {
     const n = v.days.length;

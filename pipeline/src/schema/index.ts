@@ -10,6 +10,8 @@ export {
   KpisJsonSchema,
   type TopDomainEntry,
   TopDomainEntrySchema,
+  type TopDomainsByRange,
+  TopDomainsByRangeSchema,
   type TopDomainsDay,
   TopDomainsDaySchema,
 } from "./kpis.ts";

@@ -13,6 +13,7 @@ const sampleKpis: KpisJson = {
     { date: "2024-05-04", domains: [] },
     { date: "2024-05-05", domains: [] },
   ],
+  topDomainsByRange: { "1w": [], "1m": [], "3m": [], "6m": [], "1y": [], "2y": [] },
 };
 
 describe("buildMeta", () => {

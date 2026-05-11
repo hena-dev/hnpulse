@@ -45,6 +45,15 @@ describe("bucketSeries", () => {
     ]);
   });
 
+  it("can average grouped values for non-additive metrics", () => {
+    const days = ["2024-01-01", "2024-01-02", "2024-01-08"];
+    const out = bucketSeries(days, [10, 20, 40], "weekly", "mean");
+    expect(out).toEqual([
+      { date: "2024-01-01", value: 15 },
+      { date: "2024-01-08", value: 40 },
+    ]);
+  });
+
   it("treats Sunday correctly (week starts Mon, so Sun belongs to prior week)", () => {
     // 2024-01-07 is Sun, week start is 2024-01-01
     const out = bucketSeries(["2024-01-07"], [9], "weekly");

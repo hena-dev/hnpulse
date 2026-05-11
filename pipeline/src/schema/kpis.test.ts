@@ -18,6 +18,14 @@ const minimalKpis = {
       domains: [{ name: "github.com", stories: 12, share: 0.12 }],
     },
   ],
+  topDomainsByRange: {
+    "1w": [{ name: "github.com", stories: 22, share: 0.11 }],
+    "1m": [{ name: "github.com", stories: 22, share: 0.11 }],
+    "3m": [{ name: "github.com", stories: 22, share: 0.11 }],
+    "6m": [{ name: "github.com", stories: 22, share: 0.11 }],
+    "1y": [{ name: "github.com", stories: 22, share: 0.11 }],
+    "2y": [{ name: "github.com", stories: 22, share: 0.11 }],
+  },
 };
 
 describe("TopDomainEntrySchema", () => {

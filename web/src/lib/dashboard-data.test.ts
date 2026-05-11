@@ -23,6 +23,12 @@ const makeKpis = (storiesSeries: number[]): KpisJson => {
           : { name: "b.example", stories: 1, share: 1 },
       ],
     })),
+    topDomainsByRange: {
+      "1w": [
+        { name: "a.example", stories: 6, share: 0.6 },
+        { name: "b.example", stories: 4, share: 0.4 },
+      ],
+    },
   };
 };
 
@@ -51,18 +57,35 @@ describe("buildDashboardData", () => {
     expect(sparkline[sparkline.length - 1]).toBe(100);
   });
 
-  it("returns null for the top domain when no domains exist in the range", () => {
+  it("returns null for the top domain when no exact range domains exist", () => {
     const kpis = makeKpis([1, 2, 3]);
-    const data = buildDashboardData(
-      {
-        ...kpis,
-        topDomainsByDay: kpis.days.map((date) => ({ date, domains: [] })),
-      },
-      "1w",
-    );
+    const { topDomainsByRange: _topDomainsByRange, ...withoutRangeDomains } = kpis;
+    const data = buildDashboardData(withoutRangeDomains, "1w");
 
     expect(data.topDomain).toBeNull();
     expect(data.topDomains).toEqual([]);
+  });
+
+  it("uses exact range-level top domains when the pipeline provides them", () => {
+    const kpis = {
+      ...makeKpis(Array.from({ length: 7 }, () => 1)),
+      topDomainsByRange: {
+        "1w": [{ name: "range-winner.example", stories: 11, share: 0.55 }],
+      },
+    };
+    const data = buildDashboardData(kpis, "1w");
+
+    expect(data.topDomain).toEqual({ name: "range-winner.example", stories: 11, share: 0.55 });
+    expect(data.topDomains).toEqual([{ name: "range-winner.example", stories: 11, share: 0.55 }]);
+  });
+
+  it("averages score and active-user buckets instead of summing them", () => {
+    const kpis = makeKpis([10, 20, 30, 40, 50, 60, 70, 80]);
+    const data = buildDashboardData(kpis, "6m");
+
+    expect(data.detailSeries.medianScore[0]).toEqual({ date: "2024-01-01", value: 40 });
+    expect(data.detailSeries.activeCommenters[0]).toEqual({ date: "2024-01-01", value: 40 });
+    expect(data.detailSeries.stories[0]).toEqual({ date: "2024-01-01", value: 280 });
   });
 
   it("builds derived dashboard data for every supported range", () => {

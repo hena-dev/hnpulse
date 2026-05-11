@@ -1,3 +1,5 @@
+import type { RangeId } from "../lib/range/range.ts";
+
 export const METRIC_KEYS = [
   "stories",
   "comments",
@@ -28,6 +30,8 @@ export interface TopDomainsDay {
   domains: readonly TopDomainEntry[];
 }
 
+export type TopDomainsByRange = Readonly<Partial<Record<RangeId, readonly TopDomainEntry[]>>>;
+
 export interface KpisJson {
   schemaVersion: 1;
   windowStart: string;
@@ -35,6 +39,7 @@ export interface KpisJson {
   days: readonly string[];
   metrics: MetricSeries;
   topDomainsByDay: readonly TopDomainsDay[];
+  topDomainsByRange?: TopDomainsByRange;
 }
 
 export interface MetaJson {

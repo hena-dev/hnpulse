@@ -1,7 +1,6 @@
 import { type KpisJson, METRIC_KEYS, type MetricKey, type TopDomainEntry } from "../data/types.ts";
 import type { KpiSummary } from "./kpi/kpi-card.ts";
 import { kpiSummary } from "./kpi/kpi-card.ts";
-import { topDomainsForRange } from "./kpi/top-domains.ts";
 import { type BucketPoint, bucketForRange, bucketSeries } from "./range/bucket.ts";
 import { RANGE_DAYS, RANGE_IDS, type RangeId, sliceSeries } from "./range/range.ts";
 
@@ -42,17 +41,19 @@ const compactSummary = (summary: KpiSummary): KpiSummary => ({
   sparkline: downsample(summary.sparkline, MAX_SPARKLINE_POINTS),
 });
 
+const topDomainsForDashboardRange = (kpis: KpisJson, range: RangeId): readonly TopDomainEntry[] =>
+  kpis.topDomainsByRange?.[range] ?? [];
+
 export const buildDashboardData = (kpis: KpisJson, range: RangeId): DashboardData => {
   const days = RANGE_DAYS[range];
   const bucket = bucketForRange(range);
   const dayLabels = sliceSeries(kpis.days, days);
-  const topDomainsInRange = sliceSeries(kpis.topDomainsByDay, days);
-  const topDomains = topDomainsForRange(topDomainsInRange, 10);
+  const topDomains = topDomainsForDashboardRange(kpis, range);
   const summaries = Object.fromEntries(
     METRIC_KEYS.map((key) => [key, compactSummary(kpiSummary(key, kpis, days))]),
   ) as Record<MetricKey, KpiSummary>;
-  const chartSeries = (key: MetricKey): BucketPoint[] =>
-    bucketSeries(dayLabels, sliceSeries(kpis.metrics[key], days), bucket);
+  const chartSeries = (key: MetricKey, reducer: "sum" | "mean" = "sum"): BucketPoint[] =>
+    bucketSeries(dayLabels, sliceSeries(kpis.metrics[key], days), bucket, reducer);
 
   return {
     summaries,
@@ -60,10 +61,10 @@ export const buildDashboardData = (kpis: KpisJson, range: RangeId): DashboardDat
     detailSeries: {
       stories: chartSeries("stories"),
       comments: chartSeries("comments"),
-      activeCommenters: chartSeries("activeCommenters"),
-      activeSubmitters: chartSeries("activeSubmitters"),
-      medianScore: chartSeries("medianScore"),
-      p90Score: chartSeries("p90Score"),
+      activeCommenters: chartSeries("activeCommenters", "mean"),
+      activeSubmitters: chartSeries("activeSubmitters", "mean"),
+      medianScore: chartSeries("medianScore", "mean"),
+      p90Score: chartSeries("p90Score", "mean"),
     },
     topDomains,
   };
