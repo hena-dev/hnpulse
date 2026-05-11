@@ -25,5 +25,5 @@ const kpis = parseKpis(JSON.parse(readFileSync(join(dataDir, kpisFileName), "utf
 const ranges = buildDashboardDataByRange(kpis);
 ---
 <BaseLayout title="HN Pulse — Hacker News, daily vitals" description="A daily-updated dashboard of Hacker News' most important community vitals: submissions, comments, active users, top domains, and more.">
-  <SiteApp initialPage="dashboard" initialRange={range} ranges={ranges} meta={meta} client:load />
+  <SiteApp initialRange={range} ranges={ranges} meta={meta} client:load />
 </BaseLayout>

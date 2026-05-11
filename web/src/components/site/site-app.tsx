@@ -9,12 +9,10 @@ import {
 import type { MetaJson } from "../../data/types.ts";
 import type { DashboardDataByRange } from "../../lib/dashboard-data.ts";
 import { RANGE_IDS, type RangeId } from "../../lib/range/range.ts";
-import { AboutContent } from "../about/about-content.tsx";
 import { DashboardView } from "./dashboard-view.tsx";
-import { SiteHeader, type SiteHref, type SitePage } from "./site-header.tsx";
+import { SiteHeader, type SiteHref } from "./site-header.tsx";
 
 export interface SiteAppProps {
-  initialPage: SitePage;
   initialRange: RangeId;
   ranges: DashboardDataByRange;
   meta: MetaJson;
@@ -23,19 +21,17 @@ export interface SiteAppProps {
 const isRangeId = (value: string): value is RangeId =>
   (RANGE_IDS as readonly string[]).includes(value);
 
-const routeFromPath = (fallbackRange: RangeId): { page: SitePage; range: RangeId } => {
+const routeFromPath = (fallbackRange: RangeId): RangeId => {
   /* v8 ignore next -- this module is rendered on the server before hydrating in the browser. */
-  if (typeof window === "undefined") return { page: "dashboard", range: fallbackRange };
+  if (typeof window === "undefined") return fallbackRange;
   const segment = window.location.pathname.split("/").filter(Boolean)[0] ?? "";
-  if (segment === "about") return { page: "about", range: fallbackRange };
-  return { page: "dashboard", range: isRangeId(segment) ? segment : fallbackRange };
+  return isRangeId(segment) ? segment : fallbackRange;
 };
 
 const shouldHandleClick = (event: MouseEvent<HTMLAnchorElement>): boolean =>
   event.button === 0 && !event.metaKey && !event.ctrlKey && !event.shiftKey && !event.altKey;
 
-export const SiteApp = ({ initialPage, initialRange, ranges, meta }: SiteAppProps): JSX.Element => {
-  const [page, setPage] = useState<SitePage>(initialPage);
+export const SiteApp = ({ initialRange, ranges, meta }: SiteAppProps): JSX.Element => {
   const [range, setRange] = useState<RangeId>(initialRange);
   const [chartRange, setChartRange] = useState<RangeId>(initialRange);
   const dashboard = ranges[range];
@@ -46,20 +42,10 @@ export const SiteApp = ({ initialPage, initialRange, ranges, meta }: SiteAppProp
     startTransition(() => setChartRange(next));
   }, []);
 
-  const applyRoute = useCallback(
-    (nextPage: SitePage, nextRange: RangeId): void => {
-      setPage(nextPage);
-      if (nextPage === "dashboard") setDashboardRange(nextRange);
-    },
-    [setDashboardRange],
-  );
-
   const navigate = (href: SiteHref): void => {
-    const nextPage = href === "/about" ? "about" : "dashboard";
-    const nextRange = href === "/about" ? range : (href.slice(1) as RangeId);
+    const nextRange = href.slice(1) as RangeId;
     if (window.location.pathname !== href) window.history.pushState(null, "", href);
-    applyRoute(nextPage, nextRange);
-    if (nextPage === "about") window.scrollTo({ left: 0, top: 0, behavior: "instant" });
+    setDashboardRange(nextRange);
   };
 
   const handleNav = (href: SiteHref) => (event: MouseEvent<HTMLAnchorElement>) => {
@@ -70,31 +56,22 @@ export const SiteApp = ({ initialPage, initialRange, ranges, meta }: SiteAppProp
 
   useEffect(() => {
     const onPopState = (): void => {
-      const next = routeFromPath(range);
-      applyRoute(next.page, next.range);
+      setDashboardRange(routeFromPath(range));
     };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
-  }, [applyRoute, range]);
-
-  useEffect(() => {
-    document.title = page === "about" ? "About HN Pulse" : "HN Pulse — Hacker News, daily vitals";
-  }, [page]);
+  }, [range, setDashboardRange]);
 
   return (
     <>
-      <SiteHeader page={page} onNavigate={handleNav} />
-      {page === "about" ? (
-        <AboutContent />
-      ) : (
-        <DashboardView
-          dashboard={dashboard}
-          chartDashboard={chartDashboard}
-          meta={meta}
-          range={range}
-          onRangeChange={(next) => navigate(`/${next}`)}
-        />
-      )}
+      <SiteHeader onNavigate={handleNav} />
+      <DashboardView
+        dashboard={dashboard}
+        chartDashboard={chartDashboard}
+        meta={meta}
+        range={range}
+        onRangeChange={(next) => navigate(`/${next}`)}
+      />
     </>
   );
 };

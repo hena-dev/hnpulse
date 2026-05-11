@@ -1,5 +1,5 @@
-import { render, screen, waitFor } from "@testing-library/react";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { METRIC_KEYS, type MetaJson } from "../../data/types.ts";
 import type { DashboardDataByRange } from "../../lib/dashboard-data.ts";
 import { RANGE_IDS, type RangeId } from "../../lib/range/range.ts";
@@ -43,19 +43,13 @@ const ranges = Object.fromEntries(
   ]),
 ) as unknown as DashboardDataByRange;
 
-const renderApp = (initialPage: "dashboard" | "about", initialRange: RangeId = "1w") =>
-  render(
-    <SiteApp initialPage={initialPage} initialRange={initialRange} ranges={ranges} meta={meta} />,
-  );
+const renderApp = (initialRange: RangeId = "1w") =>
+  render(<SiteApp initialRange={initialRange} ranges={ranges} meta={meta} />);
 
 describe("SiteApp", () => {
-  beforeEach(() => {
-    vi.spyOn(window, "scrollTo").mockImplementation(() => {});
-  });
-
   it("updates dashboard ranges without leaving the page", async () => {
     window.history.replaceState(null, "", "/1w");
-    renderApp("dashboard", "1w");
+    renderApp("1w");
 
     screen.getByRole("link", { name: "1m" }).click();
 
@@ -64,33 +58,43 @@ describe("SiteApp", () => {
     await waitFor(() => expect(screen.getByTestId("charts")).toHaveTextContent("2"));
   });
 
-  it("switches between dashboard and about without a document navigation", async () => {
+  it("handles dashboard header navigation", async () => {
     window.history.replaceState(null, "", "/1w");
-    renderApp("dashboard", "1w");
+    renderApp("1w");
 
-    screen.getByRole("link", { name: "About" }).click();
-
-    await waitFor(() => expect(window.location.pathname).toBe("/about"));
-    expect(screen.getByRole("heading", { name: "About HN Pulse" })).toBeInTheDocument();
-
-    screen.getByRole("link", { name: "Dashboard" }).click();
+    screen.getByRole("link", { name: "HN Pulse" }).click();
 
     await waitFor(() => expect(window.location.pathname).toBe("/1m"));
     expect(screen.getByRole("link", { name: "1m" })).toHaveAttribute("aria-current", "page");
+
+    screen.getByRole("link", { name: "HN Pulse" }).click();
+
+    expect(window.location.pathname).toBe("/1m");
+  });
+
+  it("allows modified header clicks to skip SPA handling", () => {
+    window.history.replaceState(null, "", "/1w");
+    renderApp("1w");
+    const homeLink = screen.getByRole("link", { name: "HN Pulse" });
+    homeLink.addEventListener("click", (event) => event.preventDefault(), { once: true });
+
+    fireEvent.click(homeLink, { metaKey: true });
+
+    expect(window.location.pathname).toBe("/1w");
   });
 
   it("responds to browser back and forward popstate changes", async () => {
     window.history.replaceState(null, "", "/1w");
-    renderApp("dashboard", "1w");
+    renderApp("1w");
 
-    window.history.pushState(null, "", "/about");
+    window.history.pushState(null, "", "/2y");
     window.dispatchEvent(new PopStateEvent("popstate"));
 
     await waitFor(() =>
-      expect(screen.getByRole("heading", { name: "About HN Pulse" })).toBeInTheDocument(),
+      expect(screen.getByRole("link", { name: "2y" })).toHaveAttribute("aria-current", "page"),
     );
 
-    window.history.pushState(null, "", "/2y");
+    window.history.pushState(null, "", "/not-a-range");
     window.dispatchEvent(new PopStateEvent("popstate"));
 
     await waitFor(() =>
