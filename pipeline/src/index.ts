@@ -7,6 +7,7 @@
 import { join } from "node:path";
 import { createRealBqClient } from "./bq/real-client.ts";
 import { createRealDuckdbRunner } from "./duckdb/real-runner.ts";
+import { createRealHnApiClient } from "./hn-api/real-client.ts";
 import { runOrchestrator } from "./orchestrator/run.ts";
 import { createRealReleaseManager, releaseEnvCoords } from "./release/real-manager.ts";
 
@@ -27,6 +28,7 @@ const pipelineNow = (): Date => {
 const result = await runOrchestrator(
   {
     bq: createRealBqClient(),
+    hnApi: createRealHnApiClient(),
     release: createRealReleaseManager(releaseEnvCoords()),
     duckdb: createRealDuckdbRunner(),
   },
@@ -42,10 +44,10 @@ const result = await runOrchestrator(
 
 console.info(JSON.stringify(result, null, 2));
 
-if (
-  result.status === "stale-source" ||
-  result.status === "invalid-source" ||
-  result.status === "no-rows"
-) {
+if (result.status === "invalid-source" || result.status === "incomplete-source") {
+  process.exit(1);
+}
+
+if (result.status === "stale-source" || result.status === "no-rows") {
   process.exit(0);
 }

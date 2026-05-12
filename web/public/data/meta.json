@@ -6,5 +6,8 @@
   "windowEnd": "2026-05-08",
   "kpisFile": "/data/kpis.9db38a0.json",
   "buildSha": "44633c9478f0338dd7f7e611d3ec7fd92d8c2043",
-  "pipelineVersion": "1.0.0"
+  "pipelineVersion": "1.0.0",
+  "dataSources": ["bigquery"],
+  "stabilizationDays": 7,
+  "provisionalFrom": "2026-05-02"
 }

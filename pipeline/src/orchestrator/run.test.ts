@@ -33,16 +33,6 @@ const baseCfg = (overrides: Partial<Parameters<typeof runOrchestrator>[1]> = {})
   ...overrides,
 });
 
-describe("runOrchestrator — freshness gate", () => {
-  it("returns stale-source if BQ MAX(timestamp) is before yesterday", async () => {
-    const bq = stubBq([], new Date("2026-05-01T00:00:00Z"));
-    const release = stubRelease();
-    const result = await runOrchestrator({ bq, release, duckdb: stubDuckdb([]) }, baseCfg());
-    expect(result.status).toBe("stale-source");
-    expect(release.uploads).toEqual([]);
-  });
-});
-
 describe("runOrchestrator — happy path (incremental)", () => {
   it("uploads parquets, runs aggregations, emits kpis & meta", async () => {
     const bq = stubBq(
@@ -62,7 +52,7 @@ describe("runOrchestrator — happy path (incremental)", () => {
     expect(release.uploads).toContain("items-2026-05-03.parquet");
   });
 
-  it("extracts only closed days after the latest parquet asset", async () => {
+  it("rewrites the full 7-day stabilization window", async () => {
     const calls: { sql: string; opts: { params?: Readonly<Record<string, unknown>> } }[] = [];
     const bq: BqClient = {
       async query<T>(sql: string, opts: BqQueryOptions) {
@@ -80,7 +70,7 @@ describe("runOrchestrator — happy path (incremental)", () => {
 
     const extractCall = calls.find((call) => call.sql.includes("TIMESTAMP_SECONDS(@since)"));
     expect(extractCall?.opts.params).toEqual({
-      since: Date.parse("2026-05-03T00:00:00Z") / 1000,
+      since: Date.parse("2026-04-27T00:00:00Z") / 1000,
       until: Date.parse("2026-05-04T00:00:00Z") / 1000,
     });
     expect(release.uploads).toEqual(["items-2026-05-03.parquet"]);
@@ -95,7 +85,7 @@ describe("runOrchestrator — bootstrap path", () => {
     const duck = stubDuckdb(days.map((d) => stableDailyRow(d)));
     const result = await runOrchestrator({ bq, release, duckdb: duck }, baseCfg());
     expect(result.status).toBe("completed");
-    expect(result.message).toBe("OK (bootstrap)");
+    expect(result.message).toBe("OK");
     expect(release.uploads).toEqual(days.map((d) => `items-${d}.parquet`));
   });
 

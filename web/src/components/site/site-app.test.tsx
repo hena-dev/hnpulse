@@ -20,6 +20,9 @@ const meta: MetaJson = {
   kpisFile: "/data/kpis.0000000.json",
   buildSha: "test",
   pipelineVersion: "test",
+  dataSources: ["bigquery"],
+  stabilizationDays: 7,
+  provisionalFrom: "2026-04-29",
 };
 
 const ranges = Object.fromEntries(

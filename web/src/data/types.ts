@@ -51,4 +51,7 @@ export interface MetaJson {
   kpisFile: string;
   buildSha: string;
   pipelineVersion: string;
+  dataSources: readonly ("bigquery" | "hacker-news-api")[];
+  stabilizationDays: number;
+  provisionalFrom: string;
 }

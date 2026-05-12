@@ -35,6 +35,9 @@ describe("writeData", () => {
       buildSha: "abcd123",
       pipelineVersion: "1.0.0",
       now: new Date("2024-05-06T14:00:00Z"),
+      dataSources: ["bigquery"],
+      stabilizationDays: 7,
+      provisionalFrom: "2024-04-29",
     });
     const files = (await readdir(dir)).sort();
     expect(files).toContain("meta.json");
@@ -50,6 +53,9 @@ describe("writeData", () => {
       buildSha: "abc",
       pipelineVersion: "1.0.0",
       now: new Date(),
+      dataSources: ["bigquery"],
+      stabilizationDays: 7,
+      provisionalFrom: "2024-04-29",
     });
     const current = await readFile(join(dir, "kpis-current.json"), "utf8");
     const meta = JSON.parse(await readFile(join(dir, "meta.json"), "utf8")) as { kpisFile: string };
@@ -64,12 +70,17 @@ describe("writeData", () => {
       buildSha: "xyz",
       pipelineVersion: "9.9.9",
       now: new Date("2024-05-06T14:00:00Z"),
+      dataSources: ["bigquery", "hacker-news-api"],
+      stabilizationDays: 7,
+      provisionalFrom: "2024-04-29",
     });
     const meta = JSON.parse(await readFile(join(dir, "meta.json"), "utf8")) as {
       buildSha: string;
       kpisFile: string;
+      dataSources: string[];
     };
     expect(meta.buildSha).toBe("xyz");
     expect(meta.kpisFile).toMatch(/^\/data\/kpis\.[a-f0-9]{7}\.json$/);
+    expect(meta.dataSources).toEqual(["bigquery", "hacker-news-api"]);
   });
 });

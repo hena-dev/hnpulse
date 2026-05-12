@@ -8,6 +8,8 @@ const kpisPath = z
   .string()
   .regex(/^\/data\/kpis\.[a-f0-9]+\.json$/, "expected /data/kpis.<sha>.json");
 
+export const DataSourceSchema = z.enum(["bigquery", "hacker-news-api"]);
+
 export const MetaJsonSchema = z.object({
   schemaVersion: z.literal(1),
   lastUpdated: isoUtcString,
@@ -17,6 +19,10 @@ export const MetaJsonSchema = z.object({
   kpisFile: kpisPath,
   buildSha: z.string().min(1),
   pipelineVersion: z.string().min(1),
+  dataSources: z.array(DataSourceSchema).min(1),
+  stabilizationDays: z.number().int().positive(),
+  provisionalFrom: dateString,
 });
 
 export type MetaJson = z.infer<typeof MetaJsonSchema>;
+export type DataSource = z.infer<typeof DataSourceSchema>;

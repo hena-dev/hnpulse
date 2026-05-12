@@ -60,6 +60,9 @@ export const MetaJsonSchema = z.object({
   kpisFile: z.string().regex(/^\/data\/kpis\.[a-f0-9]+\.json$/),
   buildSha: z.string().min(1),
   pipelineVersion: z.string().min(1),
+  dataSources: z.array(z.enum(["bigquery", "hacker-news-api"])).min(1),
+  stabilizationDays: z.number().int().positive(),
+  provisionalFrom: date,
 });
 
 export const parseKpis = (raw: unknown): KpisJson =>

@@ -46,6 +46,9 @@ describe("MetaJsonSchema (web)", () => {
         kpisFile: "/data/kpis.abcdef0.json",
         buildSha: "abc",
         pipelineVersion: "1.0.0",
+        dataSources: ["bigquery"],
+        stabilizationDays: 7,
+        provisionalFrom: "2024-04-27",
       }),
     ).toMatchObject({ schemaVersion: 1 });
   });

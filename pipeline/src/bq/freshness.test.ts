@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import { fetchMaxTimestamp, isFreshAsOf } from "./freshness.ts";
+import { completeUtcDayThrough, fetchMaxTimestamp, isFreshAsOf } from "./freshness.ts";
 import type { BqClient } from "./types.ts";
 
 describe("isFreshAsOf", () => {
@@ -12,6 +12,17 @@ describe("isFreshAsOf", () => {
 
   it("returns false when maxTs does not reach the end of yesterday", () => {
     expect(isFreshAsOf(new Date("2026-05-03T23:44:59Z"), now)).toBe(false);
+  });
+});
+
+describe("completeUtcDayThrough", () => {
+  it("returns the max timestamp day once BQ reaches its end-of-day grace period", () => {
+    expect(completeUtcDayThrough(new Date("2026-05-09T23:45:00Z"))).toBe("2026-05-09");
+  });
+
+  it("returns the prior day while the max timestamp day is still partial", () => {
+    expect(completeUtcDayThrough(new Date("2026-05-09T23:44:59Z"))).toBe("2026-05-08");
+    expect(completeUtcDayThrough(new Date("2026-05-09T12:00:00Z"))).toBe("2026-05-08");
   });
 });
 

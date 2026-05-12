@@ -10,6 +10,9 @@ const ok = {
   kpisFile: "/data/kpis.f4a9c1e.json",
   buildSha: "f4a9c1e",
   pipelineVersion: "1.0.0",
+  dataSources: ["bigquery", "hacker-news-api"],
+  stabilizationDays: 7,
+  provisionalFrom: "2026-04-27",
 };
 
 describe("MetaJsonSchema", () => {
@@ -28,5 +31,11 @@ describe("MetaJsonSchema", () => {
 
   it("rejects empty buildSha", () => {
     expect(() => MetaJsonSchema.parse({ ...ok, buildSha: "" })).toThrow();
+  });
+
+  it("requires source and stabilization metadata", () => {
+    expect(() => MetaJsonSchema.parse({ ...ok, dataSources: [] })).toThrow();
+    expect(() => MetaJsonSchema.parse({ ...ok, stabilizationDays: 0 })).toThrow();
+    expect(() => MetaJsonSchema.parse({ ...ok, provisionalFrom: "bad" })).toThrow();
   });
 });

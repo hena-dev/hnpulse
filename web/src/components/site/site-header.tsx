@@ -11,7 +11,12 @@ export interface SiteHeaderProps {
 export const SiteHeader = ({ onNavigate }: SiteHeaderProps): JSX.Element => (
   <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
     <div className="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
-      <a href="/1m" onClick={onNavigate("/1m")} className="font-semibold text-lg">
+      <a
+        href="/1m"
+        onClick={onNavigate("/1m")}
+        className="flex items-center gap-2 font-semibold text-lg"
+      >
+        <img src="/favicon.png" alt="" className="h-6 w-6 rounded-sm" aria-hidden="true" />
         HN Pulse
       </a>
       <div className="flex items-center gap-3">

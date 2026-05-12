@@ -2,7 +2,7 @@ import { mkdir, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 import type { KpisJson } from "../schema/kpis.ts";
 import { KpisJsonSchema } from "../schema/kpis.ts";
-import type { MetaJson } from "../schema/meta.ts";
+import type { DataSource, MetaJson } from "../schema/meta.ts";
 import { buildMeta } from "./build-meta.ts";
 import { kpisFilenameFor } from "./hash.ts";
 
@@ -12,6 +12,9 @@ export interface WriteDataArgs {
   buildSha: string;
   pipelineVersion: string;
   now: Date;
+  dataSources: readonly DataSource[];
+  stabilizationDays: number;
+  provisionalFrom: string;
 }
 
 export interface WriteDataResult {
@@ -36,6 +39,9 @@ export const writeData = async (args: WriteDataArgs): Promise<WriteDataResult> =
     buildSha: args.buildSha,
     pipelineVersion: args.pipelineVersion,
     lastUpdated: args.now,
+    dataSources: args.dataSources,
+    stabilizationDays: args.stabilizationDays,
+    provisionalFrom: args.provisionalFrom,
   });
   await writeFile(join(args.outDir, "meta.json"), `${JSON.stringify(meta, null, 2)}\n`, "utf8");
 

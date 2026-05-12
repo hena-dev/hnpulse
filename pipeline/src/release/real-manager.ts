@@ -1,6 +1,7 @@
 import { createReadStream } from "node:fs";
 import { stat, writeFile } from "node:fs/promises";
 import { Octokit } from "@octokit/rest";
+import { listReleaseAssetsAllPages } from "./paginate.ts";
 import type { ReleaseAsset, ReleaseManager } from "./types.ts";
 
 const TAG = "data-snapshot";
@@ -36,16 +37,24 @@ export const createRealReleaseManager = (args: RealManagerArgs): ReleaseManager 
   const octokit = new Octokit({ auth: args.token });
   const { owner, repo } = args;
 
-  return {
-    async listAssets() {
-      const { id } = await ensureRelease(octokit, owner, repo);
+  const listAssetsForRelease = async () => {
+    const { id } = await ensureRelease(octokit, owner, repo);
+    return listReleaseAssetsAllPages(async (page, perPage) => {
       const r = await octokit.rest.repos.listReleaseAssets({
         owner,
         repo,
         release_id: id,
-        per_page: 100,
+        per_page: perPage,
+        page,
       });
-      return r.data.map((a) => ({
+      return r.data;
+    });
+  };
+
+  return {
+    async listAssets() {
+      const assets = await listAssetsForRelease();
+      return assets.map((a) => ({
         name: a.name,
         size: a.size,
         url: a.browser_download_url,
@@ -66,26 +75,12 @@ export const createRealReleaseManager = (args: RealManagerArgs): ReleaseManager 
       return { name: r.data.name, size: r.data.size, url: r.data.browser_download_url };
     },
     async deleteAsset(name) {
-      const { id } = await ensureRelease(octokit, owner, repo);
-      const r = await octokit.rest.repos.listReleaseAssets({
-        owner,
-        repo,
-        release_id: id,
-        per_page: 100,
-      });
-      const asset = r.data.find((a) => a.name === name);
+      const asset = (await listAssetsForRelease()).find((a) => a.name === name);
       if (asset === undefined) return;
       await octokit.rest.repos.deleteReleaseAsset({ owner, repo, asset_id: asset.id });
     },
     async downloadAsset(name, destPath) {
-      const { id } = await ensureRelease(octokit, owner, repo);
-      const r = await octokit.rest.repos.listReleaseAssets({
-        owner,
-        repo,
-        release_id: id,
-        per_page: 100,
-      });
-      const asset = r.data.find((a) => a.name === name);
+      const asset = (await listAssetsForRelease()).find((a) => a.name === name);
       if (asset === undefined) throw new Error(`asset not found: ${name}`);
       const dl = await fetch(asset.browser_download_url, {
         headers: { Authorization: `token ${args.token}`, Accept: "application/octet-stream" },

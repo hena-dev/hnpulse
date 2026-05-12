@@ -24,6 +24,9 @@ describe("buildMeta", () => {
       buildSha: "deadbee",
       pipelineVersion: "1.2.3",
       lastUpdated: new Date("2024-05-06T14:00:00Z"),
+      dataSources: ["bigquery", "hacker-news-api"],
+      stabilizationDays: 7,
+      provisionalFrom: "2024-04-29",
     });
     expect(m.windowStart).toBe("2024-05-04");
     expect(m.windowEnd).toBe("2024-05-05");
@@ -32,6 +35,9 @@ describe("buildMeta", () => {
     expect(m.kpisFile).toBe("/data/kpis.abcdef0.json");
     expect(m.buildSha).toBe("deadbee");
     expect(m.pipelineVersion).toBe("1.2.3");
+    expect(m.dataSources).toEqual(["bigquery", "hacker-news-api"]);
+    expect(m.stabilizationDays).toBe(7);
+    expect(m.provisionalFrom).toBe("2024-04-29");
     expect(m.schemaVersion).toBe(1);
   });
 
@@ -43,6 +49,9 @@ describe("buildMeta", () => {
         buildSha: "x",
         pipelineVersion: "1",
         lastUpdated: new Date(),
+        dataSources: ["bigquery"],
+        stabilizationDays: 7,
+        provisionalFrom: "2024-04-29",
       }),
     ).toThrow();
   });

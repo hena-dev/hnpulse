@@ -16,7 +16,7 @@ export default defineConfig({
     plugins: [tailwindcss()],
     // Allow Tailscale MagicDNS hosts in dev (HMR host-check).
     server: {
-      allowedHosts: [".ts.net", "localhost"],
+      allowedHosts: [".pug-mohs.ts.net", "chris-mini", "chris-mini.local", "localhost"],
     },
   },
   build: {
