@@ -8,6 +8,8 @@ import { pickParquetAssets } from "../release/policy.ts";
 import type { ReleaseAsset, ReleaseManager } from "../release/types.ts";
 import type { KpisJson } from "../schema/kpis.ts";
 
+const DOWNLOAD_CONCURRENCY = 8;
+
 export interface AggregateStepArgs {
   release: ReleaseManager;
   duckdb: DuckdbRunner;
@@ -25,12 +27,23 @@ export const downloadAllParquet = async (
 ): Promise<readonly string[]> => {
   await mkdir(destDir, { recursive: true });
   const parquets = pickParquetAssets(assets);
-  const files: string[] = [];
-  for (const a of parquets) {
-    const localPath = join(destDir, a.name);
-    await release.downloadAsset(a.name, localPath);
-    files.push(localPath);
-  }
+  const files = new Array<string>(parquets.length);
+  let next = 0;
+  const workers = Array.from(
+    { length: Math.min(DOWNLOAD_CONCURRENCY, parquets.length) },
+    async () => {
+      while (next < parquets.length) {
+        const index = next;
+        next += 1;
+        const asset = parquets[index];
+        if (asset === undefined) continue;
+        const localPath = join(destDir, asset.name);
+        await release.downloadAsset(asset.name, localPath);
+        files[index] = localPath;
+      }
+    },
+  );
+  await Promise.all(workers);
   return files;
 };
 
