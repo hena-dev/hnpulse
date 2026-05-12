@@ -1,0 +1,191 @@
+{
+  "en": {
+    "name": "English",
+    "nativeName": "English",
+    "htmlLang": "en",
+    "hrefLang": "en",
+    "intlLocale": "en-US",
+    "dir": "ltr",
+    "aliases": ["en", "en-us", "en-gb", "en-au", "en-ca"]
+  },
+  "zh": {
+    "name": "Simplified Chinese",
+    "nativeName": "简体中文",
+    "htmlLang": "zh-Hans",
+    "hrefLang": "zh-Hans",
+    "intlLocale": "zh-CN",
+    "dir": "ltr",
+    "aliases": ["zh", "zh-cn", "zh-sg", "zh-hans"]
+  },
+  "es": {
+    "name": "Spanish",
+    "nativeName": "Español",
+    "htmlLang": "es",
+    "hrefLang": "es",
+    "intlLocale": "es-ES",
+    "dir": "ltr",
+    "aliases": ["es", "es-es", "es-mx", "es-419"]
+  },
+  "hi": {
+    "name": "Hindi",
+    "nativeName": "हिन्दी",
+    "htmlLang": "hi",
+    "hrefLang": "hi",
+    "intlLocale": "hi-IN",
+    "dir": "ltr",
+    "aliases": ["hi", "hi-in"]
+  },
+  "ar": {
+    "name": "Arabic",
+    "nativeName": "العربية",
+    "htmlLang": "ar",
+    "hrefLang": "ar",
+    "intlLocale": "ar",
+    "dir": "rtl",
+    "aliases": ["ar", "ar-sa", "ar-ae", "ar-eg", "ar-ma"]
+  },
+  "pt": {
+    "name": "Portuguese",
+    "nativeName": "Português",
+    "htmlLang": "pt",
+    "hrefLang": "pt",
+    "intlLocale": "pt-BR",
+    "dir": "ltr",
+    "aliases": ["pt", "pt-br", "pt-pt"]
+  },
+  "id": {
+    "name": "Indonesian",
+    "nativeName": "Bahasa Indonesia",
+    "htmlLang": "id",
+    "hrefLang": "id",
+    "intlLocale": "id-ID",
+    "dir": "ltr",
+    "aliases": ["id", "id-id"]
+  },
+  "ja": {
+    "name": "Japanese",
+    "nativeName": "日本語",
+    "htmlLang": "ja",
+    "hrefLang": "ja",
+    "intlLocale": "ja-JP",
+    "dir": "ltr",
+    "aliases": ["ja", "ja-jp"]
+  },
+  "ru": {
+    "name": "Russian",
+    "nativeName": "Русский",
+    "htmlLang": "ru",
+    "hrefLang": "ru",
+    "intlLocale": "ru-RU",
+    "dir": "ltr",
+    "aliases": ["ru", "ru-ru"]
+  },
+  "fr": {
+    "name": "French",
+    "nativeName": "Français",
+    "htmlLang": "fr",
+    "hrefLang": "fr",
+    "intlLocale": "fr-FR",
+    "dir": "ltr",
+    "aliases": ["fr", "fr-fr", "fr-ca"]
+  },
+  "de": {
+    "name": "German",
+    "nativeName": "Deutsch",
+    "htmlLang": "de",
+    "hrefLang": "de",
+    "intlLocale": "de-DE",
+    "dir": "ltr",
+    "aliases": ["de", "de-de", "de-at", "de-ch"]
+  },
+  "ko": {
+    "name": "Korean",
+    "nativeName": "한국어",
+    "htmlLang": "ko",
+    "hrefLang": "ko",
+    "intlLocale": "ko-KR",
+    "dir": "ltr",
+    "aliases": ["ko", "ko-kr"]
+  },
+  "tr": {
+    "name": "Turkish",
+    "nativeName": "Türkçe",
+    "htmlLang": "tr",
+    "hrefLang": "tr",
+    "intlLocale": "tr-TR",
+    "dir": "ltr",
+    "aliases": ["tr", "tr-tr"]
+  },
+  "vi": {
+    "name": "Vietnamese",
+    "nativeName": "Tiếng Việt",
+    "htmlLang": "vi",
+    "hrefLang": "vi",
+    "intlLocale": "vi-VN",
+    "dir": "ltr",
+    "aliases": ["vi", "vi-vn"]
+  },
+  "it": {
+    "name": "Italian",
+    "nativeName": "Italiano",
+    "htmlLang": "it",
+    "hrefLang": "it",
+    "intlLocale": "it-IT",
+    "dir": "ltr",
+    "aliases": ["it", "it-it"]
+  },
+  "pl": {
+    "name": "Polish",
+    "nativeName": "Polski",
+    "htmlLang": "pl",
+    "hrefLang": "pl",
+    "intlLocale": "pl-PL",
+    "dir": "ltr",
+    "aliases": ["pl", "pl-pl"]
+  },
+  "nl": {
+    "name": "Dutch",
+    "nativeName": "Nederlands",
+    "htmlLang": "nl",
+    "hrefLang": "nl",
+    "intlLocale": "nl-NL",
+    "dir": "ltr",
+    "aliases": ["nl", "nl-nl", "nl-be"]
+  },
+  "th": {
+    "name": "Thai",
+    "nativeName": "ไทย",
+    "htmlLang": "th",
+    "hrefLang": "th",
+    "intlLocale": "th-TH",
+    "dir": "ltr",
+    "aliases": ["th", "th-th"]
+  },
+  "fa": {
+    "name": "Persian",
+    "nativeName": "فارسی",
+    "htmlLang": "fa",
+    "hrefLang": "fa",
+    "intlLocale": "fa-IR",
+    "dir": "rtl",
+    "aliases": ["fa", "fa-ir", "fa-af"]
+  },
+  "uk": {
+    "name": "Ukrainian",
+    "nativeName": "Українська",
+    "htmlLang": "uk",
+    "hrefLang": "uk",
+    "intlLocale": "uk-UA",
+    "dir": "ltr",
+    "aliases": ["uk", "uk-ua"]
+  },
+  "zh-tw": {
+    "name": "Traditional Chinese",
+    "nativeName": "繁體中文",
+    "htmlLang": "zh-Hant",
+    "hrefLang": "zh-Hant",
+    "intlLocale": "zh-TW",
+    "dir": "ltr",
+    "aliases": ["zh-tw", "zh-hant", "zh-hk", "zh-mo"]
+  }
+}

@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import type { Messages } from "../../lib/i18n/messages.ts";
 import type { BucketPoint } from "../../lib/range/bucket.ts";
 import { shouldOfferLogScale } from "../../lib/range/scale.ts";
 import { ChartContainer, type YScale } from "./chart-container.tsx";
@@ -16,9 +17,14 @@ import { ChartTooltip } from "./chart-tooltip.tsx";
 export interface ActiveUsersProps {
   commenters: readonly BucketPoint[];
   submitters: readonly BucketPoint[];
+  messages: Messages["charts"];
 }
 
-export const ActiveUsers = ({ commenters, submitters }: ActiveUsersProps): JSX.Element => {
+export const ActiveUsers = ({
+  commenters,
+  submitters,
+  messages,
+}: ActiveUsersProps): JSX.Element => {
   const data = commenters.map((c, i) => ({
     date: c.date,
     commenters: c.value,
@@ -28,8 +34,10 @@ export const ActiveUsers = ({ commenters, submitters }: ActiveUsersProps): JSX.E
   const [scale, setScale] = useState<YScale>("linear");
   return (
     <ChartContainer
-      title="Active users"
-      description="Distinct authors per day"
+      title={messages.activeUsersTitle}
+      description={messages.activeUsersDescription}
+      scaleAriaLabel={messages.scaleAria}
+      scaleLabels={{ linear: messages.scaleLinear, log: messages.scaleLog }}
       {...(offerLog ? { scale, onScaleChange: setScale } : {})}
     >
       <ResponsiveContainer width="100%" height="100%">
@@ -44,10 +52,17 @@ export const ActiveUsers = ({ commenters, submitters }: ActiveUsersProps): JSX.E
           />
           <ChartTooltip />
           <Legend />
-          <Line type="monotone" dataKey="commenters" stroke="var(--chart-1)" dot={false} />
+          <Line
+            type="monotone"
+            dataKey="commenters"
+            name={messages.seriesCommenters}
+            stroke="var(--chart-1)"
+            dot={false}
+          />
           <Line
             type="monotone"
             dataKey="submitters"
+            name={messages.seriesSubmitters}
             stroke="var(--chart-2)"
             strokeDasharray="4 2"
             dot={false}

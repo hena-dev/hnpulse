@@ -1,0 +1,78 @@
+---
+import "../styles/globals.css";
+import {
+  DEFAULT_LOCALE,
+  DEFAULT_RANGE,
+  LANGUAGE_STORAGE_KEY,
+  localeRedirectTargets,
+  localizedRangePath,
+} from "../lib/i18n/config.ts";
+import { getMessages } from "../lib/i18n/messages.ts";
+
+const fallbackPath = localizedRangePath(DEFAULT_LOCALE, DEFAULT_RANGE);
+const traditionalChinesePath = localizedRangePath("zh-tw", DEFAULT_RANGE);
+const copy = getMessages(DEFAULT_LOCALE);
+const redirectTargets = localeRedirectTargets();
+---
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{copy.metadata.title}</title>
+    <meta name="description" content={copy.metadata.description} />
+    <meta name="robots" content="noindex" />
+    <link rel="canonical" href={new URL(fallbackPath, "https://hnpulse.hena.dev").toString()} />
+    <script
+      is:inline
+      define:vars={{ fallbackPath, redirectTargets, storageKey: LANGUAGE_STORAGE_KEY, traditionalChinesePath }}
+    >
+      const normalize = (value) => value.trim().toLowerCase().replaceAll("_", "-");
+      const targetForLanguage = (language) => {
+        const normalized = normalize(language || "");
+        if (
+          normalized === "zh-hant" ||
+          normalized.startsWith("zh-hant-") ||
+          normalized.startsWith("zh-tw") ||
+          normalized.startsWith("zh-hk") ||
+          normalized.startsWith("zh-mo")
+        ) {
+          return traditionalChinesePath;
+        }
+        for (const entry of redirectTargets) {
+          if (
+            entry.aliases.some((alias) =>
+              normalized === alias || normalized.startsWith(`${alias}-`),
+            )
+          ) {
+            return entry.target;
+          }
+        }
+        return null;
+      };
+
+      let stored = null;
+      try {
+        stored = localStorage.getItem(storageKey);
+      } catch {}
+      const storedTarget = targetForLanguage(stored);
+      let target = storedTarget ?? fallbackPath;
+      if (storedTarget === null) {
+        const languages = navigator.languages?.length ? navigator.languages : [navigator.language];
+        for (const language of languages) {
+          const languageTarget = targetForLanguage(language);
+          if (languageTarget === null) continue;
+          target = languageTarget;
+          break;
+        }
+      }
+      window.location.replace(target);
+    </script>
+  </head>
+  <body class="min-h-screen bg-background text-foreground">
+    <main class="mx-auto max-w-xl px-4 py-16">
+      <p>{copy.redirect.message}</p>
+      <p><a class="underline" href={fallbackPath}>{copy.redirect.fallback}</a></p>
+    </main>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+---
+import StaticDashboard from "../../components/site/static-dashboard.astro";
+import { DEFAULT_RANGE, NON_DEFAULT_LOCALES, type Locale } from "../../lib/i18n/config.ts";
+
+export const getStaticPaths = () =>
+  NON_DEFAULT_LOCALES.map((locale) => ({
+    params: { locale },
+    props: { locale },
+  }));
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props as Props;
+---
+<StaticDashboard locale={locale} range={DEFAULT_RANGE} />

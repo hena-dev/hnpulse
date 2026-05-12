@@ -8,6 +8,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import type { Messages } from "../../lib/i18n/messages.ts";
 import type { BucketPoint } from "../../lib/range/bucket.ts";
 import { shouldOfferLogScale } from "../../lib/range/scale.ts";
 import { ChartContainer, type YScale } from "./chart-container.tsx";
@@ -16,9 +17,10 @@ import { ChartTooltip } from "./chart-tooltip.tsx";
 export interface ScoreTrendProps {
   median: readonly BucketPoint[];
   p90: readonly BucketPoint[];
+  messages: Messages["charts"];
 }
 
-export const ScoreTrend = ({ median, p90 }: ScoreTrendProps): JSX.Element => {
+export const ScoreTrend = ({ median, p90, messages }: ScoreTrendProps): JSX.Element => {
   const data = median.map((m, i) => ({
     date: m.date,
     median: m.value,
@@ -28,8 +30,10 @@ export const ScoreTrend = ({ median, p90 }: ScoreTrendProps): JSX.Element => {
   const [scale, setScale] = useState<YScale>("linear");
   return (
     <ChartContainer
-      title="Story score (median + p90)"
-      description="Daily quantiles"
+      title={messages.scoreTrendTitle}
+      description={messages.scoreTrendDescription}
+      scaleAriaLabel={messages.scaleAria}
+      scaleLabels={{ linear: messages.scaleLinear, log: messages.scaleLog }}
       {...(offerLog ? { scale, onScaleChange: setScale } : {})}
     >
       <ResponsiveContainer width="100%" height="100%">
@@ -44,10 +48,17 @@ export const ScoreTrend = ({ median, p90 }: ScoreTrendProps): JSX.Element => {
           />
           <ChartTooltip />
           <Legend />
-          <Line type="monotone" dataKey="median" stroke="var(--chart-1)" dot={false} />
+          <Line
+            type="monotone"
+            dataKey="median"
+            name={messages.seriesMedian}
+            stroke="var(--chart-1)"
+            dot={false}
+          />
           <Line
             type="monotone"
             dataKey="p90"
+            name={messages.seriesP90}
             stroke="var(--chart-2)"
             strokeDasharray="4 2"
             dot={false}

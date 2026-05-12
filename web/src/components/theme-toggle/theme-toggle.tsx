@@ -7,7 +7,11 @@ const detect = (): "light" | "dark" => {
   return document.documentElement.classList.contains("dark") ? "dark" : "light";
 };
 
-export const ThemeToggle = (): JSX.Element => {
+export interface ThemeToggleProps {
+  ariaLabel?: string;
+}
+
+export const ThemeToggle = ({ ariaLabel = "Toggle theme" }: ThemeToggleProps): JSX.Element => {
   const [theme, setTheme] = useState<"light" | "dark">(detect);
 
   useEffect(() => {
@@ -26,7 +30,7 @@ export const ThemeToggle = (): JSX.Element => {
   return (
     <button
       type="button"
-      aria-label="Toggle theme"
+      aria-label={ariaLabel}
       onClick={toggle}
       className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-card text-foreground hover:bg-muted"
     >

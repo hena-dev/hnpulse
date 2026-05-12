@@ -10,6 +10,11 @@ describe("RangeSelector", () => {
     }
   });
 
+  it("supports localized range hrefs", () => {
+    render(<RangeSelector value="1m" hrefForRange={(range) => `/ko/${range}`} />);
+    expect(screen.getByRole("link", { name: "1w" })).toHaveAttribute("href", "/ko/1w");
+  });
+
   it("marks the selected range as the current page", () => {
     render(<RangeSelector value="3m" />);
     expect(screen.getByRole("link", { name: "3m" })).toHaveAttribute("aria-current", "page");

@@ -8,20 +8,31 @@ export interface ChartContainerProps {
   description?: string;
   children: ReactNode;
   className?: string;
+  scaleAriaLabel?: string;
+  scaleLabels?: Readonly<Record<YScale, string>>;
   /** When provided, renders a Linear/Log toggle in the header. */
   scale?: YScale;
   onScaleChange?: (s: YScale) => void;
 }
 
+const defaultScaleLabels = {
+  linear: "linear",
+  log: "log",
+};
+
 const ScaleToggle = ({
   value,
   onChange,
+  ariaLabel,
+  labels,
 }: {
   value: YScale;
   onChange: (s: YScale) => void;
+  ariaLabel: string;
+  labels: Readonly<Record<YScale, string>>;
 }): JSX.Element => (
   <fieldset
-    aria-label="Y-axis scale"
+    aria-label={ariaLabel}
     className="inline-flex items-center gap-1 text-[0.625rem] uppercase tracking-wider"
   >
     {(["linear", "log"] as const).map((s) => (
@@ -37,7 +48,7 @@ const ScaleToggle = ({
             : "border-border text-muted-foreground hover:text-foreground",
         )}
       >
-        {s}
+        {labels[s]}
       </button>
     ))}
   </fieldset>
@@ -48,6 +59,8 @@ export const ChartContainer = ({
   description,
   children,
   className,
+  scaleAriaLabel = "Y-axis scale",
+  scaleLabels = defaultScaleLabels,
   scale,
   onScaleChange,
 }: ChartContainerProps): JSX.Element => (
@@ -60,7 +73,12 @@ export const ChartContainer = ({
         )}
       </div>
       {scale !== undefined && onScaleChange !== undefined && (
-        <ScaleToggle value={scale} onChange={onScaleChange} />
+        <ScaleToggle
+          value={scale}
+          onChange={onScaleChange}
+          ariaLabel={scaleAriaLabel}
+          labels={scaleLabels}
+        />
       )}
     </header>
     <div className="h-[260px] w-full">{children}</div>

@@ -1,0 +1,44 @@
+---
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
+import { parseKpis, parseMeta } from "../../data/schema.ts";
+import { alternateLinksForRange, localizedRangePath, type Locale } from "../../lib/i18n/config.ts";
+import { getMessages } from "../../lib/i18n/messages.ts";
+import { buildDashboardDataByRange } from "../../lib/dashboard-data.ts";
+import type { RangeId } from "../../lib/range/range.ts";
+import BaseLayout from "../../layouts/base.astro";
+import { SiteApp } from "./site-app.tsx";
+
+interface Props {
+  locale: Locale;
+  range: RangeId;
+}
+
+const { locale, range } = Astro.props as Props;
+const dataDir = join(process.cwd(), "public", "data");
+const meta = parseMeta(JSON.parse(readFileSync(join(dataDir, "meta.json"), "utf8")));
+const kpisFileName = meta.kpisFile.replace(/^\/data\//, "");
+const kpis = parseKpis(JSON.parse(readFileSync(join(dataDir, kpisFileName), "utf8")));
+const ranges = buildDashboardDataByRange(kpis);
+const copy = getMessages(locale);
+const alternateLinks = alternateLinksForRange(range);
+const canonicalPath = localizedRangePath(locale, range);
+---
+<BaseLayout
+  title={copy.metadata.title}
+  description={copy.metadata.description}
+  ogDescription={copy.metadata.ogDescription}
+  dataFeedTitle={copy.metadata.dataFeedTitle}
+  locale={locale}
+  canonicalPath={canonicalPath}
+  alternateLinks={alternateLinks}
+>
+  <SiteApp
+    initialRange={range}
+    locale={locale}
+    messages={copy}
+    ranges={ranges}
+    meta={meta}
+    client:load
+  />
+</BaseLayout>

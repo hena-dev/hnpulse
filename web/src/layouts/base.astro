@@ -1,28 +1,43 @@
 ---
 import "../styles/globals.css";
-const { title, description } = Astro.props as { title: string; description: string };
-const canonical = new URL(Astro.url.pathname, "https://hnpulse.hena.dev").toString();
+import { absoluteUrl, LOCALE_CONFIGS, type AlternateLink, type Locale } from "../lib/i18n/config.ts";
+const { title, description, locale, canonicalPath, alternateLinks, ogDescription, dataFeedTitle } =
+  Astro.props as {
+    title: string;
+    description: string;
+    locale: Locale;
+    canonicalPath: string;
+    alternateLinks: readonly AlternateLink[];
+    ogDescription: string;
+    dataFeedTitle: string;
+  };
+const canonical = absoluteUrl(canonicalPath);
+const localeConfig = LOCALE_CONFIGS[locale];
 const cwaToken = (import.meta.env as Record<string, string | undefined>).PUBLIC_CWA_TOKEN;
 ---
 <!doctype html>
-<html lang="en" class="dark">
+<html lang={localeConfig.htmlLang} dir={localeConfig.dir} class="dark">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta property="og:title" content="HN Pulse" />
-    <meta property="og:description" content="Hacker News, daily vitals." />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={ogDescription} />
     <meta property="og:image" content="https://hnpulse.hena.dev/og.png" />
-    <meta property="og:url" content="https://hnpulse.hena.dev" />
+    <meta property="og:url" content={canonical} />
     <meta property="og:type" content="website" />
+    <meta property="og:locale" content={localeConfig.intlLocale.replace("-", "_")} />
     <meta name="twitter:card" content="summary_large_image" />
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' https://static.cloudflareinsights.com; connect-src 'self' https://static.cloudflareinsights.com" />
     <meta name="referrer" content="strict-origin-when-cross-origin" />
     <link rel="canonical" href={canonical} />
+    {alternateLinks.map((link) => (
+      <link rel="alternate" hreflang={link.hrefLang} href={link.href} />
+    ))}
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/favicon.png" />
-    <link rel="alternate" type="application/json" href="/data/meta.json" title="HN Pulse data feed" />
+    <link rel="alternate" type="application/json" href="/data/meta.json" title={dataFeedTitle} />
     <script is:inline>
       try {
         const stored = localStorage.getItem("hnpulse.theme");

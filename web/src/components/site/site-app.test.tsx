@@ -2,6 +2,7 @@ import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { METRIC_KEYS, type MetaJson } from "../../data/types.ts";
 import type { DashboardDataByRange } from "../../lib/dashboard-data.ts";
+import { getMessages } from "../../lib/i18n/messages.ts";
 import { RANGE_IDS, type RangeId } from "../../lib/range/range.ts";
 import { SiteApp } from "./site-app.tsx";
 
@@ -47,7 +48,26 @@ const ranges = Object.fromEntries(
 ) as unknown as DashboardDataByRange;
 
 const renderApp = (initialRange: RangeId = "1w") =>
-  render(<SiteApp initialRange={initialRange} ranges={ranges} meta={meta} />);
+  render(
+    <SiteApp
+      initialRange={initialRange}
+      locale="en"
+      messages={getMessages("en")}
+      ranges={ranges}
+      meta={meta}
+    />,
+  );
+
+const renderLocalizedApp = (initialRange: RangeId = "1w") =>
+  render(
+    <SiteApp
+      initialRange={initialRange}
+      locale="ko"
+      messages={getMessages("ko")}
+      ranges={ranges}
+      meta={meta}
+    />,
+  );
 
 describe("SiteApp", () => {
   it("updates dashboard ranges without leaving the page", async () => {
@@ -73,6 +93,16 @@ describe("SiteApp", () => {
     screen.getByRole("link", { name: "HN Pulse" }).click();
 
     expect(window.location.pathname).toBe("/1m");
+  });
+
+  it("keeps localized range navigation under the locale prefix", async () => {
+    window.history.replaceState(null, "", "/ko/1w");
+    renderLocalizedApp("1w");
+
+    screen.getByRole("link", { name: "1m" }).click();
+
+    await waitFor(() => expect(window.location.pathname).toBe("/ko"));
+    expect(screen.getByRole("link", { name: "1m" })).toHaveAttribute("aria-current", "page");
   });
 
   it("allows modified header clicks to skip SPA handling", () => {

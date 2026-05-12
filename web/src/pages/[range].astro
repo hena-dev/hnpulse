@@ -1,29 +1,19 @@
 ---
-import { readFileSync } from "node:fs";
-import { join } from "node:path";
-import { SiteApp } from "../components/site/site-app.tsx";
-import { parseKpis, parseMeta } from "../data/schema.ts";
-import BaseLayout from "../layouts/base.astro";
-import { buildDashboardDataByRange } from "../lib/dashboard-data.ts";
+import StaticDashboard from "../components/site/static-dashboard.astro";
+import { DEFAULT_LOCALE } from "../lib/i18n/config.ts";
 import { RANGE_IDS, type RangeId } from "../lib/range/range.ts";
 
 export const getStaticPaths = () =>
   RANGE_IDS.map((range) => ({
     params: { range },
-    props: { range },
+    props: { range, locale: DEFAULT_LOCALE },
   }));
 
 interface Props {
   range: RangeId;
+  locale: typeof DEFAULT_LOCALE;
 }
 
-const { range } = Astro.props as Props;
-const dataDir = join(process.cwd(), "public", "data");
-const meta = parseMeta(JSON.parse(readFileSync(join(dataDir, "meta.json"), "utf8")));
-const kpisFileName = meta.kpisFile.replace(/^\/data\//, "");
-const kpis = parseKpis(JSON.parse(readFileSync(join(dataDir, kpisFileName), "utf8")));
-const ranges = buildDashboardDataByRange(kpis);
+const { locale, range } = Astro.props as Props;
 ---
-<BaseLayout title="HN Pulse — Hacker News, daily vitals" description="A daily-updated dashboard of Hacker News' most important community vitals: submissions, comments, active users, top domains, and more.">
-  <SiteApp initialRange={range} ranges={ranges} meta={meta} client:load />
-</BaseLayout>
+<StaticDashboard locale={locale} range={range} />

@@ -10,6 +10,8 @@ export interface SingleCardProps {
   value: number;
   delta: number | null;
   sparkline: readonly number[];
+  intlLocale?: string;
+  sparklineLabel?: string;
 }
 
 const deltaClass = (cls: ReturnType<typeof classifyDelta>): string => {
@@ -18,7 +20,17 @@ const deltaClass = (cls: ReturnType<typeof classifyDelta>): string => {
   return "text-muted-foreground";
 };
 
-export const SingleCard = ({ entry, value, delta, sparkline }: SingleCardProps): JSX.Element => {
+const formatTemplate = (template: string, label: string): string =>
+  template.replace("{label}", label);
+
+export const SingleCard = ({
+  entry,
+  value,
+  delta,
+  sparkline,
+  intlLocale,
+  sparklineLabel = "{label} sparkline",
+}: SingleCardProps): JSX.Element => {
   const cls = delta === null ? "flat" : classifyDelta(delta);
   return (
     <article
@@ -31,12 +43,14 @@ export const SingleCard = ({ entry, value, delta, sparkline }: SingleCardProps):
       <header className="text-xs uppercase tracking-wider text-muted-foreground">
         {entry.label}
       </header>
-      <div className="text-2xl font-semibold tabular-nums">{formatByType(value, entry.format)}</div>
+      <div className="text-2xl font-semibold tabular-nums">
+        {formatByType(value, entry.format, intlLocale)}
+      </div>
       <div className={cn("text-xs tabular-nums", deltaClass(cls))}>
-        {delta === null ? "—" : formatDelta(delta)}
+        {delta === null ? "—" : formatDelta(delta, intlLocale)}
       </div>
       <div className="text-muted-foreground/60">
-        <Sparkline values={sparkline} ariaLabel={`${entry.label} sparkline`} />
+        <Sparkline values={sparkline} ariaLabel={formatTemplate(sparklineLabel, entry.label)} />
       </div>
       <div className="sr-only">
         <table>

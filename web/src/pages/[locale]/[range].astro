@@ -1,0 +1,21 @@
+---
+import StaticDashboard from "../../components/site/static-dashboard.astro";
+import { DEFAULT_RANGE, NON_DEFAULT_LOCALES, type Locale } from "../../lib/i18n/config.ts";
+import { RANGE_IDS, type RangeId } from "../../lib/range/range.ts";
+
+export const getStaticPaths = () =>
+  NON_DEFAULT_LOCALES.flatMap((locale) =>
+    RANGE_IDS.filter((range) => range !== DEFAULT_RANGE).map((range) => ({
+      params: { locale, range },
+      props: { locale, range },
+    })),
+  );
+
+interface Props {
+  locale: Locale;
+  range: RangeId;
+}
+
+const { locale, range } = Astro.props as Props;
+---
+<StaticDashboard locale={locale} range={range} />

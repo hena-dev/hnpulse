@@ -5,6 +5,8 @@ import { cn } from "../../lib/utils/cn.ts";
 export interface RangeSelectorProps {
   value: RangeId;
   className?: string;
+  ariaLabel?: string;
+  hrefForRange?: (range: RangeId) => string;
   onRangeChange?: (range: RangeId) => void;
 }
 
@@ -14,10 +16,12 @@ const shouldHandleClick = (event: MouseEvent<HTMLAnchorElement>): boolean =>
 export const RangeSelector = ({
   value,
   className,
+  ariaLabel = "Time range",
+  hrefForRange = (range) => `/${range}`,
   onRangeChange,
 }: RangeSelectorProps): JSX.Element => (
   <nav
-    aria-label="Time range"
+    aria-label={ariaLabel}
     className={cn("inline-flex rounded-md border bg-card p-0.5", className)}
   >
     {RANGE_IDS.map((id) => {
@@ -25,7 +29,7 @@ export const RangeSelector = ({
       return (
         <a
           key={id}
-          href={`/${id}`}
+          href={hrefForRange(id)}
           onClick={(event) => {
             if (onRangeChange === undefined || !shouldHandleClick(event)) return;
             event.preventDefault();

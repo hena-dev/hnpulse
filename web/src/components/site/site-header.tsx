@@ -1,26 +1,29 @@
 import type { JSX, MouseEvent } from "react";
-import type { RangeId } from "../../lib/range/range.ts";
 import { ThemeToggle } from "../theme-toggle/theme-toggle.tsx";
 
-export type SiteHref = `/${RangeId}`;
-
 export interface SiteHeaderProps {
-  onNavigate: (href: SiteHref) => (event: MouseEvent<HTMLAnchorElement>) => void;
+  homeHref: string;
+  themeToggleLabel: string;
+  onHomeNavigate: (event: MouseEvent<HTMLAnchorElement>) => void;
 }
 
-export const SiteHeader = ({ onNavigate }: SiteHeaderProps): JSX.Element => (
+export const SiteHeader = ({
+  homeHref,
+  themeToggleLabel,
+  onHomeNavigate,
+}: SiteHeaderProps): JSX.Element => (
   <header className="sticky top-0 z-10 border-b bg-background/80 backdrop-blur">
     <div className="mx-auto max-w-6xl flex items-center justify-between px-4 py-3">
       <a
-        href="/1m"
-        onClick={onNavigate("/1m")}
+        href={homeHref}
+        onClick={onHomeNavigate}
         className="flex items-center gap-2 font-semibold text-lg"
       >
         <img src="/favicon.png" alt="" className="h-6 w-6 rounded-sm" aria-hidden="true" />
         HN Pulse
       </a>
       <div className="flex items-center gap-3">
-        <ThemeToggle />
+        <ThemeToggle ariaLabel={themeToggleLabel} />
         <a
           href="https://github.com/hena-dev/hnpulse"
           target="_blank"

@@ -1,9 +1,10 @@
 import type { MetricKey } from "../../data/types.ts";
+import type { KpiMessageId } from "../i18n/messages.ts";
 
 export type KpiFormat = "count" | "ratio" | "percent";
 
 interface BaseEntry {
-  id: string;
+  id: KpiMessageId;
   label: string;
   description: string;
   /** True for the small/secondary card row (Dead/flagged ratio). */

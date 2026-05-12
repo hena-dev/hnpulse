@@ -1,5 +1,6 @@
 import { type JSX, useState } from "react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import type { Messages } from "../../lib/i18n/messages.ts";
 import type { BucketPoint } from "../../lib/range/bucket.ts";
 import { shouldOfferLogScale } from "../../lib/range/scale.ts";
 import { ChartContainer, type YScale } from "./chart-container.tsx";
@@ -8,9 +9,14 @@ import { ChartTooltip } from "./chart-tooltip.tsx";
 export interface StoriesVsCommentsProps {
   stories: readonly BucketPoint[];
   comments: readonly BucketPoint[];
+  messages: Messages["charts"];
 }
 
-export const StoriesVsComments = ({ stories, comments }: StoriesVsCommentsProps): JSX.Element => {
+export const StoriesVsComments = ({
+  stories,
+  comments,
+  messages,
+}: StoriesVsCommentsProps): JSX.Element => {
   const data = stories.map((s, i) => ({
     date: s.date,
     stories: s.value,
@@ -21,8 +27,10 @@ export const StoriesVsComments = ({ stories, comments }: StoriesVsCommentsProps)
   const [scale, setScale] = useState<YScale>("linear");
   return (
     <ChartContainer
-      title="Stories vs Comments"
-      description="Stacked area"
+      title={messages.storiesVsCommentsTitle}
+      description={messages.storiesVsCommentsDescription}
+      scaleAriaLabel={messages.scaleAria}
+      scaleLabels={{ linear: messages.scaleLinear, log: messages.scaleLog }}
       {...(offerLog ? { scale, onScaleChange: setScale } : {})}
     >
       <ResponsiveContainer width="100%" height="100%">
@@ -40,6 +48,7 @@ export const StoriesVsComments = ({ stories, comments }: StoriesVsCommentsProps)
             type="monotone"
             stackId="1"
             dataKey="stories"
+            name={messages.seriesStories}
             stroke="var(--chart-1)"
             fill="var(--chart-1)"
             fillOpacity={0.2}
@@ -48,6 +57,7 @@ export const StoriesVsComments = ({ stories, comments }: StoriesVsCommentsProps)
             type="monotone"
             stackId="1"
             dataKey="comments"
+            name={messages.seriesComments}
             stroke="var(--chart-2)"
             fill="var(--chart-2)"
             fillOpacity={0.4}

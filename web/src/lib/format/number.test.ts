@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatCount, formatPercent, formatRatio } from "./number.ts";
+import { formatCount, formatInteger, formatPercent, formatRatio } from "./number.ts";
 
 describe("formatCount", () => {
   it("uses thousands separators for whole numbers", () => {
@@ -23,6 +23,13 @@ describe("formatPercent", () => {
   it("handles 0 and 1 cleanly", () => {
     expect(formatPercent(0)).toBe("0.0%");
     expect(formatPercent(1)).toBe("100.0%");
+  });
+});
+
+describe("formatInteger", () => {
+  it("formats whole counts without decimal places", () => {
+    expect(formatInteger(41)).toBe("41");
+    expect(formatInteger(1234.7)).toBe("1,235");
   });
 });
 

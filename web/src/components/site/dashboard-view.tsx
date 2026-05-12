@@ -1,15 +1,23 @@
 import type { JSX } from "react";
 import type { MetaJson } from "../../data/types.ts";
 import type { DashboardData } from "../../lib/dashboard-data.ts";
+import { formatDateTime } from "../../lib/format/date.ts";
+import type { Locale } from "../../lib/i18n/config.ts";
+import { formatMessage, type Messages } from "../../lib/i18n/messages.ts";
 import type { RangeId } from "../../lib/range/range.ts";
 import { DetailCharts } from "../dashboard/detail-charts.tsx";
 import { KpiGrid } from "../dashboard/kpi-grid.tsx";
+import { LanguageSwitcher } from "../language-switcher/language-switcher.tsx";
 
 export interface DashboardViewProps {
   dashboard: DashboardData;
   chartDashboard: DashboardData;
   meta: MetaJson;
   range: RangeId;
+  locale: Locale;
+  messages: Messages;
+  intlLocale: string;
+  hrefForRange: (range: RangeId) => string;
   onRangeChange: (range: RangeId) => void;
 }
 
@@ -18,6 +26,10 @@ export const DashboardView = ({
   chartDashboard,
   meta,
   range,
+  locale,
+  messages,
+  intlLocale,
+  hrefForRange,
   onRangeChange,
 }: DashboardViewProps): JSX.Element => (
   <>
@@ -27,21 +39,36 @@ export const DashboardView = ({
         topDomain={dashboard.topDomain}
         meta={meta}
         range={range}
+        messages={messages}
+        intlLocale={intlLocale}
+        hrefForRange={hrefForRange}
         onRangeChange={onRangeChange}
       />
-      <DetailCharts series={chartDashboard.detailSeries} topDomains={chartDashboard.topDomains} />
+      <DetailCharts
+        series={chartDashboard.detailSeries}
+        topDomains={chartDashboard.topDomains}
+        messages={messages.charts}
+      />
     </main>
-    <footer className="mx-auto max-w-6xl px-4 py-8 text-xs text-muted-foreground">
-      Built by hena ·{" "}
+    <footer className="mx-auto max-w-6xl px-4 py-8 text-xs text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-2">
+      <span>{messages.dashboard.footerBuiltBy}</span>
+      <span aria-hidden="true">·</span>
       <a
         href="https://github.com/hena-dev/hnpulse"
         target="_blank"
         rel="noopener noreferrer"
         className="underline"
       >
-        Repo
-      </a>{" "}
-      · last updated {meta.lastUpdated}
+        {messages.dashboard.footerRepo}
+      </a>
+      <span aria-hidden="true">·</span>
+      <span>
+        {formatMessage(messages.dashboard.lastUpdated, {
+          date: formatDateTime(meta.lastUpdated, intlLocale),
+        })}
+      </span>
+      <span aria-hidden="true">·</span>
+      <LanguageSwitcher locale={locale} range={range} />
     </footer>
   </>
 );
