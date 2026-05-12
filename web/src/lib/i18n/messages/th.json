@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — สัญญาณชีพรายวันของ Hacker News",
+    "description": "แดชบอร์ดที่อัปเดตรายวันของสัญญาณชีพชุมชน Hacker News ที่สำคัญที่สุด: การส่งเรื่อง ความคิดเห็น ผู้ใช้ที่ใช้งาน โดเมนยอดนิยม และอื่นๆ",
+    "ogDescription": "สัญญาณชีพรายวันของ Hacker News",
+    "dataFeedTitle": "ฟีดข้อมูล HN Pulse"
+  },
+  "redirect": {
+    "message": "กำลังเปลี่ยนเส้นทางไปยังภาษาของคุณ...",
+    "fallback": "เปิดแดชบอร์ด"
+  },
+  "range": {
+    "ariaLabel": "ช่วงเวลา",
+    "labels": {
+      "1w": "1 สัปดาห์",
+      "1m": "1 เดือน",
+      "3m": "3 เดือน",
+      "6m": "6 เดือน",
+      "1y": "1 ปี",
+      "2y": "2 ปี"
+    }
+  },
+  "theme": {
+    "toggle": "สลับธีม"
+  },
+  "dashboard": {
+    "asOf": "ณ {date}",
+    "footerBuiltBy": "สร้างโดย hena",
+    "footerRepo": "Repo",
+    "lastUpdated": "อัปเดตล่าสุด {date}"
+  },
+  "charts": {
+    "unavailable": "แผนภูมิจะโหลดเมื่อมี JavaScript",
+    "scaleAria": "สเกลแกน Y",
+    "scaleLinear": "เชิงเส้น",
+    "scaleLog": "ลอการิทึม",
+    "storiesVsCommentsTitle": "เรื่องเทียบกับความคิดเห็น",
+    "storiesVsCommentsDescription": "พื้นที่ซ้อนกัน",
+    "activeUsersTitle": "ผู้ใช้ที่ใช้งาน",
+    "activeUsersDescription": "ผู้เขียนไม่ซ้ำต่อวัน",
+    "topDomainsTitle": "10 โดเมนยอดนิยม",
+    "topDomainsDescription": "จำนวนเรื่องในช่วงที่เลือก",
+    "scoreTrendTitle": "คะแนนเรื่อง (มัธยฐาน + p90)",
+    "scoreTrendDescription": "ควอนไทล์รายวัน",
+    "seriesStories": "เรื่อง",
+    "seriesComments": "ความคิดเห็น",
+    "seriesCommenters": "ผู้แสดงความคิดเห็น",
+    "seriesSubmitters": "ผู้ส่งเรื่อง",
+    "seriesMedian": "มัธยฐาน",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} ของเรื่องทั้งหมด",
+    "submissions": "การส่ง {count} รายการ"
+  },
+  "sparkline": "สปาร์กไลน์ {label}",
+  "kpis": {
+    "stories": {
+      "label": "เรื่อง / วัน",
+      "description": "ค่าเฉลี่ยการส่งเรื่องต่อวัน UTC"
+    },
+    "comments": {
+      "label": "ความคิดเห็น / วัน",
+      "description": "ค่าเฉลี่ยความคิดเห็นต่อวัน UTC"
+    },
+    "activeCommenters": {
+      "label": "ผู้แสดงความคิดเห็นที่ใช้งาน",
+      "description": "ผู้เขียนความคิดเห็นไม่ซ้ำ / วัน"
+    },
+    "activeSubmitters": {
+      "label": "ผู้ส่งเรื่องที่ใช้งาน",
+      "description": "ผู้เขียนเรื่องไม่ซ้ำ / วัน"
+    },
+    "score": {
+      "label": "คะแนนเรื่อง",
+      "description": "มัธยฐาน (p50) และ p90 ของคะแนนเรื่องรายวัน",
+      "primaryLabel": "มัธยฐาน",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "ความคิดเห็น / เรื่อง",
+      "description": "อัตราส่วนการมีส่วนร่วม"
+    },
+    "successRateGte100": {
+      "label": "อัตราความสำเร็จ (>=100)",
+      "description": "เรื่องที่ได้คะแนน >=100 / เรื่องทั้งหมด"
+    },
+    "topDomain": {
+      "label": "โดเมนยอดนิยม",
+      "description": "โดเมนจดทะเบียนที่ถูกส่งมากที่สุดในช่วงที่เลือก"
+    },
+    "showHn": {
+      "label": "Show HN / วัน",
+      "description": "โพสต์ Show HN / วัน"
+    },
+    "askHn": {
+      "label": "Ask HN / วัน",
+      "description": "โพสต์ Ask HN / วัน"
+    },
+    "jobs": {
+      "label": "งาน / วัน",
+      "description": "ประกาศงาน / วัน"
+    },
+    "deadFlaggedRatio": {
+      "label": "ตาย/ถูกแฟล็ก",
+      "description": "สัดส่วนรายการที่ถูกแฟล็กว่า dead"
+    }
+  }
+}

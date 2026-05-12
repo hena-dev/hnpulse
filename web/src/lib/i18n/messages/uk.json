@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, щоденні показники",
+    "description": "Щоденно оновлювана панель найважливіших показників спільноти Hacker News: дописи, коментарі, активні користувачі, топ доменів тощо.",
+    "ogDescription": "Hacker News, щоденні показники.",
+    "dataFeedTitle": "Фід даних HN Pulse"
+  },
+  "redirect": {
+    "message": "Перенаправляємо на вашу мову...",
+    "fallback": "Відкрити панель"
+  },
+  "range": {
+    "ariaLabel": "Діапазон часу",
+    "labels": {
+      "1w": "1 тиж",
+      "1m": "1 міс",
+      "3m": "3 міс",
+      "6m": "6 міс",
+      "1y": "1 рік",
+      "2y": "2 роки"
+    }
+  },
+  "theme": {
+    "toggle": "Перемкнути тему"
+  },
+  "dashboard": {
+    "asOf": "станом на {date}",
+    "footerBuiltBy": "Створено hena",
+    "footerRepo": "Репозиторій",
+    "lastUpdated": "оновлено {date}"
+  },
+  "charts": {
+    "unavailable": "Графіки завантажуються, коли доступний JavaScript.",
+    "scaleAria": "Масштаб осі Y",
+    "scaleLinear": "лінійний",
+    "scaleLog": "логарифмічний",
+    "storiesVsCommentsTitle": "Дописи й коментарі",
+    "storiesVsCommentsDescription": "Складена область",
+    "activeUsersTitle": "Активні користувачі",
+    "activeUsersDescription": "Унікальні автори за день",
+    "topDomainsTitle": "Топ 10 доменів",
+    "topDomainsDescription": "Кількість дописів за вибраний діапазон",
+    "scoreTrendTitle": "Оцінка дописів (медіана + p90)",
+    "scoreTrendDescription": "Щоденні квантилі",
+    "seriesStories": "дописи",
+    "seriesComments": "коментарі",
+    "seriesCommenters": "коментатори",
+    "seriesSubmitters": "автори дописів",
+    "seriesMedian": "медіана",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} дописів",
+    "submissions": "{count} публікацій"
+  },
+  "sparkline": "Спарклайн {label}",
+  "kpis": {
+    "stories": {
+      "label": "Дописи / день",
+      "description": "Сер. кількість дописів за UTC-день"
+    },
+    "comments": {
+      "label": "Коментарі / день",
+      "description": "Сер. кількість коментарів за UTC-день"
+    },
+    "activeCommenters": {
+      "label": "Активні коментатори",
+      "description": "Унікальні автори коментарів / день"
+    },
+    "activeSubmitters": {
+      "label": "Активні автори дописів",
+      "description": "Унікальні автори дописів / день"
+    },
+    "score": {
+      "label": "Оцінка дописів",
+      "description": "Медіана (p50) і p90 щоденних оцінок дописів",
+      "primaryLabel": "медіана",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Коментарі / допис",
+      "description": "Коефіцієнт залучення"
+    },
+    "successRateGte100": {
+      "label": "Рівень успіху (>=100)",
+      "description": "Дописи з оцінкою >=100 / усі дописи"
+    },
+    "topDomain": {
+      "label": "Топ домен",
+      "description": "Найчастіше публікований реєстрований домен у вибраному діапазоні"
+    },
+    "showHn": {
+      "label": "Show HN / день",
+      "description": "Дописи Show HN / день"
+    },
+    "askHn": {
+      "label": "Ask HN / день",
+      "description": "Дописи Ask HN / день"
+    },
+    "jobs": {
+      "label": "Вакансії / день",
+      "description": "Оголошення про вакансії / день"
+    },
+    "deadFlaggedRatio": {
+      "label": "Мертві/позначені",
+      "description": "Частка елементів, позначених як мертві"
+    }
+  }
+}

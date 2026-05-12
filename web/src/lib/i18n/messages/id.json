@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — vital harian Hacker News",
+    "description": "Dasbor yang diperbarui harian untuk vital komunitas terpenting Hacker News: kiriman, komentar, pengguna aktif, domain teratas, dan lainnya.",
+    "ogDescription": "Hacker News, vital harian.",
+    "dataFeedTitle": "Feed data HN Pulse"
+  },
+  "redirect": {
+    "message": "Mengalihkan ke bahasa Anda...",
+    "fallback": "Buka dasbor"
+  },
+  "range": {
+    "ariaLabel": "Rentang waktu",
+    "labels": {
+      "1w": "1 mg",
+      "1m": "1 bln",
+      "3m": "3 bln",
+      "6m": "6 bln",
+      "1y": "1 thn",
+      "2y": "2 thn"
+    }
+  },
+  "theme": {
+    "toggle": "Ganti tema"
+  },
+  "dashboard": {
+    "asOf": "per {date}",
+    "footerBuiltBy": "Dibuat oleh hena",
+    "footerRepo": "Repo",
+    "lastUpdated": "terakhir diperbarui {date}"
+  },
+  "charts": {
+    "unavailable": "Grafik dimuat saat JavaScript tersedia.",
+    "scaleAria": "Skala sumbu Y",
+    "scaleLinear": "linear",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Cerita vs Komentar",
+    "storiesVsCommentsDescription": "Area bertumpuk",
+    "activeUsersTitle": "Pengguna aktif",
+    "activeUsersDescription": "Penulis unik per hari",
+    "topDomainsTitle": "10 domain teratas",
+    "topDomainsDescription": "Jumlah cerita dalam rentang yang dipilih",
+    "scoreTrendTitle": "Skor cerita (median + p90)",
+    "scoreTrendDescription": "Kuantil harian",
+    "seriesStories": "cerita",
+    "seriesComments": "komentar",
+    "seriesCommenters": "komentator",
+    "seriesSubmitters": "pengirim",
+    "seriesMedian": "median",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} dari cerita",
+    "submissions": "{count} kiriman"
+  },
+  "sparkline": "Sparkline {label}",
+  "kpis": {
+    "stories": {
+      "label": "Cerita / hari",
+      "description": "Rata-rata kiriman cerita per hari UTC"
+    },
+    "comments": {
+      "label": "Komentar / hari",
+      "description": "Rata-rata komentar per hari UTC"
+    },
+    "activeCommenters": {
+      "label": "Komentator aktif",
+      "description": "Penulis komentar unik / hari"
+    },
+    "activeSubmitters": {
+      "label": "Pengirim aktif",
+      "description": "Penulis cerita unik / hari"
+    },
+    "score": {
+      "label": "Skor cerita",
+      "description": "Median (p50) dan p90 skor cerita harian",
+      "primaryLabel": "median",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Komentar / cerita",
+      "description": "Rasio keterlibatan"
+    },
+    "successRateGte100": {
+      "label": "Tingkat sukses (>=100)",
+      "description": "Cerita berskor >=100 / semua cerita"
+    },
+    "topDomain": {
+      "label": "Domain teratas",
+      "description": "Domain terdaftar yang paling banyak dikirim dalam rentang yang dipilih"
+    },
+    "showHn": {
+      "label": "Show HN / hari",
+      "description": "Posting Show HN / hari"
+    },
+    "askHn": {
+      "label": "Ask HN / hari",
+      "description": "Posting Ask HN / hari"
+    },
+    "jobs": {
+      "label": "Lowongan / hari",
+      "description": "Posting lowongan kerja / hari"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "Porsi item yang ditandai dead"
+    }
+  }
+}

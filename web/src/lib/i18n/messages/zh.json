@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News 每日指标",
+    "description": "每日更新的 Hacker News 关键社区指标看板：投稿、评论、活跃用户、热门域名等。",
+    "ogDescription": "Hacker News 每日指标。",
+    "dataFeedTitle": "HN Pulse 数据源"
+  },
+  "redirect": {
+    "message": "正在跳转到你的语言...",
+    "fallback": "打开看板"
+  },
+  "range": {
+    "ariaLabel": "时间范围",
+    "labels": {
+      "1w": "1周",
+      "1m": "1个月",
+      "3m": "3个月",
+      "6m": "6个月",
+      "1y": "1年",
+      "2y": "2年"
+    }
+  },
+  "theme": {
+    "toggle": "切换主题"
+  },
+  "dashboard": {
+    "asOf": "截至 {date}",
+    "footerBuiltBy": "由 hena 构建",
+    "footerRepo": "仓库",
+    "lastUpdated": "最后更新于 {date}"
+  },
+  "charts": {
+    "unavailable": "启用 JavaScript 后加载图表。",
+    "scaleAria": "Y 轴刻度",
+    "scaleLinear": "线性",
+    "scaleLog": "对数",
+    "storiesVsCommentsTitle": "文章与评论",
+    "storiesVsCommentsDescription": "堆叠面积图",
+    "activeUsersTitle": "活跃用户",
+    "activeUsersDescription": "每日不同作者数",
+    "topDomainsTitle": "前 10 域名",
+    "topDomainsDescription": "所选范围内的文章数",
+    "scoreTrendTitle": "文章分数（中位数 + p90）",
+    "scoreTrendDescription": "每日分位数",
+    "seriesStories": "文章",
+    "seriesComments": "评论",
+    "seriesCommenters": "评论者",
+    "seriesSubmitters": "投稿者",
+    "seriesMedian": "中位数",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "占文章的 {share}",
+    "submissions": "{count} 篇投稿"
+  },
+  "sparkline": "{label} 迷你趋势图",
+  "kpis": {
+    "stories": {
+      "label": "文章 / 天",
+      "description": "每 UTC 日平均文章投稿数"
+    },
+    "comments": {
+      "label": "评论 / 天",
+      "description": "每 UTC 日平均评论数"
+    },
+    "activeCommenters": {
+      "label": "活跃评论者",
+      "description": "每日不同评论作者数"
+    },
+    "activeSubmitters": {
+      "label": "活跃投稿者",
+      "description": "每日不同文章作者数"
+    },
+    "score": {
+      "label": "文章分数",
+      "description": "每日文章分数的中位数（p50）和 p90",
+      "primaryLabel": "中位数",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "评论 / 文章",
+      "description": "互动比率"
+    },
+    "successRateGte100": {
+      "label": "成功率（>=100）",
+      "description": "得分 >=100 的文章 / 全部文章"
+    },
+    "topDomain": {
+      "label": "热门域名",
+      "description": "所选范围内投稿最多的可注册域名"
+    },
+    "showHn": {
+      "label": "Show HN / 天",
+      "description": "Show HN 帖子 / 天"
+    },
+    "askHn": {
+      "label": "Ask HN / 天",
+      "description": "Ask HN 帖子 / 天"
+    },
+    "jobs": {
+      "label": "招聘 / 天",
+      "description": "招聘帖 / 天"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "被标记为 dead 的条目占比"
+    }
+  }
+}

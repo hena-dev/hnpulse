@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, dati vitali quotidiani",
+    "description": "Una dashboard aggiornata ogni giorno con i dati vitali più importanti della community di Hacker News: invii, commenti, utenti attivi, domini principali e altro.",
+    "ogDescription": "Hacker News, dati vitali quotidiani.",
+    "dataFeedTitle": "Feed dati HN Pulse"
+  },
+  "redirect": {
+    "message": "Reindirizzamento alla tua lingua...",
+    "fallback": "Apri la dashboard"
+  },
+  "range": {
+    "ariaLabel": "Intervallo di tempo",
+    "labels": {
+      "1w": "1 sett.",
+      "1m": "1 mese",
+      "3m": "3 mesi",
+      "6m": "6 mesi",
+      "1y": "1 anno",
+      "2y": "2 anni"
+    }
+  },
+  "theme": {
+    "toggle": "Cambia tema"
+  },
+  "dashboard": {
+    "asOf": "al {date}",
+    "footerBuiltBy": "Creato da hena",
+    "footerRepo": "Repo",
+    "lastUpdated": "ultimo aggiornamento {date}"
+  },
+  "charts": {
+    "unavailable": "I grafici vengono caricati quando JavaScript è disponibile.",
+    "scaleAria": "Scala asse Y",
+    "scaleLinear": "lineare",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Storie vs commenti",
+    "storiesVsCommentsDescription": "Area impilata",
+    "activeUsersTitle": "Utenti attivi",
+    "activeUsersDescription": "Autori distinti al giorno",
+    "topDomainsTitle": "Top 10 domini",
+    "topDomainsDescription": "Conteggio storie nell'intervallo selezionato",
+    "scoreTrendTitle": "Punteggio storie (mediana + p90)",
+    "scoreTrendDescription": "Quantili giornalieri",
+    "seriesStories": "storie",
+    "seriesComments": "commenti",
+    "seriesCommenters": "commentatori",
+    "seriesSubmitters": "autori di invii",
+    "seriesMedian": "mediana",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} delle storie",
+    "submissions": "{count} invii"
+  },
+  "sparkline": "sparkline {label}",
+  "kpis": {
+    "stories": {
+      "label": "Storie / giorno",
+      "description": "Media invii di storie per giorno UTC"
+    },
+    "comments": {
+      "label": "Commenti / giorno",
+      "description": "Media commenti per giorno UTC"
+    },
+    "activeCommenters": {
+      "label": "Commentatori attivi",
+      "description": "Autori di commenti distinti / giorno"
+    },
+    "activeSubmitters": {
+      "label": "Autori attivi",
+      "description": "Autori di storie distinti / giorno"
+    },
+    "score": {
+      "label": "Punteggio storie",
+      "description": "Mediana (p50) e p90 dei punteggi giornalieri delle storie",
+      "primaryLabel": "mediana",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Commenti / storia",
+      "description": "Rapporto di engagement"
+    },
+    "successRateGte100": {
+      "label": "Tasso di successo (>=100)",
+      "description": "Storie con punteggio >=100 / tutte le storie"
+    },
+    "topDomain": {
+      "label": "Dominio principale",
+      "description": "Dominio registrabile con più invii nell'intervallo selezionato"
+    },
+    "showHn": {
+      "label": "Show HN / giorno",
+      "description": "Post Show HN / giorno"
+    },
+    "askHn": {
+      "label": "Ask HN / giorno",
+      "description": "Post Ask HN / giorno"
+    },
+    "jobs": {
+      "label": "Lavori / giorno",
+      "description": "Annunci di lavoro / giorno"
+    },
+    "deadFlaggedRatio": {
+      "label": "Morti/segnalati",
+      "description": "Quota di elementi segnalati come morti"
+    }
+  }
+}

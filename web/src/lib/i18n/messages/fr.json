@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, indicateurs quotidiens",
+    "description": "Un tableau de bord mis à jour chaque jour avec les principaux indicateurs de la communauté Hacker News : soumissions, commentaires, utilisateurs actifs, domaines populaires, et plus encore.",
+    "ogDescription": "Hacker News, indicateurs quotidiens.",
+    "dataFeedTitle": "Flux de données HN Pulse"
+  },
+  "redirect": {
+    "message": "Redirection vers votre langue...",
+    "fallback": "Ouvrir le tableau de bord"
+  },
+  "range": {
+    "ariaLabel": "Période",
+    "labels": {
+      "1w": "1 sem.",
+      "1m": "1 mois",
+      "3m": "3 mois",
+      "6m": "6 mois",
+      "1y": "1 an",
+      "2y": "2 ans"
+    }
+  },
+  "theme": {
+    "toggle": "Changer de thème"
+  },
+  "dashboard": {
+    "asOf": "au {date}",
+    "footerBuiltBy": "Créé par hena",
+    "footerRepo": "Dépôt",
+    "lastUpdated": "dernière mise à jour {date}"
+  },
+  "charts": {
+    "unavailable": "Les graphiques se chargent lorsque JavaScript est disponible.",
+    "scaleAria": "Échelle de l’axe Y",
+    "scaleLinear": "linéaire",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Stories vs commentaires",
+    "storiesVsCommentsDescription": "Aire empilée",
+    "activeUsersTitle": "Utilisateurs actifs",
+    "activeUsersDescription": "Auteurs distincts par jour",
+    "topDomainsTitle": "Top 10 des domaines",
+    "topDomainsDescription": "Nombre de stories sur la période sélectionnée",
+    "scoreTrendTitle": "Score des stories (médiane + p90)",
+    "scoreTrendDescription": "Quantiles quotidiens",
+    "seriesStories": "stories",
+    "seriesComments": "commentaires",
+    "seriesCommenters": "commentateurs",
+    "seriesSubmitters": "contributeurs",
+    "seriesMedian": "médiane",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} des stories",
+    "submissions": "{count} soumissions"
+  },
+  "sparkline": "sparkline {label}",
+  "kpis": {
+    "stories": {
+      "label": "Stories / jour",
+      "description": "Moy. des soumissions de stories par jour UTC"
+    },
+    "comments": {
+      "label": "Commentaires / jour",
+      "description": "Moy. des commentaires par jour UTC"
+    },
+    "activeCommenters": {
+      "label": "Commentateurs actifs",
+      "description": "Auteurs de commentaires distincts / jour"
+    },
+    "activeSubmitters": {
+      "label": "Contributeurs actifs",
+      "description": "Auteurs de stories distincts / jour"
+    },
+    "score": {
+      "label": "Score des stories",
+      "description": "Médiane (p50) et p90 des scores quotidiens des stories",
+      "primaryLabel": "médiane",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Commentaires / story",
+      "description": "Taux d’engagement"
+    },
+    "successRateGte100": {
+      "label": "Taux de réussite (>=100)",
+      "description": "Stories avec un score >=100 / toutes les stories"
+    },
+    "topDomain": {
+      "label": "Domaine principal",
+      "description": "Domaine enregistrable le plus soumis sur la période sélectionnée"
+    },
+    "showHn": {
+      "label": "Show HN / jour",
+      "description": "Posts Show HN / jour"
+    },
+    "askHn": {
+      "label": "Ask HN / jour",
+      "description": "Posts Ask HN / jour"
+    },
+    "jobs": {
+      "label": "Jobs / jour",
+      "description": "Offres d’emploi / jour"
+    },
+    "deadFlaggedRatio": {
+      "label": "Morts/signalés",
+      "description": "Part des éléments marqués dead"
+    }
+  }
+}

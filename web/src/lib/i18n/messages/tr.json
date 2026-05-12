@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, günlük göstergeler",
+    "description": "Hacker News'in en önemli topluluk göstergelerini günlük güncellenen bir panoda sunar: gönderiler, yorumlar, aktif kullanıcılar, en iyi alan adları ve daha fazlası.",
+    "ogDescription": "Hacker News, günlük göstergeler.",
+    "dataFeedTitle": "HN Pulse veri akışı"
+  },
+  "redirect": {
+    "message": "Dilinize yönlendiriliyor...",
+    "fallback": "Panoyu aç"
+  },
+  "range": {
+    "ariaLabel": "Zaman aralığı",
+    "labels": {
+      "1w": "1 hf",
+      "1m": "1 ay",
+      "3m": "3 ay",
+      "6m": "6 ay",
+      "1y": "1 yıl",
+      "2y": "2 yıl"
+    }
+  },
+  "theme": {
+    "toggle": "Temayı değiştir"
+  },
+  "dashboard": {
+    "asOf": "{date} itibarıyla",
+    "footerBuiltBy": "hena tarafından oluşturuldu",
+    "footerRepo": "Repo",
+    "lastUpdated": "son güncelleme {date}"
+  },
+  "charts": {
+    "unavailable": "Grafikler JavaScript kullanılabilir olduğunda yüklenir.",
+    "scaleAria": "Y ekseni ölçeği",
+    "scaleLinear": "doğrusal",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Hikayeler ve yorumlar",
+    "storiesVsCommentsDescription": "Yığın alan",
+    "activeUsersTitle": "Aktif kullanıcılar",
+    "activeUsersDescription": "Günlük benzersiz yazarlar",
+    "topDomainsTitle": "İlk 10 alan adı",
+    "topDomainsDescription": "Seçili aralıktaki hikaye sayısı",
+    "scoreTrendTitle": "Hikaye puanı (medyan + p90)",
+    "scoreTrendDescription": "Günlük kantiller",
+    "seriesStories": "hikayeler",
+    "seriesComments": "yorumlar",
+    "seriesCommenters": "yorumcular",
+    "seriesSubmitters": "gönderenler",
+    "seriesMedian": "medyan",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "hikayelerin {share} oranı",
+    "submissions": "{count} gönderi"
+  },
+  "sparkline": "{label} sparkline",
+  "kpis": {
+    "stories": {
+      "label": "Hikaye / gün",
+      "description": "UTC günü başına ort. hikaye gönderisi"
+    },
+    "comments": {
+      "label": "Yorum / gün",
+      "description": "UTC günü başına ort. yorum"
+    },
+    "activeCommenters": {
+      "label": "Aktif yorumcular",
+      "description": "Günlük benzersiz yorum yazarları"
+    },
+    "activeSubmitters": {
+      "label": "Aktif gönderenler",
+      "description": "Günlük benzersiz hikaye yazarları"
+    },
+    "score": {
+      "label": "Hikaye puanı",
+      "description": "Günlük hikaye puanlarının medyanı (p50) ve p90'ı",
+      "primaryLabel": "medyan",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Yorum / hikaye",
+      "description": "Etkileşim oranı"
+    },
+    "successRateGte100": {
+      "label": "Başarı oranı (>=100)",
+      "description": ">=100 puan alan hikayeler / tüm hikayeler"
+    },
+    "topDomain": {
+      "label": "En iyi alan adı",
+      "description": "Seçili aralıkta en çok gönderilen kaydedilebilir alan adı"
+    },
+    "showHn": {
+      "label": "Show HN / gün",
+      "description": "Show HN gönderileri / gün"
+    },
+    "askHn": {
+      "label": "Ask HN / gün",
+      "description": "Ask HN gönderileri / gün"
+    },
+    "jobs": {
+      "label": "İş ilanları / gün",
+      "description": "İş ilanları / gün"
+    },
+    "deadFlaggedRatio": {
+      "label": "Ölü/işaretli",
+      "description": "Ölü olarak işaretlenen öğelerin payı"
+    }
+  }
+}

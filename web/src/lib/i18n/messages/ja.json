@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker Newsの日次バイタル",
+    "description": "Hacker Newsの主要なコミュニティ指標を毎日更新するダッシュボード: 投稿、コメント、アクティブユーザー、上位ドメインなど。",
+    "ogDescription": "Hacker Newsの日次バイタル。",
+    "dataFeedTitle": "HN Pulseデータフィード"
+  },
+  "redirect": {
+    "message": "あなたの言語にリダイレクトしています...",
+    "fallback": "ダッシュボードを開く"
+  },
+  "range": {
+    "ariaLabel": "期間",
+    "labels": {
+      "1w": "1週",
+      "1m": "1か月",
+      "3m": "3か月",
+      "6m": "6か月",
+      "1y": "1年",
+      "2y": "2年"
+    }
+  },
+  "theme": {
+    "toggle": "テーマを切り替え"
+  },
+  "dashboard": {
+    "asOf": "{date}時点",
+    "footerBuiltBy": "henaが作成",
+    "footerRepo": "リポジトリ",
+    "lastUpdated": "最終更新 {date}"
+  },
+  "charts": {
+    "unavailable": "JavaScriptが有効になるとチャートが読み込まれます。",
+    "scaleAria": "Y軸スケール",
+    "scaleLinear": "線形",
+    "scaleLog": "対数",
+    "storiesVsCommentsTitle": "ストーリーとコメント",
+    "storiesVsCommentsDescription": "積み上げエリア",
+    "activeUsersTitle": "アクティブユーザー",
+    "activeUsersDescription": "1日あたりのユニーク投稿者",
+    "topDomainsTitle": "上位10ドメイン",
+    "topDomainsDescription": "選択期間内のストーリー数",
+    "scoreTrendTitle": "ストーリースコア（中央値 + p90）",
+    "scoreTrendDescription": "日次分位数",
+    "seriesStories": "ストーリー",
+    "seriesComments": "コメント",
+    "seriesCommenters": "コメント投稿者",
+    "seriesSubmitters": "ストーリー投稿者",
+    "seriesMedian": "中央値",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "ストーリーの{share}",
+    "submissions": "{count}件の投稿"
+  },
+  "sparkline": "{label}のスパークライン",
+  "kpis": {
+    "stories": {
+      "label": "ストーリー / 日",
+      "description": "UTC日あたりの平均ストーリー投稿数"
+    },
+    "comments": {
+      "label": "コメント / 日",
+      "description": "UTC日あたりの平均コメント数"
+    },
+    "activeCommenters": {
+      "label": "アクティブコメント投稿者",
+      "description": "1日あたりのユニークコメント投稿者"
+    },
+    "activeSubmitters": {
+      "label": "アクティブ投稿者",
+      "description": "1日あたりのユニークストーリー投稿者"
+    },
+    "score": {
+      "label": "ストーリースコア",
+      "description": "日次ストーリースコアの中央値（p50）とp90",
+      "primaryLabel": "中央値",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "コメント / ストーリー",
+      "description": "エンゲージメント比率"
+    },
+    "successRateGte100": {
+      "label": "成功率（>=100）",
+      "description": "スコア>=100のストーリー / 全ストーリー"
+    },
+    "topDomain": {
+      "label": "トップドメイン",
+      "description": "選択期間内で最も投稿された登録可能ドメイン"
+    },
+    "showHn": {
+      "label": "Show HN / 日",
+      "description": "Show HN投稿 / 日"
+    },
+    "askHn": {
+      "label": "Ask HN / 日",
+      "description": "Ask HN投稿 / 日"
+    },
+    "jobs": {
+      "label": "Jobs / 日",
+      "description": "求人投稿 / 日"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "deadフラグ付き項目の割合"
+    }
+  }
+}

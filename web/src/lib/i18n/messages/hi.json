@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, दैनिक संकेतक",
+    "description": "Hacker News के सबसे महत्वपूर्ण सामुदायिक संकेतकों का रोज़ अपडेट होने वाला डैशबोर्ड: सबमिशन, टिप्पणियां, सक्रिय यूज़र, शीर्ष डोमेन, और बहुत कुछ।",
+    "ogDescription": "Hacker News, दैनिक संकेतक।",
+    "dataFeedTitle": "HN Pulse डेटा फ़ीड"
+  },
+  "redirect": {
+    "message": "आपकी भाषा पर रीडायरेक्ट हो रहा है...",
+    "fallback": "डैशबोर्ड खोलें"
+  },
+  "range": {
+    "ariaLabel": "समय सीमा",
+    "labels": {
+      "1w": "1 हफ़्ता",
+      "1m": "1 महीना",
+      "3m": "3 महीने",
+      "6m": "6 महीने",
+      "1y": "1 साल",
+      "2y": "2 साल"
+    }
+  },
+  "theme": {
+    "toggle": "थीम बदलें"
+  },
+  "dashboard": {
+    "asOf": "{date} तक",
+    "footerBuiltBy": "hena द्वारा बनाया गया",
+    "footerRepo": "Repo",
+    "lastUpdated": "आखिरी अपडेट {date}"
+  },
+  "charts": {
+    "unavailable": "JavaScript उपलब्ध होने पर चार्ट लोड होते हैं।",
+    "scaleAria": "Y-axis स्केल",
+    "scaleLinear": "linear",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "स्टोरीज़ बनाम टिप्पणियां",
+    "storiesVsCommentsDescription": "स्टैक्ड एरिया",
+    "activeUsersTitle": "सक्रिय यूज़र",
+    "activeUsersDescription": "प्रति दिन अलग-अलग लेखक",
+    "topDomainsTitle": "शीर्ष 10 डोमेन",
+    "topDomainsDescription": "चुनी गई सीमा में स्टोरी संख्या",
+    "scoreTrendTitle": "स्टोरी स्कोर (मीडियन + p90)",
+    "scoreTrendDescription": "दैनिक क्वांटाइल",
+    "seriesStories": "स्टोरीज़",
+    "seriesComments": "टिप्पणियां",
+    "seriesCommenters": "टिप्पणीकार",
+    "seriesSubmitters": "सबमिटर",
+    "seriesMedian": "मीडियन",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "स्टोरीज़ का {share}",
+    "submissions": "{count} सबमिशन"
+  },
+  "sparkline": "{label} स्पार्कलाइन",
+  "kpis": {
+    "stories": {
+      "label": "स्टोरीज़ / दिन",
+      "description": "प्रति UTC दिन औसत स्टोरी सबमिशन"
+    },
+    "comments": {
+      "label": "टिप्पणियां / दिन",
+      "description": "प्रति UTC दिन औसत टिप्पणियां"
+    },
+    "activeCommenters": {
+      "label": "सक्रिय टिप्पणीकार",
+      "description": "अलग-अलग टिप्पणी लेखक / दिन"
+    },
+    "activeSubmitters": {
+      "label": "सक्रिय सबमिटर",
+      "description": "अलग-अलग स्टोरी लेखक / दिन"
+    },
+    "score": {
+      "label": "स्टोरी स्कोर",
+      "description": "दैनिक स्टोरी स्कोर का मीडियन (p50) और p90",
+      "primaryLabel": "मीडियन",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "टिप्पणियां / स्टोरी",
+      "description": "एंगेजमेंट अनुपात"
+    },
+    "successRateGte100": {
+      "label": "सफलता दर (>=100)",
+      "description": ">=100 स्कोर वाली स्टोरीज़ / सभी स्टोरीज़"
+    },
+    "topDomain": {
+      "label": "शीर्ष डोमेन",
+      "description": "चुनी गई सीमा में सबसे ज़्यादा सबमिट किया गया रजिस्ट्रेबल डोमेन"
+    },
+    "showHn": {
+      "label": "Show HN / दिन",
+      "description": "Show HN पोस्ट / दिन"
+    },
+    "askHn": {
+      "label": "Ask HN / दिन",
+      "description": "Ask HN पोस्ट / दिन"
+    },
+    "jobs": {
+      "label": "Jobs / दिन",
+      "description": "नौकरी पोस्टिंग / दिन"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "dead फ्लैग किए गए आइटम का हिस्सा"
+    }
+  }
+}

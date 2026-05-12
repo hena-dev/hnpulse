@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News، مؤشرات يومية",
+    "description": "لوحة معلومات تُحدَّث يوميًا لأهم مؤشرات مجتمع Hacker News: المشاركات، التعليقات، المستخدمون النشطون، أبرز النطاقات، والمزيد.",
+    "ogDescription": "Hacker News، مؤشرات يومية.",
+    "dataFeedTitle": "موجز بيانات HN Pulse"
+  },
+  "redirect": {
+    "message": "جارٍ تحويلك إلى لغتك...",
+    "fallback": "افتح لوحة المعلومات"
+  },
+  "range": {
+    "ariaLabel": "النطاق الزمني",
+    "labels": {
+      "1w": "١ أسبوع",
+      "1m": "١ شهر",
+      "3m": "٣ أشهر",
+      "6m": "٦ أشهر",
+      "1y": "١ سنة",
+      "2y": "٢ سنة"
+    }
+  },
+  "theme": {
+    "toggle": "تبديل السمة"
+  },
+  "dashboard": {
+    "asOf": "حتى {date}",
+    "footerBuiltBy": "صُنع بواسطة hena",
+    "footerRepo": "المستودع",
+    "lastUpdated": "آخر تحديث {date}"
+  },
+  "charts": {
+    "unavailable": "تُحمَّل المخططات عند توفر JavaScript.",
+    "scaleAria": "مقياس محور Y",
+    "scaleLinear": "خطي",
+    "scaleLog": "لوغاريتمي",
+    "storiesVsCommentsTitle": "المشاركات مقابل التعليقات",
+    "storiesVsCommentsDescription": "مساحة مكدسة",
+    "activeUsersTitle": "المستخدمون النشطون",
+    "activeUsersDescription": "مؤلفون فريدون يوميًا",
+    "topDomainsTitle": "أبرز 10 نطاقات",
+    "topDomainsDescription": "عدد المشاركات ضمن النطاق المحدد",
+    "scoreTrendTitle": "درجة المشاركة (الوسيط + p90)",
+    "scoreTrendDescription": "كميات يومية",
+    "seriesStories": "المشاركات",
+    "seriesComments": "التعليقات",
+    "seriesCommenters": "المعلقون",
+    "seriesSubmitters": "الناشرون",
+    "seriesMedian": "الوسيط",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} من المشاركات",
+    "submissions": "{count} مشاركة"
+  },
+  "sparkline": "مخطط مصغر لـ {label}",
+  "kpis": {
+    "stories": {
+      "label": "المشاركات / يوم",
+      "description": "متوسط المشاركات لكل يوم UTC"
+    },
+    "comments": {
+      "label": "التعليقات / يوم",
+      "description": "متوسط التعليقات لكل يوم UTC"
+    },
+    "activeCommenters": {
+      "label": "المعلقون النشطون",
+      "description": "مؤلفو تعليقات فريدون / يوم"
+    },
+    "activeSubmitters": {
+      "label": "الناشرون النشطون",
+      "description": "مؤلفو مشاركات فريدون / يوم"
+    },
+    "score": {
+      "label": "درجة المشاركة",
+      "description": "الوسيط (p50) و p90 لدرجات المشاركات اليومية",
+      "primaryLabel": "الوسيط",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "التعليقات / مشاركة",
+      "description": "نسبة التفاعل"
+    },
+    "successRateGte100": {
+      "label": "معدل النجاح (>=100)",
+      "description": "المشاركات بدرجة >=100 / كل المشاركات"
+    },
+    "topDomain": {
+      "label": "أبرز نطاق",
+      "description": "أكثر نطاق قابل للتسجيل إرسالًا ضمن النطاق المحدد"
+    },
+    "showHn": {
+      "label": "Show HN / يوم",
+      "description": "منشورات Show HN / يوم"
+    },
+    "askHn": {
+      "label": "Ask HN / يوم",
+      "description": "منشورات Ask HN / يوم"
+    },
+    "jobs": {
+      "label": "الوظائف / يوم",
+      "description": "إعلانات الوظائف / يوم"
+    },
+    "deadFlaggedRatio": {
+      "label": "ميتة/مبلّغ عنها",
+      "description": "حصة العناصر المعلّمة كميتة"
+    }
+  }
+}

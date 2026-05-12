@@ -99,10 +99,10 @@ describe("SiteApp", () => {
     window.history.replaceState(null, "", "/ko/1w");
     renderLocalizedApp("1w");
 
-    screen.getByRole("link", { name: "1m" }).click();
+    screen.getByRole("link", { name: "1개월" }).click();
 
     await waitFor(() => expect(window.location.pathname).toBe("/ko"));
-    expect(screen.getByRole("link", { name: "1m" })).toHaveAttribute("aria-current", "page");
+    expect(screen.getByRole("link", { name: "1개월" })).toHaveAttribute("aria-current", "page");
   });
 
   it("allows modified header clicks to skip SPA handling", () => {

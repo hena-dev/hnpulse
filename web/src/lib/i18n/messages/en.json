@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, daily vitals",
+    "description": "A daily-updated dashboard of Hacker News' most important community vitals: submissions, comments, active users, top domains, and more.",
+    "ogDescription": "Hacker News, daily vitals.",
+    "dataFeedTitle": "HN Pulse data feed"
+  },
+  "redirect": {
+    "message": "Redirecting to your language...",
+    "fallback": "Open the dashboard"
+  },
+  "range": {
+    "ariaLabel": "Time range",
+    "labels": {
+      "1w": "1w",
+      "1m": "1m",
+      "3m": "3m",
+      "6m": "6m",
+      "1y": "1y",
+      "2y": "2y"
+    }
+  },
+  "theme": {
+    "toggle": "Toggle theme"
+  },
+  "dashboard": {
+    "asOf": "as of {date}",
+    "footerBuiltBy": "Built by hena",
+    "footerRepo": "Repo",
+    "lastUpdated": "last updated {date}"
+  },
+  "charts": {
+    "unavailable": "Charts load when JavaScript is available.",
+    "scaleAria": "Y-axis scale",
+    "scaleLinear": "linear",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Stories vs Comments",
+    "storiesVsCommentsDescription": "Stacked area",
+    "activeUsersTitle": "Active users",
+    "activeUsersDescription": "Distinct authors per day",
+    "topDomainsTitle": "Top 10 domains",
+    "topDomainsDescription": "Story count over the selected range",
+    "scoreTrendTitle": "Story score (median + p90)",
+    "scoreTrendDescription": "Daily quantiles",
+    "seriesStories": "stories",
+    "seriesComments": "comments",
+    "seriesCommenters": "commenters",
+    "seriesSubmitters": "submitters",
+    "seriesMedian": "median",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} of stories",
+    "submissions": "{count} submissions"
+  },
+  "sparkline": "{label} sparkline",
+  "kpis": {
+    "stories": {
+      "label": "Stories / day",
+      "description": "Avg. story submissions per UTC day"
+    },
+    "comments": {
+      "label": "Comments / day",
+      "description": "Avg. comments per UTC day"
+    },
+    "activeCommenters": {
+      "label": "Active commenters",
+      "description": "Distinct comment authors / day"
+    },
+    "activeSubmitters": {
+      "label": "Active submitters",
+      "description": "Distinct story authors / day"
+    },
+    "score": {
+      "label": "Story score",
+      "description": "Median (p50) and p90 of daily story scores",
+      "primaryLabel": "median",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Comments / story",
+      "description": "Engagement ratio"
+    },
+    "successRateGte100": {
+      "label": "Success rate (>=100)",
+      "description": "Stories scoring >=100 / all stories"
+    },
+    "topDomain": {
+      "label": "Top domain",
+      "description": "Most-submitted registrable domain in the selected range"
+    },
+    "showHn": {
+      "label": "Show HN / day",
+      "description": "Show HN posts / day"
+    },
+    "askHn": {
+      "label": "Ask HN / day",
+      "description": "Ask HN posts / day"
+    },
+    "jobs": {
+      "label": "Jobs / day",
+      "description": "Job postings / day"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "Share of items flagged dead"
+    }
+  }
+}

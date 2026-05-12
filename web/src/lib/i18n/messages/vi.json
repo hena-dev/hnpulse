@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, chỉ số hằng ngày",
+    "description": "Dashboard cập nhật hằng ngày về các chỉ số cộng đồng quan trọng nhất của Hacker News: bài đăng, bình luận, người dùng hoạt động, tên miền hàng đầu và hơn thế nữa.",
+    "ogDescription": "Hacker News, chỉ số hằng ngày.",
+    "dataFeedTitle": "Nguồn dữ liệu HN Pulse"
+  },
+  "redirect": {
+    "message": "Đang chuyển đến ngôn ngữ của bạn...",
+    "fallback": "Mở dashboard"
+  },
+  "range": {
+    "ariaLabel": "Khoảng thời gian",
+    "labels": {
+      "1w": "1 tuần",
+      "1m": "1 tháng",
+      "3m": "3 tháng",
+      "6m": "6 tháng",
+      "1y": "1 năm",
+      "2y": "2 năm"
+    }
+  },
+  "theme": {
+    "toggle": "Đổi giao diện"
+  },
+  "dashboard": {
+    "asOf": "tính đến {date}",
+    "footerBuiltBy": "Xây dựng bởi hena",
+    "footerRepo": "Repo",
+    "lastUpdated": "cập nhật lần cuối {date}"
+  },
+  "charts": {
+    "unavailable": "Biểu đồ sẽ tải khi có JavaScript.",
+    "scaleAria": "Thang trục Y",
+    "scaleLinear": "tuyến tính",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Bài đăng và bình luận",
+    "storiesVsCommentsDescription": "Vùng xếp chồng",
+    "activeUsersTitle": "Người dùng hoạt động",
+    "activeUsersDescription": "Tác giả riêng biệt mỗi ngày",
+    "topDomainsTitle": "Top 10 tên miền",
+    "topDomainsDescription": "Số bài đăng trong khoảng đã chọn",
+    "scoreTrendTitle": "Điểm bài đăng (trung vị + p90)",
+    "scoreTrendDescription": "Phân vị hằng ngày",
+    "seriesStories": "bài đăng",
+    "seriesComments": "bình luận",
+    "seriesCommenters": "người bình luận",
+    "seriesSubmitters": "người đăng bài",
+    "seriesMedian": "trung vị",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} số bài đăng",
+    "submissions": "{count} bài gửi"
+  },
+  "sparkline": "Biểu đồ thu nhỏ {label}",
+  "kpis": {
+    "stories": {
+      "label": "Bài đăng / ngày",
+      "description": "Số bài đăng trung bình mỗi ngày UTC"
+    },
+    "comments": {
+      "label": "Bình luận / ngày",
+      "description": "Số bình luận trung bình mỗi ngày UTC"
+    },
+    "activeCommenters": {
+      "label": "Người bình luận hoạt động",
+      "description": "Tác giả bình luận riêng biệt / ngày"
+    },
+    "activeSubmitters": {
+      "label": "Người đăng hoạt động",
+      "description": "Tác giả bài đăng riêng biệt / ngày"
+    },
+    "score": {
+      "label": "Điểm bài đăng",
+      "description": "Trung vị (p50) và p90 của điểm bài đăng hằng ngày",
+      "primaryLabel": "trung vị",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Bình luận / bài đăng",
+      "description": "Tỷ lệ tương tác"
+    },
+    "successRateGte100": {
+      "label": "Tỷ lệ thành công (>=100)",
+      "description": "Bài đạt >=100 điểm / tất cả bài đăng"
+    },
+    "topDomain": {
+      "label": "Tên miền hàng đầu",
+      "description": "Tên miền có thể đăng ký được gửi nhiều nhất trong khoảng đã chọn"
+    },
+    "showHn": {
+      "label": "Show HN / ngày",
+      "description": "Bài Show HN / ngày"
+    },
+    "askHn": {
+      "label": "Ask HN / ngày",
+      "description": "Bài Ask HN / ngày"
+    },
+    "jobs": {
+      "label": "Việc làm / ngày",
+      "description": "Tin tuyển dụng / ngày"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "Tỷ lệ mục bị đánh dấu dead"
+    }
+  }
+}

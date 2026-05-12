@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, sinais vitais diários",
+    "description": "Um painel atualizado diariamente com os sinais vitais mais importantes da comunidade Hacker News: submissões, comentários, utilizadores ativos, principais domínios e mais.",
+    "ogDescription": "Hacker News, sinais vitais diários.",
+    "dataFeedTitle": "Feed de dados do HN Pulse"
+  },
+  "redirect": {
+    "message": "A redirecionar para o seu idioma...",
+    "fallback": "Abrir o painel"
+  },
+  "range": {
+    "ariaLabel": "Intervalo de tempo",
+    "labels": {
+      "1w": "1 sem.",
+      "1m": "1 mês",
+      "3m": "3 meses",
+      "6m": "6 meses",
+      "1y": "1 ano",
+      "2y": "2 anos"
+    }
+  },
+  "theme": {
+    "toggle": "Alternar tema"
+  },
+  "dashboard": {
+    "asOf": "em {date}",
+    "footerBuiltBy": "Criado por hena",
+    "footerRepo": "Repo",
+    "lastUpdated": "última atualização {date}"
+  },
+  "charts": {
+    "unavailable": "Os gráficos carregam quando o JavaScript está disponível.",
+    "scaleAria": "Escala do eixo Y",
+    "scaleLinear": "linear",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Histórias vs Comentários",
+    "storiesVsCommentsDescription": "Área empilhada",
+    "activeUsersTitle": "Utilizadores ativos",
+    "activeUsersDescription": "Autores distintos por dia",
+    "topDomainsTitle": "Top 10 domínios",
+    "topDomainsDescription": "Número de histórias no intervalo selecionado",
+    "scoreTrendTitle": "Pontuação das histórias (mediana + p90)",
+    "scoreTrendDescription": "Quantis diários",
+    "seriesStories": "histórias",
+    "seriesComments": "comentários",
+    "seriesCommenters": "comentadores",
+    "seriesSubmitters": "submissores",
+    "seriesMedian": "mediana",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} das histórias",
+    "submissions": "{count} submissões"
+  },
+  "sparkline": "minigráfico de {label}",
+  "kpis": {
+    "stories": {
+      "label": "Histórias / dia",
+      "description": "Média de submissões de histórias por dia UTC"
+    },
+    "comments": {
+      "label": "Comentários / dia",
+      "description": "Média de comentários por dia UTC"
+    },
+    "activeCommenters": {
+      "label": "Comentadores ativos",
+      "description": "Autores distintos de comentários / dia"
+    },
+    "activeSubmitters": {
+      "label": "Submissores ativos",
+      "description": "Autores distintos de histórias / dia"
+    },
+    "score": {
+      "label": "Pontuação das histórias",
+      "description": "Mediana (p50) e p90 das pontuações diárias das histórias",
+      "primaryLabel": "mediana",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Comentários / história",
+      "description": "Rácio de envolvimento"
+    },
+    "successRateGte100": {
+      "label": "Taxa de sucesso (>=100)",
+      "description": "Histórias com pontuação >=100 / todas as histórias"
+    },
+    "topDomain": {
+      "label": "Domínio principal",
+      "description": "Domínio registável mais submetido no intervalo selecionado"
+    },
+    "showHn": {
+      "label": "Show HN / dia",
+      "description": "Publicações Show HN / dia"
+    },
+    "askHn": {
+      "label": "Ask HN / dia",
+      "description": "Publicações Ask HN / dia"
+    },
+    "jobs": {
+      "label": "Empregos / dia",
+      "description": "Anúncios de emprego / dia"
+    },
+    "deadFlaggedRatio": {
+      "label": "Mortos/sinalizados",
+      "description": "Percentagem de itens sinalizados como mortos"
+    }
+  }
+}

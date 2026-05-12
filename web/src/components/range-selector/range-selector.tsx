@@ -6,6 +6,7 @@ export interface RangeSelectorProps {
   value: RangeId;
   className?: string;
   ariaLabel?: string;
+  labels?: Record<RangeId, string>;
   hrefForRange?: (range: RangeId) => string;
   onRangeChange?: (range: RangeId) => void;
 }
@@ -17,6 +18,7 @@ export const RangeSelector = ({
   value,
   className,
   ariaLabel = "Time range",
+  labels,
   hrefForRange = (range) => `/${range}`,
   onRangeChange,
 }: RangeSelectorProps): JSX.Element => (
@@ -43,7 +45,7 @@ export const RangeSelector = ({
               : "text-muted-foreground hover:text-foreground",
           )}
         >
-          {id}
+          {labels?.[id] ?? id}
         </a>
       );
     })}

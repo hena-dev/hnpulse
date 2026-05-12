@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, dagelijkse vitals",
+    "description": "Een dagelijks bijgewerkt dashboard met de belangrijkste community-vitals van Hacker News: inzendingen, reacties, actieve gebruikers, topdomeinen en meer.",
+    "ogDescription": "Hacker News, dagelijkse vitals.",
+    "dataFeedTitle": "HN Pulse-datafeed"
+  },
+  "redirect": {
+    "message": "Je wordt doorgestuurd naar je taal...",
+    "fallback": "Dashboard openen"
+  },
+  "range": {
+    "ariaLabel": "Tijdsperiode",
+    "labels": {
+      "1w": "1 wk",
+      "1m": "1 mnd",
+      "3m": "3 mnd",
+      "6m": "6 mnd",
+      "1y": "1 jr",
+      "2y": "2 jr"
+    }
+  },
+  "theme": {
+    "toggle": "Thema wisselen"
+  },
+  "dashboard": {
+    "asOf": "per {date}",
+    "footerBuiltBy": "Gebouwd door hena",
+    "footerRepo": "Repo",
+    "lastUpdated": "laatst bijgewerkt {date}"
+  },
+  "charts": {
+    "unavailable": "Grafieken laden zodra JavaScript beschikbaar is.",
+    "scaleAria": "Schaal Y-as",
+    "scaleLinear": "lineair",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Stories vs reacties",
+    "storiesVsCommentsDescription": "Gestapeld vlak",
+    "activeUsersTitle": "Actieve gebruikers",
+    "activeUsersDescription": "Unieke auteurs per dag",
+    "topDomainsTitle": "Top 10 domeinen",
+    "topDomainsDescription": "Aantal stories over de geselecteerde periode",
+    "scoreTrendTitle": "Story-score (mediaan + p90)",
+    "scoreTrendDescription": "Dagelijkse kwantielen",
+    "seriesStories": "stories",
+    "seriesComments": "reacties",
+    "seriesCommenters": "reageerders",
+    "seriesSubmitters": "indieners",
+    "seriesMedian": "mediaan",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} van stories",
+    "submissions": "{count} inzendingen"
+  },
+  "sparkline": "{label} sparkline",
+  "kpis": {
+    "stories": {
+      "label": "Stories / dag",
+      "description": "Gem. story-inzendingen per UTC-dag"
+    },
+    "comments": {
+      "label": "Reacties / dag",
+      "description": "Gem. reacties per UTC-dag"
+    },
+    "activeCommenters": {
+      "label": "Actieve reageerders",
+      "description": "Unieke reactieauteurs / dag"
+    },
+    "activeSubmitters": {
+      "label": "Actieve indieners",
+      "description": "Unieke story-auteurs / dag"
+    },
+    "score": {
+      "label": "Story-score",
+      "description": "Mediaan (p50) en p90 van dagelijkse story-scores",
+      "primaryLabel": "mediaan",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Reacties / story",
+      "description": "Engagementratio"
+    },
+    "successRateGte100": {
+      "label": "Succespercentage (>=100)",
+      "description": "Stories met score >=100 / alle stories"
+    },
+    "topDomain": {
+      "label": "Topdomein",
+      "description": "Meest ingezonden registreerbare domein in de geselecteerde periode"
+    },
+    "showHn": {
+      "label": "Show HN / dag",
+      "description": "Show HN-posts / dag"
+    },
+    "askHn": {
+      "label": "Ask HN / dag",
+      "description": "Ask HN-posts / dag"
+    },
+    "jobs": {
+      "label": "Jobs / dag",
+      "description": "Vacatures / dag"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "Aandeel items gemarkeerd als dead"
+    }
+  }
+}

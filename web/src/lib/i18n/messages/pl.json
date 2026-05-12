@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — codzienne wskaźniki Hacker News",
+    "description": "Codziennie aktualizowany dashboard najważniejszych wskaźników społeczności Hacker News: zgłoszenia, komentarze, aktywni użytkownicy, top domeny i nie tylko.",
+    "ogDescription": "Hacker News, codzienne wskaźniki.",
+    "dataFeedTitle": "Kanał danych HN Pulse"
+  },
+  "redirect": {
+    "message": "Przekierowujemy do Twojego języka...",
+    "fallback": "Otwórz dashboard"
+  },
+  "range": {
+    "ariaLabel": "Zakres czasu",
+    "labels": {
+      "1w": "1 tydz.",
+      "1m": "1 mies.",
+      "3m": "3 mies.",
+      "6m": "6 mies.",
+      "1y": "1 rok",
+      "2y": "2 lata"
+    }
+  },
+  "theme": {
+    "toggle": "Przełącz motyw"
+  },
+  "dashboard": {
+    "asOf": "stan na {date}",
+    "footerBuiltBy": "Stworzone przez hena",
+    "footerRepo": "Repo",
+    "lastUpdated": "ostatnia aktualizacja {date}"
+  },
+  "charts": {
+    "unavailable": "Wykresy wczytują się, gdy JavaScript jest dostępny.",
+    "scaleAria": "Skala osi Y",
+    "scaleLinear": "liniowa",
+    "scaleLog": "log",
+    "storiesVsCommentsTitle": "Wątki vs komentarze",
+    "storiesVsCommentsDescription": "Warstwowy obszarowy",
+    "activeUsersTitle": "Aktywni użytkownicy",
+    "activeUsersDescription": "Unikalni autorzy dziennie",
+    "topDomainsTitle": "Top 10 domen",
+    "topDomainsDescription": "Liczba wątków w wybranym zakresie",
+    "scoreTrendTitle": "Ocena wątków (mediana + p90)",
+    "scoreTrendDescription": "Dzienne kwantyle",
+    "seriesStories": "wątki",
+    "seriesComments": "komentarze",
+    "seriesCommenters": "komentujący",
+    "seriesSubmitters": "zgłaszający",
+    "seriesMedian": "mediana",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} wątków",
+    "submissions": "{count} zgłoszeń"
+  },
+  "sparkline": "sparkline {label}",
+  "kpis": {
+    "stories": {
+      "label": "Wątki / dzień",
+      "description": "Śr. zgłoszeń wątków na dzień UTC"
+    },
+    "comments": {
+      "label": "Komentarze / dzień",
+      "description": "Śr. komentarzy na dzień UTC"
+    },
+    "activeCommenters": {
+      "label": "Aktywni komentujący",
+      "description": "Unikalni autorzy komentarzy / dzień"
+    },
+    "activeSubmitters": {
+      "label": "Aktywni zgłaszający",
+      "description": "Unikalni autorzy wątków / dzień"
+    },
+    "score": {
+      "label": "Ocena wątku",
+      "description": "Mediana (p50) i p90 dziennych ocen wątków",
+      "primaryLabel": "mediana",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Komentarze / wątek",
+      "description": "Wskaźnik zaangażowania"
+    },
+    "successRateGte100": {
+      "label": "Wskaźnik sukcesu (>=100)",
+      "description": "Wątki z oceną >=100 / wszystkie wątki"
+    },
+    "topDomain": {
+      "label": "Top domena",
+      "description": "Najczęściej zgłaszana domena rejestrowalna w wybranym zakresie"
+    },
+    "showHn": {
+      "label": "Show HN / dzień",
+      "description": "Posty Show HN / dzień"
+    },
+    "askHn": {
+      "label": "Ask HN / dzień",
+      "description": "Posty Ask HN / dzień"
+    },
+    "jobs": {
+      "label": "Oferty pracy / dzień",
+      "description": "Ogłoszenia o pracę / dzień"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "Udział elementów oznaczonych jako dead"
+    }
+  }
+}

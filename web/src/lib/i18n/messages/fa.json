@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — علائم حیاتی روزانه Hacker News",
+    "description": "داشبوردی با به‌روزرسانی روزانه از مهم‌ترین علائم حیاتی جامعه Hacker News: ارسال‌ها، دیدگاه‌ها، کاربران فعال، دامنه‌های برتر و موارد بیشتر.",
+    "ogDescription": "علائم حیاتی روزانه Hacker News.",
+    "dataFeedTitle": "خوراک داده HN Pulse"
+  },
+  "redirect": {
+    "message": "در حال هدایت به زبان شما...",
+    "fallback": "باز کردن داشبورد"
+  },
+  "range": {
+    "ariaLabel": "بازه زمانی",
+    "labels": {
+      "1w": "۱ هفته",
+      "1m": "۱ ماه",
+      "3m": "۳ ماه",
+      "6m": "۶ ماه",
+      "1y": "۱ سال",
+      "2y": "۲ سال"
+    }
+  },
+  "theme": {
+    "toggle": "تغییر پوسته"
+  },
+  "dashboard": {
+    "asOf": "تا {date}",
+    "footerBuiltBy": "ساخته‌شده توسط hena",
+    "footerRepo": "مخزن",
+    "lastUpdated": "آخرین به‌روزرسانی {date}"
+  },
+  "charts": {
+    "unavailable": "نمودارها وقتی JavaScript در دسترس باشد بارگذاری می‌شوند.",
+    "scaleAria": "مقیاس محور Y",
+    "scaleLinear": "خطی",
+    "scaleLog": "لگاریتمی",
+    "storiesVsCommentsTitle": "داستان‌ها در برابر دیدگاه‌ها",
+    "storiesVsCommentsDescription": "ناحیه‌ای انباشته",
+    "activeUsersTitle": "کاربران فعال",
+    "activeUsersDescription": "نویسندگان یکتا در روز",
+    "topDomainsTitle": "۱۰ دامنه برتر",
+    "topDomainsDescription": "تعداد داستان‌ها در بازه انتخاب‌شده",
+    "scoreTrendTitle": "امتیاز داستان (میانه + p90)",
+    "scoreTrendDescription": "چندک‌های روزانه",
+    "seriesStories": "داستان‌ها",
+    "seriesComments": "دیدگاه‌ها",
+    "seriesCommenters": "دیدگاه‌نویسان",
+    "seriesSubmitters": "ارسال‌کنندگان",
+    "seriesMedian": "میانه",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} از داستان‌ها",
+    "submissions": "{count} ارسال"
+  },
+  "sparkline": "نمودار کوچک {label}",
+  "kpis": {
+    "stories": {
+      "label": "داستان / روز",
+      "description": "میانگین ارسال داستان در هر روز UTC"
+    },
+    "comments": {
+      "label": "دیدگاه / روز",
+      "description": "میانگین دیدگاه‌ها در هر روز UTC"
+    },
+    "activeCommenters": {
+      "label": "دیدگاه‌نویسان فعال",
+      "description": "نویسندگان یکتای دیدگاه / روز"
+    },
+    "activeSubmitters": {
+      "label": "ارسال‌کنندگان فعال",
+      "description": "نویسندگان یکتای داستان / روز"
+    },
+    "score": {
+      "label": "امتیاز داستان",
+      "description": "میانه (p50) و p90 امتیازهای روزانه داستان‌ها",
+      "primaryLabel": "میانه",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "دیدگاه / داستان",
+      "description": "نسبت تعامل"
+    },
+    "successRateGte100": {
+      "label": "نرخ موفقیت (>=100)",
+      "description": "داستان‌های با امتیاز >=100 / همه داستان‌ها"
+    },
+    "topDomain": {
+      "label": "دامنه برتر",
+      "description": "پراِرسال‌ترین دامنه قابل ثبت در بازه انتخاب‌شده"
+    },
+    "showHn": {
+      "label": "Show HN / روز",
+      "description": "پست‌های Show HN / روز"
+    },
+    "askHn": {
+      "label": "Ask HN / روز",
+      "description": "پست‌های Ask HN / روز"
+    },
+    "jobs": {
+      "label": "آگهی شغل / روز",
+      "description": "آگهی‌های شغلی / روز"
+    },
+    "deadFlaggedRatio": {
+      "label": "مرده/پرچم‌خورده",
+      "description": "سهم آیتم‌های پرچم‌خورده به‌عنوان مرده"
+    }
+  }
+}

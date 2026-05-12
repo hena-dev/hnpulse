@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News 일일 지표",
+    "description": "Hacker News의 주요 커뮤니티 지표를 매일 업데이트하는 대시보드: 제출, 댓글, 활성 사용자, 상위 도메인 등.",
+    "ogDescription": "Hacker News 일일 지표.",
+    "dataFeedTitle": "HN Pulse 데이터 피드"
+  },
+  "redirect": {
+    "message": "사용자 언어로 이동 중...",
+    "fallback": "대시보드 열기"
+  },
+  "range": {
+    "ariaLabel": "기간",
+    "labels": {
+      "1w": "1주",
+      "1m": "1개월",
+      "3m": "3개월",
+      "6m": "6개월",
+      "1y": "1년",
+      "2y": "2년"
+    }
+  },
+  "theme": {
+    "toggle": "테마 전환"
+  },
+  "dashboard": {
+    "asOf": "{date} 기준",
+    "footerBuiltBy": "hena 제작",
+    "footerRepo": "Repo",
+    "lastUpdated": "마지막 업데이트 {date}"
+  },
+  "charts": {
+    "unavailable": "JavaScript를 사용할 수 있으면 차트가 로드됩니다.",
+    "scaleAria": "Y축 스케일",
+    "scaleLinear": "선형",
+    "scaleLog": "로그",
+    "storiesVsCommentsTitle": "스토리 vs 댓글",
+    "storiesVsCommentsDescription": "누적 영역",
+    "activeUsersTitle": "활성 사용자",
+    "activeUsersDescription": "일별 고유 작성자",
+    "topDomainsTitle": "상위 10개 도메인",
+    "topDomainsDescription": "선택 기간의 스토리 수",
+    "scoreTrendTitle": "스토리 점수(중앙값 + p90)",
+    "scoreTrendDescription": "일별 분위수",
+    "seriesStories": "스토리",
+    "seriesComments": "댓글",
+    "seriesCommenters": "댓글 작성자",
+    "seriesSubmitters": "제출자",
+    "seriesMedian": "중앙값",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "스토리의 {share}",
+    "submissions": "제출 {count}건"
+  },
+  "sparkline": "{label} 스파크라인",
+  "kpis": {
+    "stories": {
+      "label": "스토리 / 일",
+      "description": "UTC 일별 평균 스토리 제출 수"
+    },
+    "comments": {
+      "label": "댓글 / 일",
+      "description": "UTC 일별 평균 댓글 수"
+    },
+    "activeCommenters": {
+      "label": "활성 댓글 작성자",
+      "description": "일별 고유 댓글 작성자"
+    },
+    "activeSubmitters": {
+      "label": "활성 제출자",
+      "description": "일별 고유 스토리 작성자"
+    },
+    "score": {
+      "label": "스토리 점수",
+      "description": "일별 스토리 점수의 중앙값(p50) 및 p90",
+      "primaryLabel": "중앙값",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "댓글 / 스토리",
+      "description": "참여 비율"
+    },
+    "successRateGte100": {
+      "label": "성공률(>=100)",
+      "description": "점수 >=100인 스토리 / 전체 스토리"
+    },
+    "topDomain": {
+      "label": "상위 도메인",
+      "description": "선택 기간에 가장 많이 제출된 등록 가능 도메인"
+    },
+    "showHn": {
+      "label": "Show HN / 일",
+      "description": "Show HN 게시물 / 일"
+    },
+    "askHn": {
+      "label": "Ask HN / 일",
+      "description": "Ask HN 게시물 / 일"
+    },
+    "jobs": {
+      "label": "채용 / 일",
+      "description": "채용 공고 / 일"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "dead로 표시된 항목 비율"
+    }
+  }
+}

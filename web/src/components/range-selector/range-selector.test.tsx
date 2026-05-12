@@ -15,6 +15,23 @@ describe("RangeSelector", () => {
     expect(screen.getByRole("link", { name: "1w" })).toHaveAttribute("href", "/ko/1w");
   });
 
+  it("supports localized range labels", () => {
+    render(
+      <RangeSelector
+        value="1m"
+        labels={{
+          "1w": "1주",
+          "1m": "1개월",
+          "3m": "3개월",
+          "6m": "6개월",
+          "1y": "1년",
+          "2y": "2년",
+        }}
+      />,
+    );
+    expect(screen.getByRole("link", { name: "1주" })).toHaveAttribute("href", "/1w");
+  });
+
   it("marks the selected range as the current page", () => {
     render(<RangeSelector value="3m" />);
     expect(screen.getByRole("link", { name: "3m" })).toHaveAttribute("aria-current", "page");

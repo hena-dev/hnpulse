@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News 每日指標",
+    "description": "每日更新的 Hacker News 重要社群指標儀表板：投稿、留言、活躍用戶、熱門網域等。",
+    "ogDescription": "Hacker News 每日指標。",
+    "dataFeedTitle": "HN Pulse 資料饋送"
+  },
+  "redirect": {
+    "message": "正在重新導向至你的語言...",
+    "fallback": "開啟儀表板"
+  },
+  "range": {
+    "ariaLabel": "時間範圍",
+    "labels": {
+      "1w": "1週",
+      "1m": "1個月",
+      "3m": "3個月",
+      "6m": "6個月",
+      "1y": "1年",
+      "2y": "2年"
+    }
+  },
+  "theme": {
+    "toggle": "切換主題"
+  },
+  "dashboard": {
+    "asOf": "截至 {date}",
+    "footerBuiltBy": "由 hena 製作",
+    "footerRepo": "Repo",
+    "lastUpdated": "最後更新 {date}"
+  },
+  "charts": {
+    "unavailable": "啟用 JavaScript 後即可載入圖表。",
+    "scaleAria": "Y 軸刻度",
+    "scaleLinear": "線性",
+    "scaleLog": "對數",
+    "storiesVsCommentsTitle": "文章與留言",
+    "storiesVsCommentsDescription": "堆疊面積圖",
+    "activeUsersTitle": "活躍用戶",
+    "activeUsersDescription": "每日不重複作者數",
+    "topDomainsTitle": "前 10 大網域",
+    "topDomainsDescription": "所選範圍內的文章數",
+    "scoreTrendTitle": "文章分數（中位數 + p90）",
+    "scoreTrendDescription": "每日分位數",
+    "seriesStories": "文章",
+    "seriesComments": "留言",
+    "seriesCommenters": "留言者",
+    "seriesSubmitters": "投稿者",
+    "seriesMedian": "中位數",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "佔文章 {share}",
+    "submissions": "{count} 篇投稿"
+  },
+  "sparkline": "{label} 趨勢線",
+  "kpis": {
+    "stories": {
+      "label": "每日文章",
+      "description": "每 UTC 日平均文章投稿數"
+    },
+    "comments": {
+      "label": "每日留言",
+      "description": "每 UTC 日平均留言數"
+    },
+    "activeCommenters": {
+      "label": "活躍留言者",
+      "description": "每日不重複留言作者數"
+    },
+    "activeSubmitters": {
+      "label": "活躍投稿者",
+      "description": "每日不重複文章作者數"
+    },
+    "score": {
+      "label": "文章分數",
+      "description": "每日文章分數的中位數（p50）與 p90",
+      "primaryLabel": "中位數",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "每篇留言數",
+      "description": "互動比例"
+    },
+    "successRateGte100": {
+      "label": "成功率（>=100）",
+      "description": "分數 >=100 的文章 / 全部文章"
+    },
+    "topDomain": {
+      "label": "熱門網域",
+      "description": "所選範圍內投稿最多的可註冊網域"
+    },
+    "showHn": {
+      "label": "每日 Show HN",
+      "description": "每日 Show HN 貼文數"
+    },
+    "askHn": {
+      "label": "每日 Ask HN",
+      "description": "每日 Ask HN 貼文數"
+    },
+    "jobs": {
+      "label": "每日 Jobs",
+      "description": "每日徵才貼文數"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "標記為 dead 的項目占比"
+    }
+  }
+}

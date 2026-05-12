@@ -1,0 +1,109 @@
+{
+  "metadata": {
+    "title": "HN Pulse — Hacker News, ежедневные показатели",
+    "description": "Ежедневно обновляемая панель ключевых показателей сообщества Hacker News: публикации, комментарии, активные пользователи, топ доменов и многое другое.",
+    "ogDescription": "Hacker News, ежедневные показатели.",
+    "dataFeedTitle": "Лента данных HN Pulse"
+  },
+  "redirect": {
+    "message": "Перенаправляем на ваш язык...",
+    "fallback": "Открыть панель"
+  },
+  "range": {
+    "ariaLabel": "Диапазон времени",
+    "labels": {
+      "1w": "1 нед.",
+      "1m": "1 мес.",
+      "3m": "3 мес.",
+      "6m": "6 мес.",
+      "1y": "1 год",
+      "2y": "2 года"
+    }
+  },
+  "theme": {
+    "toggle": "Переключить тему"
+  },
+  "dashboard": {
+    "asOf": "на {date}",
+    "footerBuiltBy": "Создано hena",
+    "footerRepo": "Репозиторий",
+    "lastUpdated": "обновлено {date}"
+  },
+  "charts": {
+    "unavailable": "Графики загружаются при доступном JavaScript.",
+    "scaleAria": "Шкала оси Y",
+    "scaleLinear": "линейная",
+    "scaleLog": "логарифмическая",
+    "storiesVsCommentsTitle": "Публикации и комментарии",
+    "storiesVsCommentsDescription": "Сложенная область",
+    "activeUsersTitle": "Активные пользователи",
+    "activeUsersDescription": "Уникальные авторы в день",
+    "topDomainsTitle": "Топ-10 доменов",
+    "topDomainsDescription": "Число публикаций за выбранный период",
+    "scoreTrendTitle": "Оценка публикаций (медиана + p90)",
+    "scoreTrendDescription": "Дневные квантили",
+    "seriesStories": "публикации",
+    "seriesComments": "комментарии",
+    "seriesCommenters": "комментаторы",
+    "seriesSubmitters": "авторы публикаций",
+    "seriesMedian": "медиана",
+    "seriesP90": "p90"
+  },
+  "topDomain": {
+    "ofStories": "{share} публикаций",
+    "submissions": "{count} публикаций"
+  },
+  "sparkline": "Спарклайн {label}",
+  "kpis": {
+    "stories": {
+      "label": "Публикаций / день",
+      "description": "Среднее число публикаций за UTC-день"
+    },
+    "comments": {
+      "label": "Комментариев / день",
+      "description": "Среднее число комментариев за UTC-день"
+    },
+    "activeCommenters": {
+      "label": "Активные комментаторы",
+      "description": "Уникальные авторы комментариев / день"
+    },
+    "activeSubmitters": {
+      "label": "Активные авторы публикаций",
+      "description": "Уникальные авторы публикаций / день"
+    },
+    "score": {
+      "label": "Оценка публикаций",
+      "description": "Медиана (p50) и p90 дневных оценок публикаций",
+      "primaryLabel": "медиана",
+      "secondaryLabel": "p90"
+    },
+    "commentsPerStory": {
+      "label": "Комментариев / публикацию",
+      "description": "Коэффициент вовлеченности"
+    },
+    "successRateGte100": {
+      "label": "Доля успешных (>=100)",
+      "description": "Публикации с оценкой >=100 / все публикации"
+    },
+    "topDomain": {
+      "label": "Топ-домен",
+      "description": "Самый часто публикуемый регистрируемый домен за выбранный период"
+    },
+    "showHn": {
+      "label": "Show HN / день",
+      "description": "Постов Show HN / день"
+    },
+    "askHn": {
+      "label": "Ask HN / день",
+      "description": "Постов Ask HN / день"
+    },
+    "jobs": {
+      "label": "Вакансий / день",
+      "description": "Публикаций вакансий / день"
+    },
+    "deadFlaggedRatio": {
+      "label": "Dead/flagged",
+      "description": "Доля элементов, помеченных dead"
+    }
+  }
+}

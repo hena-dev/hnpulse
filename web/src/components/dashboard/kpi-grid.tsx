@@ -100,6 +100,7 @@ export const KpiGrid = ({
       <RangeSelector
         value={range}
         ariaLabel={messages.range.ariaLabel}
+        labels={messages.range.labels}
         hrefForRange={hrefForRange}
         {...(onRangeChange === undefined ? {} : { onRangeChange })}
       />
