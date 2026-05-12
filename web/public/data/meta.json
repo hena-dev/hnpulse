@@ -1,11 +1,11 @@
 {
   "schemaVersion": 1,
-  "lastUpdated": "2026-05-12T06:06:30.229Z",
+  "lastUpdated": "2026-05-12T06:27:34.410Z",
   "dataAsOf": "2026-05-11",
   "windowStart": "2024-05-12",
   "windowEnd": "2026-05-11",
-  "kpisFile": "/data/kpis.3855a29.json",
-  "buildSha": "89fe97595b6a6c66aa432e0ded8f5600558c9b4b",
+  "kpisFile": "/data/kpis.cbdd398.json",
+  "buildSha": "5fdb0894ec98070c65a7cb98b357cfff01ec9e54",
   "pipelineVersion": "1.0.0",
   "dataSources": [
     "bigquery",
