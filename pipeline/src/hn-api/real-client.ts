@@ -2,8 +2,11 @@ import type { HnApiClient } from "./types.ts";
 
 const BASE_URL = "https://hacker-news.firebaseio.com/v0";
 const REQUEST_TIMEOUT_MS = 10_000;
+const MAX_ATTEMPTS = 3;
 
-const fetchJson = async (path: string): Promise<unknown> => {
+const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+const fetchJsonOnce = async (path: string): Promise<unknown> => {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
   try {
@@ -13,6 +16,20 @@ const fetchJson = async (path: string): Promise<unknown> => {
   } finally {
     clearTimeout(timeout);
   }
+};
+
+const fetchJson = async (path: string): Promise<unknown> => {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+    try {
+      return await fetchJsonOnce(path);
+    } catch (error) {
+      lastError = error;
+      if (attempt === MAX_ATTEMPTS) break;
+      await delay(250 * attempt);
+    }
+  }
+  throw lastError;
 };
 
 export const createRealHnApiClient = (): HnApiClient => ({

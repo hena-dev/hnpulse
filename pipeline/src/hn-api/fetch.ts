@@ -2,7 +2,7 @@ import type { BqRow } from "../schema/bq-row.ts";
 import { hnItemToBqRow } from "./map.ts";
 import type { HnApiClient } from "./types.ts";
 
-const DEFAULT_BATCH_SIZE = 256;
+const DEFAULT_BATCH_SIZE = 64;
 
 export interface FetchHnApiRowsArgs {
   client: HnApiClient;
