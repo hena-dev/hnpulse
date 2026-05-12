@@ -42,11 +42,6 @@ export const DashboardView = ({
         Repo
       </a>{" "}
       · last updated {meta.lastUpdated}
-      {" · recent data from "}
-      {meta.provisionalFrom}
-      {" onward may be revised for "}
-      {meta.stabilizationDays}
-      {" days"}
     </footer>
   </>
 );
