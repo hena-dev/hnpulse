@@ -35,7 +35,11 @@ const sumNdjsonRows = (files: readonly { rows: number }[]): number =>
 
 const buildSeriesForOutliers = (
   metrics: Readonly<Record<string, readonly number[]>>,
-): Readonly<Record<string, readonly number[]>> => metrics;
+): Readonly<Record<string, readonly number[]>> => {
+  // HN job posts are sparse enough that zero-job days are normal, not data loss.
+  const { jobs: _jobs, ...stableMetrics } = metrics;
+  return stableMetrics;
+};
 
 const validateKpis = (kpis: KpisJson, now: Date): string | null => {
   const expectedEnd = formatUtcDay(new Date(startOfUtcDay(now).getTime() - MS_PER_DAY));

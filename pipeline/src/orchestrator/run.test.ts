@@ -115,6 +115,17 @@ describe("runOrchestrator — no-rows path", () => {
 });
 
 describe("runOrchestrator — validation gate", () => {
+  it("does not reject valid data when sparse jobs drops to zero", async () => {
+    const days = trailingDays(8, "2026-05-03");
+    const bq = stubBq(days.map((d, i) => bqRow(i + 1, `${d}T12:00:00Z`)));
+    const release = stubRelease([]);
+    const duck = stubDuckdb(
+      days.map((d, i) => ({ ...stableDailyRow(d, 10), jobs: i === days.length - 1 ? 0 : 1 })),
+    );
+    const result = await runOrchestrator({ bq, release, duckdb: duck }, baseCfg({ windowDays: 8 }));
+    expect(result.status).toBe("completed");
+  });
+
   it("returns invalid-source when a metric is wildly off the 7-day median", async () => {
     const days = trailingDays(8, "2026-05-03");
     const bq = stubBq(days.map((d, i) => bqRow(i + 1, `${d}T12:00:00Z`)));
