@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { formatMessage, getMessages } from "./messages.ts";
+import { formatMessage } from "./format-message.ts";
+import { getMessages } from "./messages.ts";
 
 describe("getMessages", () => {
   it("returns locale-specific copy", () => {

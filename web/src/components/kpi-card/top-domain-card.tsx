@@ -1,7 +1,8 @@
 import type { JSX } from "react";
 import type { TopDomainEntry } from "../../data/types.ts";
 import { formatInteger, formatPercent } from "../../lib/format/number.ts";
-import { formatMessage, type Messages } from "../../lib/i18n/messages.ts";
+import { formatMessage } from "../../lib/i18n/format-message.ts";
+import type { Messages } from "../../lib/i18n/messages.ts";
 import type { TopDomainKpiEntry } from "../../lib/kpi/catalog.ts";
 
 export interface TopDomainCardProps {

@@ -122,6 +122,3 @@ export const messages = {
 } satisfies Record<Locale, Messages>;
 
 export const getMessages = (locale: Locale): Messages => messages[locale];
-
-export const formatMessage = (template: string, values: Record<string, string | number>): string =>
-  template.replace(/\{([a-z]+)\}/g, (match, key: string) => String(values[key] ?? match));

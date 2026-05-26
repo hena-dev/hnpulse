@@ -105,6 +105,51 @@ describe("SiteApp", () => {
     expect(screen.getByRole("link", { name: "1개월" })).toHaveAttribute("aria-current", "page");
   });
 
+  it("switches locale in place and keeps the current range", async () => {
+    const description = document.createElement("meta");
+    description.name = "description";
+    const ogTitle = document.createElement("meta");
+    ogTitle.setAttribute("property", "og:title");
+    const ogDescription = document.createElement("meta");
+    ogDescription.setAttribute("property", "og:description");
+    const ogLocale = document.createElement("meta");
+    ogLocale.setAttribute("property", "og:locale");
+    document.head.append(description, ogTitle, ogDescription, ogLocale);
+
+    window.history.replaceState(null, "", "/ko/3m");
+    try {
+      renderLocalizedApp("3m");
+
+      fireEvent.change(screen.getByLabelText("Language"), { target: { value: "ja" } });
+
+      expect(window.location.pathname).toBe("/ja/3m");
+      expect(screen.getByLabelText("Language")).toHaveValue("ja");
+      await waitFor(() =>
+        expect(screen.getByRole("link", { name: "3か月" })).toHaveAttribute("aria-current", "page"),
+      );
+      expect(document.documentElement.lang).toBe("ja");
+      expect(description).toHaveAttribute("content", getMessages("ja").metadata.description);
+      expect(ogTitle).toHaveAttribute("content", getMessages("ja").metadata.title);
+      expect(ogDescription).toHaveAttribute("content", getMessages("ja").metadata.ogDescription);
+      expect(ogLocale).toHaveAttribute("content", "ja_JP");
+    } finally {
+      description.remove();
+      ogTitle.remove();
+      ogDescription.remove();
+      ogLocale.remove();
+    }
+  });
+
+  it("uses the unprefixed URL shape when switching to English", () => {
+    window.history.replaceState(null, "", "/ko");
+    renderLocalizedApp("1m");
+
+    fireEvent.change(screen.getByLabelText("Language"), { target: { value: "en" } });
+
+    expect(window.location.pathname).toBe("/1m");
+    expect(screen.getByLabelText("Language")).toHaveValue("en");
+  });
+
   it("allows modified header clicks to skip SPA handling", () => {
     window.history.replaceState(null, "", "/1w");
     renderApp("1w");

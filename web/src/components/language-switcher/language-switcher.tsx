@@ -4,21 +4,13 @@ import {
   LOCALE_CONFIGS,
   LOCALES,
   type Locale,
-  localizedRangePath,
 } from "../../lib/i18n/config.ts";
-import type { RangeId } from "../../lib/range/range.ts";
 
 export interface LanguageSwitcherProps {
   locale: Locale;
-  range: RangeId;
   label?: string;
-  navigate?: (href: string) => void;
+  onLocaleChange?: (locale: Locale) => void;
 }
-
-/* v8 ignore next -- real browser navigation is not meaningful in jsdom. */
-const defaultNavigate = (href: string): void => {
-  window.location.assign(href);
-};
 
 const persistLocale = (locale: Locale): void => {
   try {
@@ -30,14 +22,13 @@ const persistLocale = (locale: Locale): void => {
 
 export const LanguageSwitcher = ({
   locale,
-  range,
   label = "Language",
-  navigate = defaultNavigate,
+  onLocaleChange,
 }: LanguageSwitcherProps): JSX.Element => {
   const onChange = (event: ChangeEvent<HTMLSelectElement>): void => {
     const nextLocale = event.currentTarget.value as Locale;
     persistLocale(nextLocale);
-    if (nextLocale !== locale) navigate(localizedRangePath(nextLocale, range));
+    if (nextLocale !== locale) onLocaleChange?.(nextLocale);
   };
 
   return (

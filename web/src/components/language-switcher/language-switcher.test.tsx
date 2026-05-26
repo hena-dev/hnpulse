@@ -9,54 +9,42 @@ beforeEach(() => {
 
 describe("LanguageSwitcher", () => {
   it("renders the active locale", () => {
-    render(<LanguageSwitcher locale="ko" range="1m" />);
+    render(<LanguageSwitcher locale="ko" />);
 
     expect(screen.getByLabelText("Language")).toHaveValue("ko");
   });
 
-  it("saves the selected locale and navigates to the localized range", () => {
-    const navigations: string[] = [];
-    render(<LanguageSwitcher locale="ko" range="3m" navigate={(href) => navigations.push(href)} />);
+  it("saves the selected locale and reports the change", () => {
+    const changes: string[] = [];
+    render(<LanguageSwitcher locale="ko" onLocaleChange={(locale) => changes.push(locale)} />);
 
     fireEvent.change(screen.getByLabelText("Language"), { target: { value: "ja" } });
 
     expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe("ja");
-    expect(navigations).toEqual(["/ja/3m"]);
+    expect(changes).toEqual(["ja"]);
   });
 
-  it("saves English preference using the unprefixed URL shape", () => {
-    const navigations: string[] = [];
-    render(<LanguageSwitcher locale="ko" range="1m" navigate={(href) => navigations.push(href)} />);
-
-    fireEvent.change(screen.getByLabelText("Language"), { target: { value: "en" } });
-
-    expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe("en");
-    expect(navigations).toEqual(["/1m"]);
-  });
-
-  it("does not navigate when the selected locale is unchanged", () => {
-    const navigations: string[] = [];
-    render(<LanguageSwitcher locale="ko" range="1m" navigate={(href) => navigations.push(href)} />);
+  it("does not report a change when the selected locale is unchanged", () => {
+    const changes: string[] = [];
+    render(<LanguageSwitcher locale="ko" onLocaleChange={(locale) => changes.push(locale)} />);
 
     fireEvent.change(screen.getByLabelText("Language"), { target: { value: "ko" } });
 
     expect(localStorage.getItem(LANGUAGE_STORAGE_KEY)).toBe("ko");
-    expect(navigations).toEqual([]);
+    expect(changes).toEqual([]);
   });
 
-  it("still navigates when storage is unavailable", () => {
+  it("still reports changes when storage is unavailable", () => {
     const original = Storage.prototype.setItem;
-    const navigations: string[] = [];
+    const changes: string[] = [];
     Storage.prototype.setItem = () => {
       throw new Error("blocked");
     };
     try {
-      render(
-        <LanguageSwitcher locale="ko" range="1w" navigate={(href) => navigations.push(href)} />,
-      );
+      render(<LanguageSwitcher locale="ko" onLocaleChange={(locale) => changes.push(locale)} />);
       fireEvent.change(screen.getByLabelText("Language"), { target: { value: "es" } });
 
-      expect(navigations).toEqual(["/es/1w"]);
+      expect(changes).toEqual(["es"]);
     } finally {
       Storage.prototype.setItem = original;
     }
