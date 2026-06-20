@@ -11,6 +11,9 @@ on:
 permissions:
   contents: write               # commit + release manage
 
+env:
+  WRANGLER_VERSION: 4.99.0
+
 concurrency:
   group: daily-publish
   cancel-in-progress: false
@@ -51,10 +54,29 @@ jobs:
           git add web/public/data
           git diff --cached --quiet || git commit -m "chore(data): $(date -u +%Y-%m-%d) [skip ci]"
           git push
+      - name: Resolve deployment metadata
+        id: deploy-meta
+        run: |
+          sha="$(git rev-parse HEAD)"
+          echo "sha=${sha}" >> "$GITHUB_OUTPUT"
+          echo "version_tag=${sha}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v5
         with:
           node-version: 24
-      - name: Deploy static assets to Cloudflare
+      - name: Upload Cloudflare version
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-        run: bunx wrangler@4.88.0 deploy
+          DEPLOY_SHA: ${{ steps.deploy-meta.outputs.sha }}
+          VERSION_TAG: ${{ steps.deploy-meta.outputs.version_tag }}
+        run: >-
+          bunx wrangler@${WRANGLER_VERSION} versions upload
+          --tag "$VERSION_TAG"
+          --message "Deploy $DEPLOY_SHA"
+      - name: Deploy Cloudflare version
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          VERSION_TAG: ${{ steps.deploy-meta.outputs.version_tag }}
+        run: >-
+          bunx wrangler@${WRANGLER_VERSION} versions deploy
+          --version-tag "$VERSION_TAG@100%"
+          --yes

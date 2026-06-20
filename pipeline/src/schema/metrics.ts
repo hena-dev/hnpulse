@@ -13,6 +13,7 @@ export const METRIC_KEYS = [
   "askHn",
   "jobs",
   "deadFlaggedRatio",
+  "deadFlaggedTotal",
 ] as const;
 
 export type MetricKey = (typeof METRIC_KEYS)[number];

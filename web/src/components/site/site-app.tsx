@@ -4,7 +4,6 @@ import {
   startTransition,
   useCallback,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import type { MetaJson } from "../../data/types.ts";
@@ -15,6 +14,7 @@ import {
   type Locale,
   localeFromPathname,
   localizedRangePath,
+  openGraphLocale,
   rangeFromPathname,
 } from "../../lib/i18n/config.ts";
 import { loadMessages } from "../../lib/i18n/load-messages.ts";
@@ -67,10 +67,6 @@ export const SiteApp = ({
     locale: initialLocale,
     messages: initialMessages,
   });
-  const messageCache = useRef<Partial<Record<Locale, Messages>>>({
-    [initialLocale]: initialMessages,
-  });
-  const messageRequest = useRef(0);
   const messages = messageState.messages;
   const dashboard = ranges[range];
   const chartDashboard = ranges[chartRange];
@@ -82,41 +78,6 @@ export const SiteApp = ({
     startTransition(() => setChartRange(next));
   }, []);
 
-  const loadLocale = useCallback(
-    (nextLocale: Locale): void => {
-      const request = messageRequest.current + 1;
-      messageRequest.current = request;
-
-      const cached = messageCache.current[nextLocale];
-      if (cached !== undefined) {
-        setMessageState({ locale: nextLocale, messages: cached });
-        return;
-      }
-
-      void loadMessages(nextLocale)
-        .then((nextMessages) => {
-          messageCache.current[nextLocale] = nextMessages;
-          /* v8 ignore next -- covers a stale dynamic import after a faster later switch. */
-          if (messageRequest.current !== request) return;
-          startTransition(() => setMessageState({ locale: nextLocale, messages: nextMessages }));
-        })
-        /* v8 ignore next 4 -- only used if a generated locale chunk fails to load. */
-        .catch(() => {
-          if (messageRequest.current !== request) return;
-          window.location.assign(localizedRangePath(nextLocale, range));
-        });
-    },
-    [range],
-  );
-
-  const setSiteLocale = useCallback(
-    (nextLocale: Locale): void => {
-      setLocale(nextLocale);
-      loadLocale(nextLocale);
-    },
-    [loadLocale],
-  );
-
   const navigate = (nextRange: RangeId): void => {
     const href = hrefForRange(nextRange);
     if (window.location.pathname !== href) window.history.pushState(null, "", href);
@@ -126,7 +87,7 @@ export const SiteApp = ({
   const navigateLocale = (nextLocale: Locale): void => {
     const href = localizedRangePath(nextLocale, range);
     if (window.location.pathname !== href) window.history.pushState(null, "", href);
-    setSiteLocale(nextLocale);
+    setLocale(nextLocale);
   };
 
   const handleNav = (nextRange: RangeId) => (event: MouseEvent<HTMLAnchorElement>) => {
@@ -139,11 +100,31 @@ export const SiteApp = ({
     const onPopState = (): void => {
       const next = routeFromPath(locale, range);
       setDashboardRange(next.range);
-      setSiteLocale(next.locale);
+      setLocale(next.locale);
     };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
-  }, [locale, range, setDashboardRange, setSiteLocale]);
+  }, [locale, range, setDashboardRange]);
+
+  useEffect(() => {
+    if (messageState.locale === locale) return;
+
+    let cancelled = false;
+    void loadMessages(locale)
+      .then((nextMessages) => {
+        if (cancelled) return;
+        startTransition(() => setMessageState({ locale, messages: nextMessages }));
+      })
+      /* v8 ignore next 4 -- only used if a generated locale chunk fails to load. */
+      .catch(() => {
+        if (cancelled) return;
+        window.location.assign(localizedRangePath(locale, range));
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [locale, messageState.locale, range]);
 
   useEffect(() => {
     const config = LOCALE_CONFIGS[locale];
@@ -154,18 +135,15 @@ export const SiteApp = ({
   useEffect(() => {
     if (messageState.locale !== locale) return;
     document.title = messages.metadata.title;
-    document
-      .querySelector('meta[name="description"]')
-      ?.setAttribute("content", messages.metadata.description);
-    document
-      .querySelector('meta[property="og:title"]')
-      ?.setAttribute("content", messages.metadata.title);
-    document
-      .querySelector('meta[property="og:description"]')
-      ?.setAttribute("content", messages.metadata.ogDescription);
-    document
-      .querySelector('meta[property="og:locale"]')
-      ?.setAttribute("content", LOCALE_CONFIGS[locale].intlLocale.replace("-", "_"));
+    const tags = [
+      ['meta[name="description"]', messages.metadata.description],
+      ['meta[property="og:title"]', messages.metadata.title],
+      ['meta[property="og:description"]', messages.metadata.ogDescription],
+      ['meta[property="og:locale"]', openGraphLocale(locale)],
+    ] as const;
+    for (const [selector, content] of tags) {
+      document.querySelector(selector)?.setAttribute("content", content);
+    }
   }, [locale, messageState.locale, messages]);
 
   return (

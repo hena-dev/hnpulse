@@ -41,7 +41,7 @@
     "topDomainsTitle": "Top 10 domains",
     "topDomainsDescription": "Story count over the selected range",
     "scoreTrendTitle": "Story score (median + p90)",
-    "scoreTrendDescription": "Daily quantiles",
+    "scoreTrendDescription": "Daily quantiles, averaged when bucketed",
     "seriesStories": "stories",
     "seriesComments": "comments",
     "seriesCommenters": "commenters",
@@ -50,7 +50,7 @@
     "seriesP90": "p90"
   },
   "topDomain": {
-    "ofStories": "{share} of stories",
+    "ofStories": "{share} of linked stories",
     "submissions": "{count} submissions"
   },
   "sparkline": "{label} sparkline",
@@ -73,7 +73,7 @@
     },
     "score": {
       "label": "Story score",
-      "description": "Median (p50) and p90 of daily story scores",
+      "description": "Avg. of daily median (p50) and p90 story scores",
       "primaryLabel": "median",
       "secondaryLabel": "p90"
     },

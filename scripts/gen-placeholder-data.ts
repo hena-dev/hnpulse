@@ -38,6 +38,7 @@ const kpis = {
     askHn: seq(15, 4),
     jobs: seq(3, 1),
     deadFlaggedRatio: seqf(0.012, 0.003),
+    deadFlaggedTotal: seq(7800, 900),
   },
   topDomainsByDay: days.map((d) => ({
     date: d,

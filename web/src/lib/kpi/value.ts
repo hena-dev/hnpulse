@@ -20,6 +20,7 @@ const computers: Record<keyof MetricSeries, (m: MetricSeries, n: number) => numb
   comments: (m, n) => meanOfTail(m.comments, n),
   activeCommenters: (m, n) => meanOfTail(m.activeCommenters, n),
   activeSubmitters: (m, n) => meanOfTail(m.activeSubmitters, n),
+  // Window score KPIs average the daily quantiles; the raw score distribution is not emitted.
   medianScore: (m, n) => meanOfTail(m.medianScore, n),
   p90Score: (m, n) => meanOfTail(m.p90Score, n),
   commentsPerStory: (m, n) => ratioOfSums(m.comments, m.stories, n),
@@ -28,7 +29,9 @@ const computers: Record<keyof MetricSeries, (m: MetricSeries, n: number) => numb
   showHn: (m, n) => meanOfTail(m.showHn, n),
   askHn: (m, n) => meanOfTail(m.askHn, n),
   jobs: (m, n) => meanOfTail(m.jobs, n),
-  deadFlaggedRatio: (m, n) => meanOfTail(m.deadFlaggedRatio, n),
+  deadFlaggedRatio: (m, n) =>
+    weightedMean(sliceSeries(m.deadFlaggedRatio, n), sliceSeries(m.deadFlaggedTotal, n)),
+  deadFlaggedTotal: (m, n) => meanOfTail(m.deadFlaggedTotal, n),
 };
 
 export const computeKpiValue = (

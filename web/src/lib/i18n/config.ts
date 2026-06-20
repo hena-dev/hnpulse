@@ -66,6 +66,9 @@ export const localizedRangePath = (locale: Locale, range: RangeId = DEFAULT_RANG
 
 export const absoluteUrl = (path: string): string => new URL(path, SITE_URL).toString();
 
+export const openGraphLocale = (locale: Locale): string =>
+  LOCALE_CONFIGS[locale].intlLocale.replace("-", "_");
+
 export const localeFromPathname = (pathname: string): Locale => {
   const segment = pathname.split("/").filter(Boolean)[0];
   if (segment === undefined) return DEFAULT_LOCALE;

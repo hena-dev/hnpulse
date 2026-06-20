@@ -21,6 +21,7 @@ const dailyRow = (day: string, overrides: Record<string, number> = {}) => ({
   ask_hn: 2,
   jobs: 1,
   dead_flagged_ratio: 0.01,
+  dead_flagged_total: 111,
   ...overrides,
 });
 

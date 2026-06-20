@@ -13,6 +13,7 @@ export const METRIC_KEYS = [
   "askHn",
   "jobs",
   "deadFlaggedRatio",
+  "deadFlaggedTotal",
 ] as const;
 
 export type MetricKey = (typeof METRIC_KEYS)[number];
@@ -22,6 +23,7 @@ export type MetricSeries = Readonly<Record<MetricKey, readonly number[]>>;
 export interface TopDomainEntry {
   name: string;
   stories: number;
+  /** Share among story links that resolve to a registrable domain. */
   share: number;
 }
 
@@ -30,7 +32,7 @@ export interface TopDomainsDay {
   domains: readonly TopDomainEntry[];
 }
 
-export type TopDomainsByRange = Readonly<Partial<Record<RangeId, readonly TopDomainEntry[]>>>;
+export type TopDomainsByRange = Readonly<Record<RangeId, readonly TopDomainEntry[]>>;
 
 export interface KpisJson {
   schemaVersion: 1;
@@ -39,7 +41,7 @@ export interface KpisJson {
   days: readonly string[];
   metrics: MetricSeries;
   topDomainsByDay: readonly TopDomainsDay[];
-  topDomainsByRange?: TopDomainsByRange;
+  topDomainsByRange: TopDomainsByRange;
 }
 
 export interface MetaJson {

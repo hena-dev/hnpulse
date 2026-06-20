@@ -42,7 +42,7 @@ const compactSummary = (summary: KpiSummary): KpiSummary => ({
 });
 
 const topDomainsForDashboardRange = (kpis: KpisJson, range: RangeId): readonly TopDomainEntry[] =>
-  kpis.topDomainsByRange?.[range] ?? [];
+  kpis.topDomainsByRange[range];
 
 export const buildDashboardData = (kpis: KpisJson, range: RangeId): DashboardData => {
   const days = RANGE_DAYS[range];

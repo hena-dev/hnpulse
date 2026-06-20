@@ -17,6 +17,7 @@ describe("computeKpiValue — averaged per-day count metrics", () => {
     askHn: [2, 3, 4],
     jobs: [1, 2, 3],
     deadFlaggedRatio: [0.01, 0.02, 0.03],
+    deadFlaggedTotal: [110, 220, 330],
   };
 
   it("means daily counts for stories/comments/active*/show/ask/jobs", () => {
@@ -45,6 +46,16 @@ describe("computeKpiValue — averaged per-day count metrics", () => {
     };
     // 0*100 + 0.5*100 + 1.0*100 = 150 over 300 stories = 0.5
     expect(computeKpiValue("successRateGte100", m, 3)).toBe(0.5);
+  });
+
+  it("dead/flagged ratio is weighted by the emitted total denominator", () => {
+    const m = {
+      ...metrics,
+      deadFlaggedRatio: [0.5, 0.25, 0],
+      deadFlaggedTotal: [10, 100, 990],
+    };
+    // weights = [10, 100, 990], so low-volume days do not dominate the range KPI.
+    expect(computeKpiValue("deadFlaggedRatio", m, 3)).toBeCloseTo(30 / 1100);
   });
 
   it("returns 0 for ratios when total stories is 0", () => {
@@ -76,6 +87,7 @@ describe("computeKpiValue — averaged per-day count metrics", () => {
       "askHn",
       "jobs",
       "deadFlaggedRatio",
+      "deadFlaggedTotal",
     ] as const) {
       expect(typeof computeKpiValue(k, metrics, 3)).toBe("number");
     }

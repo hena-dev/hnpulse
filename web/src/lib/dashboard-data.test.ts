@@ -2,6 +2,15 @@ import { describe, expect, it } from "vitest";
 import { type KpisJson, METRIC_KEYS } from "../data/types.ts";
 import { buildDashboardData, buildDashboardDataByRange } from "./dashboard-data.ts";
 
+const emptyTopDomainsByRange = () => ({
+  "1w": [],
+  "1m": [],
+  "3m": [],
+  "6m": [],
+  "1y": [],
+  "2y": [],
+});
+
 const dateAt = (offset: number): string =>
   new Date(Date.UTC(2024, 0, offset + 1)).toISOString().slice(0, 10);
 
@@ -24,6 +33,7 @@ const makeKpis = (storiesSeries: number[]): KpisJson => {
       ],
     })),
     topDomainsByRange: {
+      ...emptyTopDomainsByRange(),
       "1w": [
         { name: "a.example", stories: 6, share: 0.6 },
         { name: "b.example", stories: 4, share: 0.4 },
@@ -57,10 +67,9 @@ describe("buildDashboardData", () => {
     expect(sparkline[sparkline.length - 1]).toBe(100);
   });
 
-  it("returns null for the top domain when no exact range domains exist", () => {
+  it("returns null for the top domain when the exact range has no domains", () => {
     const kpis = makeKpis([1, 2, 3]);
-    const { topDomainsByRange: _topDomainsByRange, ...withoutRangeDomains } = kpis;
-    const data = buildDashboardData(withoutRangeDomains, "1w");
+    const data = buildDashboardData({ ...kpis, topDomainsByRange: emptyTopDomainsByRange() }, "1w");
 
     expect(data.topDomain).toBeNull();
     expect(data.topDomains).toEqual([]);
@@ -70,6 +79,7 @@ describe("buildDashboardData", () => {
     const kpis = {
       ...makeKpis(Array.from({ length: 7 }, () => 1)),
       topDomainsByRange: {
+        ...emptyTopDomainsByRange(),
         "1w": [{ name: "range-winner.example", stories: 11, share: 0.55 }],
       },
     };

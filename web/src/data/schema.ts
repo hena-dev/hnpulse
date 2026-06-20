@@ -1,12 +1,18 @@
 import { z } from "zod";
 import { RANGE_IDS } from "../lib/range/range.ts";
-import type { KpisJson, MetaJson } from "./types.ts";
+import type { KpisJson, MetaJson, MetricKey } from "./types.ts";
 import { METRIC_KEYS } from "./types.ts";
 
 const date = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
 const finite = z.number().refine(Number.isFinite);
 
-const series = z.object(Object.fromEntries(METRIC_KEYS.map((k) => [k, z.array(finite)] as const)));
+const series = z.object(
+  Object.fromEntries(
+    METRIC_KEYS.map(
+      (k) => [k, k === "deadFlaggedTotal" ? z.array(finite).optional() : z.array(finite)] as const,
+    ),
+  ),
+);
 
 const TopDomain = z.object({
   name: z.string().min(1),
@@ -31,13 +37,14 @@ export const KpisJsonSchema = z
     days: z.array(date).min(1),
     metrics: series,
     topDomainsByDay: z.array(TopDomainsDay),
-    topDomainsByRange: TopDomainsByRange.optional(),
+    topDomainsByRange: TopDomainsByRange,
   })
   .superRefine((v, ctx) => {
     const n = v.days.length;
-    const metrics = v.metrics as Record<string, readonly number[]>;
+    const metrics = v.metrics as Record<string, readonly number[] | undefined>;
     for (const k of METRIC_KEYS) {
-      const len = (metrics[k] as readonly number[]).length;
+      const len = metrics[k]?.length;
+      if (len === undefined) continue;
       if (len !== n) {
         ctx.addIssue({
           code: "custom",
@@ -49,6 +56,22 @@ export const KpisJsonSchema = z
     if (v.topDomainsByDay.length !== n) {
       ctx.addIssue({ code: "custom", path: ["topDomainsByDay"], message: `expected ${n}` });
     }
+  })
+  .transform((v) => {
+    type ParsedMetrics = Record<MetricKey, number[]> & { deadFlaggedTotal?: number[] };
+    const metrics = v.metrics as ParsedMetrics;
+    return {
+      ...v,
+      metrics: {
+        ...metrics,
+        // Legacy checked-in KPI files predate the exact denominator series.
+        deadFlaggedTotal:
+          metrics.deadFlaggedTotal ??
+          metrics.stories.map(
+            (stories, i) => stories + (metrics.comments[i] ?? 0) + (metrics.jobs[i] ?? 0),
+          ),
+      },
+    };
   });
 
 export const MetaJsonSchema = z.object({

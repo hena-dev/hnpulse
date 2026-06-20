@@ -22,6 +22,7 @@ const row = (
     ask_hn: 0,
     jobs: 0,
     dead_flagged_ratio: 0.01,
+    dead_flagged_total: stories * 3,
     top_domains: topDomains,
   };
   return topDomainsByRange === undefined

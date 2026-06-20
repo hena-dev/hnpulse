@@ -59,6 +59,7 @@ describe("runAggregateStep", () => {
       ask_hn: 0,
       jobs: 0,
       dead_flagged_ratio: 0,
+      dead_flagged_total: 2,
     });
     const release: ReleaseManager = {
       listAssets: async () => ASSETS,

@@ -26,6 +26,7 @@ const buildPrevMetrics = (kpis: KpisJson, start: number, end: number): SeriesByK
   askHn: slicePrev(kpis.metrics.askHn, start, end),
   jobs: slicePrev(kpis.metrics.jobs, start, end),
   deadFlaggedRatio: slicePrev(kpis.metrics.deadFlaggedRatio, start, end),
+  deadFlaggedTotal: slicePrev(kpis.metrics.deadFlaggedTotal, start, end),
 });
 
 export const kpiSummary = (key: MetricKey, kpis: KpisJson, days: number): KpiSummary => {

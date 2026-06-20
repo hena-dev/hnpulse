@@ -3,6 +3,8 @@ import type { KpisJson } from "../../data/types.ts";
 import { METRIC_KEYS } from "../../data/types.ts";
 import { kpiSummary } from "./kpi-card.ts";
 
+const topDomainsByRange = { "1w": [], "1m": [], "3m": [], "6m": [], "1y": [], "2y": [] };
+
 const makeKpis = (storiesSeries: number[]): KpisJson => ({
   schemaVersion: 1,
   windowStart: "2024-05-04",
@@ -12,6 +14,7 @@ const makeKpis = (storiesSeries: number[]): KpisJson => ({
     METRIC_KEYS.map((k) => [k, k === "stories" ? storiesSeries : storiesSeries.map(() => 1)]),
   ) as unknown as KpisJson["metrics"],
   topDomainsByDay: storiesSeries.map(() => ({ date: "2024-05-04", domains: [] })),
+  topDomainsByRange,
 });
 
 describe("kpiSummary", () => {

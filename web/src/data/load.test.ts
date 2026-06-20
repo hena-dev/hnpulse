@@ -2,6 +2,8 @@ import { describe, expect, it, vi } from "vitest";
 import { joinUrl, loadDashboardData } from "./load.ts";
 import { METRIC_KEYS } from "./types.ts";
 
+const topDomainsByRange = { "1w": [], "1m": [], "3m": [], "6m": [], "1y": [], "2y": [] };
+
 describe("joinUrl", () => {
   it("passes through absolute http URLs", () => {
     expect(joinUrl("https://x/", "https://cdn/x.json")).toBe("https://cdn/x.json");
@@ -35,6 +37,7 @@ const kpis = {
     { date: "2024-05-04", domains: [] },
     { date: "2024-05-05", domains: [] },
   ],
+  topDomainsByRange,
 };
 
 describe("loadDashboardData", () => {

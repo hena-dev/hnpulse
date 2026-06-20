@@ -7,6 +7,7 @@ const dateString = z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "expected YYYY-MM-DD"
 export const TopDomainEntrySchema = z.object({
   name: z.string().min(1),
   stories: z.number().int().nonnegative(),
+  // Share among story links that resolve to a registrable domain.
   share: z.number().min(0).max(1),
 });
 

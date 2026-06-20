@@ -17,9 +17,10 @@ export const extractRegistrableDomain = (url: string | null | undefined): string
 };
 
 /**
- * Given a `Map<domain, storyCount>`, an overall total story count, and a top-N
- * limit, returns the top-N entries sorted descending by story count, each with
- * a precomputed share (0..1).
+ * Given a `Map<domain, storyCount>`, the total story count with a recognised
+ * registrable domain, and a top-N limit, returns the top-N entries sorted
+ * descending by story count. Share is normalised over recognised-domain story
+ * links, not over all stories.
  */
 export const computeDomainShares = (
   counts: ReadonlyMap<string, number>,

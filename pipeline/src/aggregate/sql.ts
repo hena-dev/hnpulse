@@ -54,14 +54,14 @@ const dailyCtes = (): string => `
   ),
   daily_main AS (
     SELECT timestamp::DATE AS day,
-      COUNT(*) FILTER (WHERE type IN ('story','poll','pollopt')) AS stories,
+      COUNT(*) FILTER (WHERE type = 'story') AS stories,
       COUNT(*) FILTER (WHERE type = 'comment') AS comments,
       COUNT(DISTINCT "by") FILTER (WHERE type = 'comment') AS active_commenters,
-      COUNT(DISTINCT "by") FILTER (WHERE type IN ('story','poll','pollopt')) AS active_submitters,
-      APPROX_QUANTILE(score, 0.50) FILTER (WHERE type IN ('story','poll','pollopt')) AS median_score,
-      APPROX_QUANTILE(score, 0.90) FILTER (WHERE type IN ('story','poll','pollopt')) AS p90_score,
+      COUNT(DISTINCT "by") FILTER (WHERE type = 'story') AS active_submitters,
+      APPROX_QUANTILE(score, 0.50) FILTER (WHERE type = 'story') AS median_score,
+      APPROX_QUANTILE(score, 0.90) FILTER (WHERE type = 'story') AS p90_score,
       COUNT(*) FILTER (
-        WHERE type IN ('story','poll','pollopt') AND score >= 100
+        WHERE type = 'story' AND score >= 100
       ) AS stories_gte100,
       COUNT(*) FILTER (WHERE type = 'story' AND title LIKE 'Show HN:%') AS show_hn,
       COUNT(*) FILTER (WHERE type = 'story' AND title LIKE 'Ask HN:%') AS ask_hn,
@@ -86,7 +86,8 @@ SELECT
   coalesce(m.ask_hn, 0)::BIGINT   AS ask_hn,
   coalesce(m.jobs, 0)::BIGINT     AS jobs,
   CASE WHEN coalesce(dd.total, 0) > 0
-       THEN dd.bad::DOUBLE / dd.total ELSE 0 END  AS dead_flagged_ratio
+       THEN dd.bad::DOUBLE / dd.total ELSE 0 END  AS dead_flagged_ratio,
+  coalesce(dd.total, 0)::BIGINT AS dead_flagged_total
 FROM days
 LEFT JOIN daily_main m  ON m.day  = d
 LEFT JOIN daily_dead dd ON dd.day = d
@@ -104,7 +105,7 @@ SELECT timestamp::DATE::VARCHAR AS day, url
 FROM all_dedup
 WHERE coalesce(deleted, false) = false
   AND coalesce(dead, false) = false
-  AND type IN ('story','poll','pollopt')
+  AND type = 'story'
   AND url IS NOT NULL
 ORDER BY day ASC;`;
 };

@@ -17,6 +17,7 @@ export interface DailyRow {
   ask_hn: number;
   jobs: number;
   dead_flagged_ratio: number;
+  dead_flagged_total: number;
 }
 
 export interface DomainRow {
@@ -43,6 +44,7 @@ const SQL_TO_METRIC: Readonly<Record<string, keyof MetricSeries>> = {
   ask_hn: "askHn",
   jobs: "jobs",
   dead_flagged_ratio: "deadFlaggedRatio",
+  dead_flagged_total: "deadFlaggedTotal",
 };
 
 const emptySeries = (n: number): MetricSeries =>

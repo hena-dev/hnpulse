@@ -23,13 +23,13 @@ WITH
   ),
   daily_main AS (
     SELECT DATE(timestamp) AS day,
-      COUNTIF(type IN ('story', 'poll', 'pollopt')) AS stories,
+      COUNTIF(type = 'story') AS stories,
       COUNTIF(type = 'comment') AS comments,
       COUNT(DISTINCT IF(type = 'comment', author, NULL)) AS active_commenters,
-      COUNT(DISTINCT IF(type IN ('story', 'poll', 'pollopt'), author, NULL)) AS active_submitters,
-      APPROX_QUANTILES(IF(type IN ('story', 'poll', 'pollopt'), score, NULL), 100 IGNORE NULLS)[OFFSET(50)] AS median_score,
-      APPROX_QUANTILES(IF(type IN ('story', 'poll', 'pollopt'), score, NULL), 100 IGNORE NULLS)[OFFSET(90)] AS p90_score,
-      COUNTIF(type IN ('story', 'poll', 'pollopt') AND score >= 100) AS stories_gte100,
+      COUNT(DISTINCT IF(type = 'story', author, NULL)) AS active_submitters,
+      APPROX_QUANTILES(IF(type = 'story', score, NULL), 100 IGNORE NULLS)[OFFSET(50)] AS median_score,
+      APPROX_QUANTILES(IF(type = 'story', score, NULL), 100 IGNORE NULLS)[OFFSET(90)] AS p90_score,
+      COUNTIF(type = 'story' AND score >= 100) AS stories_gte100,
       COUNTIF(type = 'story' AND title LIKE 'Show HN:%') AS show_hn,
       COUNTIF(type = 'story' AND title LIKE 'Ask HN:%') AS ask_hn,
       COUNTIF(type = 'job') AS jobs
@@ -37,13 +37,14 @@ WITH
   ),
   domain_base AS (
     SELECT DATE(timestamp) AS day, LOWER(NET.REG_DOMAIN(url)) AS name
-    FROM items WHERE type IN ('story', 'poll', 'pollopt') AND url IS NOT NULL
+    FROM items WHERE type = 'story' AND url IS NOT NULL
   ),
   domain_counts AS (
     SELECT day, name, COUNT(*) AS stories FROM domain_base
     WHERE name IS NOT NULL GROUP BY day, name
   ),
   daily_domain_shares AS (
+    -- Shares are within story links that resolve to a registrable domain.
     SELECT day, name, stories,
       SAFE_DIVIDE(stories, SUM(stories) OVER (PARTITION BY day)) AS share
     FROM domain_counts
@@ -69,6 +70,7 @@ WITH
     GROUP BY rs.range_id, db.name
   ),
   range_domain_shares AS (
+    -- Shares are within story links that resolve to a registrable domain.
     SELECT range_id, name, stories,
       SAFE_DIVIDE(stories, SUM(stories) OVER (PARTITION BY range_id)) AS share
     FROM range_domain_counts
@@ -90,6 +92,7 @@ SELECT FORMAT_DATE('%F', d.day) AS day,
   IFNULL(SAFE_DIVIDE(m.stories_gte100, m.stories), 0) AS success_rate_gte100,
   IFNULL(m.show_hn, 0) AS show_hn, IFNULL(m.ask_hn, 0) AS ask_hn, IFNULL(m.jobs, 0) AS jobs,
   IFNULL(SAFE_DIVIDE(dd.bad, dd.total), 0) AS dead_flagged_ratio,
+  IFNULL(dd.total, 0) AS dead_flagged_total,
   IFNULL(db.top_domains, ARRAY<STRUCT<name STRING, stories INT64, share FLOAT64>>[]) AS top_domains,
   rd.top_domains_by_range AS top_domains_by_range
 FROM days d

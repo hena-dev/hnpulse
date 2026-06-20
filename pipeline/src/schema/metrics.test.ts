@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { METRIC_KEYS, MetricKeySchema, MetricSeriesSchema } from "./metrics.ts";
 
 describe("METRIC_KEYS", () => {
-  it("contains all 12 KPI keys from §5", () => {
+  it("contains all emitted metric series", () => {
     expect(METRIC_KEYS).toEqual([
       "stories",
       "comments",
@@ -16,6 +16,7 @@ describe("METRIC_KEYS", () => {
       "askHn",
       "jobs",
       "deadFlaggedRatio",
+      "deadFlaggedTotal",
     ]);
   });
 });

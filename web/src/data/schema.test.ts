@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import { KpisJsonSchema, MetaJsonSchema } from "./schema.ts";
 import { METRIC_KEYS } from "./types.ts";
 
+const topDomainsByRange = { "1w": [], "1m": [], "3m": [], "6m": [], "1y": [], "2y": [] };
+
 const goodKpis = {
   schemaVersion: 1,
   windowStart: "2024-05-04",
@@ -12,6 +14,7 @@ const goodKpis = {
     { date: "2024-05-04", domains: [] },
     { date: "2024-05-05", domains: [] },
   ],
+  topDomainsByRange,
 };
 
 describe("KpisJsonSchema (web)", () => {
@@ -24,13 +27,26 @@ describe("KpisJsonSchema (web)", () => {
   it("rejects mismatched series length", () => {
     expect(() => KpisJsonSchema.parse({ ...goodKpis, days: ["2024-05-04"] })).toThrow();
   });
-  it("accepts optional exact range-level top domains", () => {
+  it("accepts exact range-level top domains", () => {
     expect(
       KpisJsonSchema.parse({
         ...goodKpis,
-        topDomainsByRange: { "1w": [], "1m": [], "3m": [], "6m": [], "1y": [], "2y": [] },
+        topDomainsByRange,
       }),
     ).toMatchObject({ topDomainsByRange: { "1w": [] } });
+  });
+
+  it("rejects missing exact range-level top domains", () => {
+    const { topDomainsByRange: _topDomainsByRange, ...withoutRangeDomains } = goodKpis;
+    expect(() => KpisJsonSchema.parse(withoutRangeDomains)).toThrow();
+  });
+
+  it("backfills legacy KPI files that predate deadFlaggedTotal", () => {
+    const { deadFlaggedTotal: _deadFlaggedTotal, ...legacyMetrics } = goodKpis.metrics;
+
+    const parsed = KpisJsonSchema.parse({ ...goodKpis, metrics: legacyMetrics });
+
+    expect(parsed.metrics.deadFlaggedTotal).toEqual([3, 6]);
   });
 });
 

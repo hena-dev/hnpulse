@@ -71,7 +71,7 @@ export const KPI_CATALOG: readonly KpiEntry[] = [
     primaryKey: "medianScore",
     secondaryKey: "p90Score",
     label: "Story score",
-    description: "Median (p50) and p90 of daily story scores",
+    description: "Avg. of daily median (p50) and p90 story scores",
     primaryLabel: "median",
     secondaryLabel: "p90",
     format: "count",

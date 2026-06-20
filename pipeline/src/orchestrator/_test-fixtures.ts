@@ -92,6 +92,7 @@ export const stableDailyRow = (day: string, stories = 5) => ({
   ask_hn: 0,
   jobs: 0,
   dead_flagged_ratio: 0,
+  dead_flagged_total: stories + 5,
 });
 
 export const stableBqAggregateRow = (day: string, stories = 5): BqAggregateRow => ({

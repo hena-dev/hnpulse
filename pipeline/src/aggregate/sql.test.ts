@@ -35,6 +35,7 @@ describe("buildDailyMetricsSql", () => {
       "ask_hn",
       "jobs",
       "dead_flagged_ratio",
+      "dead_flagged_total",
     ]) {
       expect(sql).toContain(col);
     }
@@ -44,8 +45,8 @@ describe("buildDailyMetricsSql", () => {
     expect(sql).toContain('COUNT(DISTINCT "by")');
   });
 
-  it("treats poll/pollopt as stories per §5.2", () => {
-    expect(sql).toContain("'story','poll','pollopt'");
+  it("counts only story rows as stories", () => {
+    expect(sql).toContain("type = 'story'");
   });
 
   it("excludes deleted/dead from main metrics but keeps for ratio", () => {
@@ -85,7 +86,7 @@ describe("buildDomainRowsSql", () => {
   });
 
   it("selects only stories with non-null urls", () => {
-    expect(sql).toMatch(/type\s+IN\s*\(\s*'story','poll','pollopt'\s*\)/);
+    expect(sql).toContain("type = 'story'");
     expect(sql).toContain("url IS NOT NULL");
   });
 
