@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
-  "lastUpdated": "2026-08-26T14:43:11.086Z",
-  "dataAsOf": "2026-08-25",
-  "windowStart": "2024-08-26",
-  "windowEnd": "2026-08-25",
-  "kpisFile": "/data/kpis.0da1723.json",
-  "buildSha": "cbabb8b368890ee4f8cee2248daff0a415e43b66",
+  "lastUpdated": "2026-08-27T23:37:52.798Z",
+  "dataAsOf": "2026-08-26",
+  "windowStart": "2024-08-27",
+  "windowEnd": "2026-08-26",
+  "kpisFile": "/data/kpis.2310e22.json",
+  "buildSha": "266537ddb160e8b701db34ea6edf8c2d3333da4d",
   "pipelineVersion": "1.0.0",
   "dataSources": [
     "bigquery",
     "hacker-news-api"
   ],
   "stabilizationDays": 7,
-  "provisionalFrom": "2026-08-19"
+  "provisionalFrom": "2026-08-20"
 }
