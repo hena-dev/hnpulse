@@ -45,6 +45,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   vi.unstubAllGlobals();
+  vi.useRealTimers();
   await rm(dir, { recursive: true, force: true });
 });
 
@@ -112,5 +113,60 @@ describe("createRealReleaseManager", () => {
     );
     expect(mocks.repos.listReleaseAssets).toHaveBeenCalledTimes(2);
     expect(assets.map((a) => a.name)).toEqual(["items-new.parquet"]);
+  });
+
+  it("retries transient download failures before succeeding", async () => {
+    mocks.repos.listReleaseAssets.mockResolvedValue({
+      data: [asset(1, "items-2024-05-04.parquet")],
+    });
+    let calls = 0;
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        calls += 1;
+        return calls < 3 ? new Response("boom", { status: 500 }) : new Response("parquet");
+      }),
+    );
+    vi.useFakeTimers();
+    const releaseManager = createRealReleaseManager({
+      owner: "hena-dev",
+      repo: "hnpulse",
+      token: "t",
+    });
+
+    const pending = releaseManager.downloadAsset(
+      "items-2024-05-04.parquet",
+      join(dir, "one.parquet"),
+    );
+    await vi.advanceTimersByTimeAsync(1000);
+    await pending;
+
+    expect(fetch).toHaveBeenCalledTimes(3);
+  });
+
+  it("gives up after exhausting retries on persistent download failures", async () => {
+    mocks.repos.listReleaseAssets.mockResolvedValue({
+      data: [asset(1, "items-2024-05-04.parquet")],
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => new Response("boom", { status: 500 })),
+    );
+    vi.useFakeTimers();
+    const releaseManager = createRealReleaseManager({
+      owner: "hena-dev",
+      repo: "hnpulse",
+      token: "t",
+    });
+
+    const pending = releaseManager.downloadAsset(
+      "items-2024-05-04.parquet",
+      join(dir, "one.parquet"),
+    );
+    const assertion = expect(pending).rejects.toThrow("download failed: 500");
+    await vi.advanceTimersByTimeAsync(1000);
+    await assertion;
+
+    expect(fetch).toHaveBeenCalledTimes(3);
   });
 });

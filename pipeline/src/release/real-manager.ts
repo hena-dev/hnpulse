@@ -6,12 +6,39 @@ import { listReleaseAssetsAllPages } from "./paginate.ts";
 import type { ReleaseAsset, ReleaseManager } from "./types.ts";
 
 const TAG = "data-snapshot";
+const MAX_ATTEMPTS = 3;
 
 interface RealManagerArgs {
   owner: string;
   repo: string;
   token: string;
 }
+
+const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
+
+const downloadAssetOnce = async (url: string, token: string): Promise<ArrayBuffer> => {
+  const dl = await fetch(url, {
+    headers: { Authorization: `token ${token}`, Accept: "application/octet-stream" },
+  });
+  if (!dl.ok) throw new Error(`download failed: ${dl.status}`);
+  return dl.arrayBuffer();
+};
+
+// GitHub's release-asset CDN occasionally returns transient 5xx errors; retry
+// a few times with a short linear backoff before giving up.
+const downloadAssetWithRetry = async (url: string, token: string): Promise<ArrayBuffer> => {
+  let lastError: unknown;
+  for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt += 1) {
+    try {
+      return await downloadAssetOnce(url, token);
+    } catch (error) {
+      lastError = error;
+      if (attempt === MAX_ATTEMPTS) break;
+      await delay(250 * attempt);
+    }
+  }
+  throw lastError;
+};
 
 const ensureRelease = async (
   octokit: Octokit,
@@ -101,11 +128,8 @@ export const createRealReleaseManager = (args: RealManagerArgs): ReleaseManager 
     async downloadAsset(name, destPath) {
       const asset = (await loadAssetsForRelease()).find((a) => a.name === name);
       if (asset === undefined) throw new Error(`asset not found: ${name}`);
-      const dl = await fetch(asset.browser_download_url, {
-        headers: { Authorization: `token ${args.token}`, Accept: "application/octet-stream" },
-      });
-      if (!dl.ok) throw new Error(`download failed: ${dl.status}`);
-      await writeFile(destPath, new Uint8Array(await dl.arrayBuffer()));
+      const bytes = await downloadAssetWithRetry(asset.browser_download_url, args.token);
+      await writeFile(destPath, new Uint8Array(bytes));
     },
   };
 };
