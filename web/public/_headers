@@ -1,0 +1,61 @@
+# Daily data is updated in place; revalidate after five minutes, with at most one hour stale.
+/data/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+
+# HTML paths are explicit so they cannot overlap build-generated immutable asset rules.
+/
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/1w*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/1m*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/3m*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/6m*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/1y*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/2y*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/zh
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/zh/*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/es*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/hi*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/ar*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/pt*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/id*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/ja*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/ru*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/fr*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/de*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/ko*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/tr*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/vi*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/it*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/pl*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/nl*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/th*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/fa*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/uk*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/zh-tw*
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
