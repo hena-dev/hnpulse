@@ -1,5 +1,32 @@
 @import "tailwindcss";
 
+.detail-chart {
+  --ts-chart-1: var(--chart-1);
+  --ts-chart-2: var(--chart-2);
+  --ts-chart-3: var(--chart-3);
+  --ts-chart-4: var(--chart-4);
+  --ts-chart-5: var(--chart-5);
+}
+
+.detail-chart-tooltip {
+  --ts-chart-tooltip-background: var(--popover);
+  --ts-chart-tooltip-color: var(--popover-foreground);
+  --ts-chart-tooltip-border: 1px solid var(--border);
+  --ts-chart-tooltip-border-radius: 0.625rem;
+  --ts-chart-tooltip-shadow: 0 8px 24px rgb(0 0 0 / 0.12);
+  --ts-chart-tooltip-max-width: min(20rem, calc(100vw - 2rem));
+  --ts-chart-tooltip-padding: 0.75rem;
+  --ts-chart-tooltip-font: 12px / 1.5 var(--font-sans);
+  --ts-chart-tooltip-active-row-background: transparent;
+  font-variant-numeric: tabular-nums;
+}
+
+.detail-chart svg:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+  border-radius: var(--radius);
+}
+
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {

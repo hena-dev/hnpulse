@@ -30,7 +30,6 @@
     "lastUpdated": "zuletzt aktualisiert {date}"
   },
   "charts": {
-    "unavailable": "Diagramme werden geladen, wenn JavaScript verfügbar ist.",
     "scaleAria": "Y-Achsen-Skalierung",
     "scaleLinear": "linear",
     "scaleLog": "log",

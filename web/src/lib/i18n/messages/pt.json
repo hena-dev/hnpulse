@@ -30,7 +30,6 @@
     "lastUpdated": "última atualização {date}"
   },
   "charts": {
-    "unavailable": "Os gráficos carregam quando o JavaScript está disponível.",
     "scaleAria": "Escala do eixo Y",
     "scaleLinear": "linear",
     "scaleLog": "log",

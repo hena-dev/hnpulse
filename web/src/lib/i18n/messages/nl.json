@@ -30,7 +30,6 @@
     "lastUpdated": "laatst bijgewerkt {date}"
   },
   "charts": {
-    "unavailable": "Grafieken laden zodra JavaScript beschikbaar is.",
     "scaleAria": "Schaal Y-as",
     "scaleLinear": "lineair",
     "scaleLog": "log",

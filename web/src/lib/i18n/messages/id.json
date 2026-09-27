@@ -30,7 +30,6 @@
     "lastUpdated": "terakhir diperbarui {date}"
   },
   "charts": {
-    "unavailable": "Grafik dimuat saat JavaScript tersedia.",
     "scaleAria": "Skala sumbu Y",
     "scaleLinear": "linear",
     "scaleLog": "log",

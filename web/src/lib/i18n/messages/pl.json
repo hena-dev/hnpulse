@@ -30,7 +30,6 @@
     "lastUpdated": "ostatnia aktualizacja {date}"
   },
   "charts": {
-    "unavailable": "Wykresy wczytują się, gdy JavaScript jest dostępny.",
     "scaleAria": "Skala osi Y",
     "scaleLinear": "liniowa",
     "scaleLog": "log",

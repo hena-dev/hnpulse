@@ -30,7 +30,6 @@
     "lastUpdated": "оновлено {date}"
   },
   "charts": {
-    "unavailable": "Графіки завантажуються, коли доступний JavaScript.",
     "scaleAria": "Масштаб осі Y",
     "scaleLinear": "лінійний",
     "scaleLog": "логарифмічний",

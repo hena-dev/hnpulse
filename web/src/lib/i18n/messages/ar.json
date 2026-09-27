@@ -30,7 +30,6 @@
     "lastUpdated": "آخر تحديث {date}"
   },
   "charts": {
-    "unavailable": "تُحمَّل المخططات عند توفر JavaScript.",
     "scaleAria": "مقياس محور Y",
     "scaleLinear": "خطي",
     "scaleLog": "لوغاريتمي",

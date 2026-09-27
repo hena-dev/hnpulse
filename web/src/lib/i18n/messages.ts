@@ -70,7 +70,6 @@ export interface Messages {
     lastUpdated: string;
   };
   charts: {
-    unavailable: string;
     scaleAria: string;
     scaleLinear: string;
     scaleLog: string;

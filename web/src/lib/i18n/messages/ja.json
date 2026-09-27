@@ -30,7 +30,6 @@
     "lastUpdated": "最終更新 {date}"
   },
   "charts": {
-    "unavailable": "JavaScriptが有効になるとチャートが読み込まれます。",
     "scaleAria": "Y軸スケール",
     "scaleLinear": "線形",
     "scaleLog": "対数",
