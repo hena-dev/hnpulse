@@ -30,7 +30,6 @@
     "lastUpdated": "обновлено {date}"
   },
   "charts": {
-    "unavailable": "Графики загружаются при доступном JavaScript.",
     "scaleAria": "Шкала оси Y",
     "scaleLinear": "линейная",
     "scaleLog": "логарифмическая",

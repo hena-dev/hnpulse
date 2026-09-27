@@ -30,7 +30,6 @@
     "lastUpdated": "آخرین به‌روزرسانی {date}"
   },
   "charts": {
-    "unavailable": "نمودارها وقتی JavaScript در دسترس باشد بارگذاری می‌شوند.",
     "scaleAria": "مقیاس محور Y",
     "scaleLinear": "خطی",
     "scaleLog": "لگاریتمی",

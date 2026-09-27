@@ -51,6 +51,8 @@ export const DashboardView = ({
         series={chartDashboard.detailSeries}
         topDomains={chartDashboard.topDomains}
         messages={messages.charts}
+        ofStories={messages.topDomain.ofStories}
+        intlLocale={intlLocale}
       />
     </main>
     <footer className="mx-auto max-w-6xl px-4 py-8 text-xs text-muted-foreground flex flex-wrap items-center gap-x-2 gap-y-2">

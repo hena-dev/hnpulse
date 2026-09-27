@@ -30,7 +30,6 @@
     "lastUpdated": "last updated {date}"
   },
   "charts": {
-    "unavailable": "Charts load when JavaScript is available.",
     "scaleAria": "Y-axis scale",
     "scaleLinear": "linear",
     "scaleLog": "log",

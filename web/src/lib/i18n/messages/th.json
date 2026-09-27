@@ -30,7 +30,6 @@
     "lastUpdated": "อัปเดตล่าสุด {date}"
   },
   "charts": {
-    "unavailable": "แผนภูมิจะโหลดเมื่อมี JavaScript",
     "scaleAria": "สเกลแกน Y",
     "scaleLinear": "เชิงเส้น",
     "scaleLog": "ลอการิทึม",

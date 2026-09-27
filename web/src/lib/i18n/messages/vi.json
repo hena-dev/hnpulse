@@ -30,7 +30,6 @@
     "lastUpdated": "cập nhật lần cuối {date}"
   },
   "charts": {
-    "unavailable": "Biểu đồ sẽ tải khi có JavaScript.",
     "scaleAria": "Thang trục Y",
     "scaleLinear": "tuyến tính",
     "scaleLog": "log",

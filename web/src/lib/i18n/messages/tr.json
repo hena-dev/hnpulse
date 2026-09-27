@@ -30,7 +30,6 @@
     "lastUpdated": "son güncelleme {date}"
   },
   "charts": {
-    "unavailable": "Grafikler JavaScript kullanılabilir olduğunda yüklenir.",
     "scaleAria": "Y ekseni ölçeği",
     "scaleLinear": "doğrusal",
     "scaleLog": "log",

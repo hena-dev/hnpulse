@@ -30,7 +30,6 @@
     "lastUpdated": "आखिरी अपडेट {date}"
   },
   "charts": {
-    "unavailable": "JavaScript उपलब्ध होने पर चार्ट लोड होते हैं।",
     "scaleAria": "Y-axis स्केल",
     "scaleLinear": "linear",
     "scaleLog": "log",

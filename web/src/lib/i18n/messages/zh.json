@@ -30,7 +30,6 @@
     "lastUpdated": "最后更新于 {date}"
   },
   "charts": {
-    "unavailable": "启用 JavaScript 后加载图表。",
     "scaleAria": "Y 轴刻度",
     "scaleLinear": "线性",
     "scaleLog": "对数",
