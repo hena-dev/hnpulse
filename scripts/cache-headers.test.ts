@@ -8,6 +8,8 @@ const template = readFileSync(new URL("../web/public/_headers", import.meta.url)
 const headers = renderCacheHeaders(template, [
   "app.ABCdef12.js",
   "styles.12345678.css",
+  "font.12345678.woff2",
+  "image.12345678.avif",
   "missing.js",
   "nested/file.12345678.js",
 ]);
@@ -30,7 +32,12 @@ const policyFor = (path: string): string[] =>
 
 describe("Cloudflare static asset caching", () => {
   it("keeps the immutable and mutable policies disjoint", () => {
-    for (const path of ["/_astro/app.ABCdef12.js", "/_astro/styles.12345678.css"]) {
+    for (const path of [
+      "/_astro/app.ABCdef12.js",
+      "/_astro/styles.12345678.css",
+      "/_astro/font.12345678.woff2",
+      "/_astro/image.12345678.avif",
+    ]) {
       expect(policyFor(path)).toEqual([immutable]);
     }
     expect(policyFor("/_astro/missing.js")).toEqual([]);

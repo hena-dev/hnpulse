@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, writeFileSync } from "node:fs";
 
 const immutable = "Cache-Control: public, max-age=31536000, immutable";
-const hashedAsset = /\.[A-Za-z0-9_-]{8,}\.(?:js|css)$/;
+const hashedAsset = /\.[A-Za-z0-9_-]{8,}\.[A-Za-z0-9]{1,8}$/;
 
 export const renderCacheHeaders = (template: string, assets: readonly string[]): string => {
   const rules = assets
