@@ -9,9 +9,16 @@ permissions:
 env:
   WRANGLER_VERSION: 4.99.0
 
+concurrency:
+  group: pr-preview-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
 jobs:
   preview:
     runs-on: ubuntu-latest
+    environment:
+      name: preview
+      url: ${{ steps.upload.outputs.alias_url }}
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
@@ -26,14 +33,33 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
         run: |
-          echo "pr_number=${PR_NUMBER}" >> "$GITHUB_OUTPUT"
-          echo "version_tag=pr-${PR_NUMBER}-${HEAD_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
+          {
+            echo "pr_number=${PR_NUMBER}"
+            echo "alias=pr-${PR_NUMBER}"
+            echo "version_tag=pr-${PR_NUMBER}-${HEAD_SHA}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          } >> "$GITHUB_OUTPUT"
       - name: Upload preview version to Cloudflare
+        id: upload
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           PR_NUMBER: ${{ steps.preview-meta.outputs.pr_number }}
+          PREVIEW_ALIAS: ${{ steps.preview-meta.outputs.alias }}
           VERSION_TAG: ${{ steps.preview-meta.outputs.version_tag }}
-        run: >-
-          bunx wrangler@${WRANGLER_VERSION} versions upload
-          --tag "$VERSION_TAG"
-          --message "Preview PR #$PR_NUMBER"
+          WRANGLER_OUTPUT_FILE_PATH: ${{ runner.temp }}/wrangler-output.ndjson
+        run: |
+          bunx "wrangler@${WRANGLER_VERSION}" versions upload \
+            --tag "$VERSION_TAG" \
+            --message "Preview PR #$PR_NUMBER" \
+            --preview-alias "$PREVIEW_ALIAS"
+          alias_url=$(jq -r 'select(.type == "version-upload") | .preview_alias_url // empty' "$WRANGLER_OUTPUT_FILE_PATH" | tail -n 1)
+          version_url=$(jq -r 'select(.type == "version-upload") | .preview_url // empty' "$WRANGLER_OUTPUT_FILE_PATH" | tail -n 1)
+          if [ -z "$alias_url" ]; then
+            echo "::error title=No preview URL::Preview URLs are disabled for this Worker. Enable them under Workers & Pages > hnpulse > Settings > Domains & Routes > Preview URLs, then re-run this job."
+            exit 1
+          fi
+          echo "alias_url=${alias_url}" >> "$GITHUB_OUTPUT"
+          {
+            echo "### Cloudflare preview"
+            echo "- PR #${PR_NUMBER} (always latest): ${alias_url}"
+            echo "- This commit: ${version_url}"
+          } >> "$GITHUB_STEP_SUMMARY"
