@@ -34,7 +34,12 @@ export const ThemeToggle = ({ ariaLabel = "Toggle theme" }: ThemeToggleProps): J
       onClick={toggle}
       className="inline-flex h-8 w-8 items-center justify-center rounded-md border bg-card text-foreground hover:bg-muted"
     >
-      <span aria-hidden="true">{theme === "dark" ? "☀" : "☾"}</span>
+      <span aria-hidden="true" className="hidden dark:inline">
+        ☀
+      </span>
+      <span aria-hidden="true" className="dark:hidden">
+        ☾
+      </span>
     </button>
   );
 };
