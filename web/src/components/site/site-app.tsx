@@ -103,6 +103,19 @@ export const SiteApp = ({
       document.querySelector(selector)?.setAttribute("content", content);
   }, [locale, messageState.locale, messages]);
 
+  const dateControl = meta.snapshots ? (
+    <SnapshotPicker
+      date={date}
+      bounds={meta.snapshots}
+      locale={locale}
+      stabilizationDays={meta.stabilizationDays}
+      status={snapshot?.status}
+      asOfLabel={messages.dashboard.asOf}
+      onChange={(next) => navigate({ locale, range, date: next })}
+    />
+  ) : (
+    <SnapshotPending locale={locale} />
+  );
   return (
     <>
       <SiteHeader
@@ -110,25 +123,13 @@ export const SiteApp = ({
         themeToggleLabel={messages.theme.toggle}
         onHomeNavigate={onHomeNavigate}
       />
-      {meta.snapshots ? (
-        <SnapshotPicker
-          date={date}
-          bounds={meta.snapshots}
-          locale={locale}
-          stabilizationDays={meta.stabilizationDays}
-          status={snapshot?.status}
-          onChange={(next) => navigate({ locale, range, date: next })}
-        />
-      ) : (
-        <SnapshotPending locale={locale} />
-      )}
       {dashboard ? (
         <div data-dashboard-values data-date-ready={ready ? "true" : "false"}>
           <DashboardView
             dashboard={dashboard}
             chartDashboard={dashboard}
             meta={displayedMeta}
-            showAsOf={date === null}
+            dateControl={dateControl}
             range={range}
             locale={locale}
             messages={messages}
@@ -140,13 +141,16 @@ export const SiteApp = ({
         </div>
       ) : (
         <main className="mx-auto max-w-6xl px-4 py-6 flex flex-col gap-6">
-          <RangeSelector
-            value={range}
-            ariaLabel={messages.range.ariaLabel}
-            labels={messages.range.labels}
-            hrefForRange={hrefForRange}
-            onRangeChange={onRangeChange}
-          />
+          <div className="flex items-center justify-between flex-wrap gap-2">
+            <RangeSelector
+              value={range}
+              ariaLabel={messages.range.ariaLabel}
+              labels={messages.range.labels}
+              hrefForRange={hrefForRange}
+              onRangeChange={onRangeChange}
+            />
+            {dateControl}
+          </div>
           <p role={result.error ? "alert" : "status"}>{result.error ? copy.error : copy.loading}</p>
           {result.error && (
             <button type="button" className="underline self-start" onClick={result.retry}>

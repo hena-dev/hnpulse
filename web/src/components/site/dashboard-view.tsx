@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 import type { MetaJson } from "../../data/types.ts";
 import type { DashboardData } from "../../lib/dashboard-data.ts";
 import { formatDateTime } from "../../lib/format/date.ts";
@@ -21,7 +21,7 @@ export interface DashboardViewProps {
   hrefForRange: (range: RangeId) => string;
   onRangeChange: (range: RangeId) => void;
   onLocaleChange: (locale: Locale) => void;
-  showAsOf?: boolean;
+  dateControl?: ReactNode;
 }
 
 export const DashboardView = ({
@@ -35,7 +35,7 @@ export const DashboardView = ({
   hrefForRange,
   onRangeChange,
   onLocaleChange,
-  showAsOf = true,
+  dateControl,
 }: DashboardViewProps): JSX.Element => (
   <>
     <main className="mx-auto max-w-6xl px-4 py-6 flex flex-col gap-6">
@@ -48,7 +48,7 @@ export const DashboardView = ({
         intlLocale={intlLocale}
         hrefForRange={hrefForRange}
         onRangeChange={onRangeChange}
-        showAsOf={showAsOf}
+        dateControl={dateControl}
       />
       <DetailCharts
         series={chartDashboard.detailSeries}

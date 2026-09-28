@@ -56,8 +56,8 @@ describe("dated dashboard navigation", () => {
     fireEvent.click(screen.getByRole("button", { name: "Retry" }));
     await waitFor(() => expect(screen.getByTestId("chart")).toHaveTextContent("42"));
     expect(
-      screen.queryByText(getMessages("en").dashboard.asOf.replace("{date}", "Jan 10, 2025")),
-    ).toBeNull();
+      screen.getAllByText(getMessages("en").dashboard.asOf.replace("{date}", "Jan 10, 2025")),
+    ).toHaveLength(1);
     expect(screen.getByRole("button", { name: "Snapshot date: Jan 10, 2025" })).toBeInTheDocument();
     fireEvent.change(screen.getByLabelText("Language"), { target: { value: "fa" } });
     expect(window.location.pathname + window.location.search).toBe("/fa?date=2025-01-10");
@@ -106,9 +106,9 @@ describe("dated dashboard navigation", () => {
         ),
     );
     renderApp();
-    expect(screen.getByText(/Estimated finalization/)).toBeInTheDocument();
+    expect(screen.getByText("Provisional", { exact: true })).toBeInTheDocument();
     await waitFor(() => expect(screen.getByTestId("chart")).toHaveTextContent("16"));
-    expect(screen.queryByText(/Estimated finalization/)).toBeNull();
+    expect(screen.queryByText("Provisional", { exact: true })).toBeNull();
     expect(window.location.search).toBe("?date=2025-01-16");
   });
 });

@@ -8,6 +8,9 @@ describe("snapshot picker", () => {
     const onChange = vi.fn();
     const props = { bounds, locale: "en" as const, stabilizationDays: 7, onChange };
     render(<SnapshotPicker {...props} date={null} />);
+    expect(screen.getByRole("button", { name: "Snapshot date: Latest" })).toHaveTextContent(
+      "as of Jan 17, 2025",
+    );
     expect(screen.queryByRole("combobox")).toBeNull();
     await act(async () => {
       fireEvent.click(screen.getByRole("button", { name: "Snapshot date: Latest" }));
@@ -23,13 +26,19 @@ describe("snapshot picker", () => {
     expect(onChange).toHaveBeenCalledWith("2025-01-10");
     expect(screen.queryByRole("combobox")).toBeNull();
   }, 15000);
-  it("labels estimates only on provisional dates and clears the selection", () => {
+  it("shows estimates inside the calendar on provisional dates and clears the selection", async () => {
     const onChange = vi.fn();
     const props = { bounds, locale: "en" as const, stabilizationDays: 7, onChange };
     const { rerender } = render(<SnapshotPicker {...props} date="2025-01-11" />);
-    expect(screen.getByRole("status")).toHaveTextContent(
+    expect(screen.queryByText(/Estimated finalization/)).toBeNull();
+    await act(async () => {
+      fireEvent.click(screen.getByRole("button", { name: /Snapshot date/ }));
+      await vi.dynamicImportSettled();
+    });
+    expect(screen.getByText(/Estimated finalization/)).toHaveTextContent(
       "Provisional · Estimated finalization: Jan 19, 2025, after a successful update",
     );
+    fireEvent.click(screen.getByRole("button", { name: /Snapshot date/ }));
     fireEvent.click(screen.getByRole("button", { name: "Latest" }));
     expect(onChange).toHaveBeenCalledWith(null);
     rerender(<SnapshotPicker {...props} date="2025-01-10" />);

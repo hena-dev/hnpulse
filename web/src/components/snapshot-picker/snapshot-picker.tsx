@@ -1,3 +1,4 @@
+import { CalendarDays } from "lucide-react";
 import { lazy, Suspense, useState } from "react";
 import type { SnapshotBounds, SnapshotJson } from "../../data/types.ts";
 import { formatDateOnly } from "../../lib/format/date.ts";
@@ -16,6 +17,7 @@ export interface SnapshotPickerProps {
   locale: Locale;
   stabilizationDays: number;
   status?: SnapshotJson["status"] | undefined;
+  asOfLabel?: string;
   onChange: (date: string | null) => void;
 }
 
@@ -25,6 +27,7 @@ export const SnapshotPicker = ({
   locale,
   stabilizationDays,
   status,
+  asOfLabel = "as of {date}",
   onChange,
 }: SnapshotPickerProps) => {
   const [open, setOpen] = useState(false);
@@ -37,22 +40,21 @@ export const SnapshotPicker = ({
       ? { ...bounds, finalThrough: date }
       : bounds;
   return (
-    <div className="mx-auto max-w-6xl px-4 pt-6 flex flex-wrap items-center gap-3" dir={config.dir}>
+    <div className="flex flex-wrap items-center justify-end gap-2" dir={config.dir}>
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <Button
             variant="outline"
+            className="h-8 gap-1.5 px-2 text-xs font-normal text-muted-foreground"
             aria-label={`${copy.date}: ${date ? format(date) : copy.latest}`}
           >
-            {copy.date}: {date ? format(date) : copy.latest}
+            <CalendarDays className="size-3.5" aria-hidden="true" />
+            <span suppressHydrationWarning>
+              {asOfLabel.replace("{date}", format(date ?? bounds.last))}
+            </span>
           </Button>
         </PopoverTrigger>
-        <PopoverContent
-          className="w-auto p-0"
-          align="start"
-          dir={config.dir}
-          aria-label={copy.date}
-        >
+        <PopoverContent className="w-auto p-0" align="end" dir={config.dir} aria-label={copy.date}>
           {open && (
             <Suspense
               fallback={
@@ -72,18 +74,21 @@ export const SnapshotPicker = ({
               />
             </Suspense>
           )}
+          {date && date > calendarBounds.finalThrough && (
+            <p className="max-w-72 px-3 pb-3 text-xs text-muted-foreground" role="status">
+              {copy.provisional} ·{" "}
+              {copy.estimate.replace("{date}", format(addDays(date, stabilizationDays + 1)))}
+            </p>
+          )}
         </PopoverContent>
       </Popover>
       {date && (
-        <Button variant="ghost" onClick={() => onChange(null)}>
+        <Button variant="ghost" className="h-8 px-2 text-xs" onClick={() => onChange(null)}>
           {copy.latest}
         </Button>
       )}
       {date && date > calendarBounds.finalThrough && (
-        <p className="text-xs text-muted-foreground" role="status">
-          {copy.provisional} ·{" "}
-          {copy.estimate.replace("{date}", format(addDays(date, stabilizationDays + 1)))}
-        </p>
+        <span className="text-xs text-muted-foreground">{copy.provisional}</span>
       )}
     </div>
   );

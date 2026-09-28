@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import { type JSX, memo } from "react";
 import type { TopDomainEntry } from "../../data/types.ts";
 import type { DetailChartSeries } from "../../lib/dashboard-data.ts";
 import type { Messages } from "../../lib/i18n/messages.ts";
@@ -15,37 +15,34 @@ export interface DetailChartsProps {
   ofStories: string;
 }
 
-export const DetailCharts = ({
-  series,
-  topDomains,
-  messages,
-  intlLocale,
-  ofStories,
-}: DetailChartsProps): JSX.Element => (
-  <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-    <StoriesVsComments
-      stories={series.stories}
-      comments={series.comments}
-      messages={messages}
-      intlLocale={intlLocale}
-    />
-    <ActiveUsers
-      commenters={series.activeCommenters}
-      submitters={series.activeSubmitters}
-      messages={messages}
-      intlLocale={intlLocale}
-    />
-    <TopDomainsChart
-      entries={topDomains}
-      messages={messages}
-      intlLocale={intlLocale}
-      ofStories={ofStories}
-    />
-    <ScoreTrend
-      median={series.medianScore}
-      p90={series.p90Score}
-      messages={messages}
-      intlLocale={intlLocale}
-    />
-  </div>
+// Route readiness and picker changes should not re-render unchanged chart datasets.
+export const DetailCharts = memo(
+  ({ series, topDomains, messages, intlLocale, ofStories }: DetailChartsProps): JSX.Element => (
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <StoriesVsComments
+        stories={series.stories}
+        comments={series.comments}
+        messages={messages}
+        intlLocale={intlLocale}
+      />
+      <ActiveUsers
+        commenters={series.activeCommenters}
+        submitters={series.activeSubmitters}
+        messages={messages}
+        intlLocale={intlLocale}
+      />
+      <TopDomainsChart
+        entries={topDomains}
+        messages={messages}
+        intlLocale={intlLocale}
+        ofStories={ofStories}
+      />
+      <ScoreTrend
+        median={series.medianScore}
+        p90={series.p90Score}
+        messages={messages}
+        intlLocale={intlLocale}
+      />
+    </div>
+  ),
 );
