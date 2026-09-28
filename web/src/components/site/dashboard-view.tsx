@@ -21,6 +21,7 @@ export interface DashboardViewProps {
   hrefForRange: (range: RangeId) => string;
   onRangeChange: (range: RangeId) => void;
   onLocaleChange: (locale: Locale) => void;
+  showAsOf?: boolean;
 }
 
 export const DashboardView = ({
@@ -34,6 +35,7 @@ export const DashboardView = ({
   hrefForRange,
   onRangeChange,
   onLocaleChange,
+  showAsOf = true,
 }: DashboardViewProps): JSX.Element => (
   <>
     <main className="mx-auto max-w-6xl px-4 py-6 flex flex-col gap-6">
@@ -46,6 +48,7 @@ export const DashboardView = ({
         intlLocale={intlLocale}
         hrefForRange={hrefForRange}
         onRangeChange={onRangeChange}
+        showAsOf={showAsOf}
       />
       <DetailCharts
         series={chartDashboard.detailSeries}
@@ -67,7 +70,8 @@ export const DashboardView = ({
         {messages.dashboard.footerRepo}
       </a>
       <span aria-hidden="true">·</span>
-      <span>
+      {/* ICU day-period translations can differ between the build runtime and browser. */}
+      <span suppressHydrationWarning>
         {formatMessage(messages.dashboard.lastUpdated, {
           date: formatDateTime(meta.lastUpdated, intlLocale),
         })}

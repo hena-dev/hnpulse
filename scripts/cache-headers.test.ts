@@ -45,6 +45,10 @@ describe("Cloudflare static asset caching", () => {
     for (const path of ["/data/meta.json", "/data/kpis-current.json", "/data/kpis.123.json"]) {
       expect(policyFor(path)).toEqual([mutable]);
     }
+    expect(policyFor("/data/snapshots/2025-01-01.json")).toEqual([immutable]);
+    expect(policyFor("/data/provisional/2026-09-27.json")).toEqual([
+      "Cache-Control: public, max-age=0, must-revalidate",
+    ]);
   });
 
   it("rejects header rules over Cloudflare's 100-rule limit", () => {

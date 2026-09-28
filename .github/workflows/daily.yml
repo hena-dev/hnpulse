@@ -8,6 +8,15 @@ on:
         description: "Optional ISO timestamp for manual data repair/backfill"
         required: false
         type: string
+      dry_run:
+        description: "Validate and build snapshots as artifacts without publishing or uploading"
+        required: false
+        type: boolean
+        default: false
+      upload_cap:
+        description: "Maximum raw parquet uploads per run (default 400)"
+        required: false
+        type: string
 permissions:
   contents: write               # commit + release manage
 
@@ -21,7 +30,7 @@ concurrency:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v5
       - uses: oven-sh/setup-bun@v2
@@ -43,11 +52,28 @@ jobs:
           GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PIPELINE_NOW: ${{ inputs.pipeline_now_utc }}
+          PIPELINE_DRY_RUN: ${{ inputs.dry_run }}
+          PIPELINE_UPLOAD_CAP: ${{ inputs.upload_cap }}
         run: bun run start
         working-directory: pipeline
+      - name: Verify snapshot archive
+        if: inputs.dry_run != true
+        run: bun run snapshots:check
+      - name: Verify dry-run snapshots
+        if: inputs.dry_run == true
+        run: bun run snapshots:check HEAD pipeline/tmp/dry-run-data
+      - name: Upload dry-run artifact
+        if: inputs.dry_run == true
+        uses: actions/upload-artifact@v4
+        with:
+          name: snapshot-dry-run
+          path: pipeline/tmp/dry-run-data
+          if-no-files-found: error
       - name: Build web
+        if: inputs.dry_run != true
         run: bun run build
       - name: Commit data
+        if: inputs.dry_run != true
         run: |
           git config user.name "hnpulse-bot"
           git config user.email "bot@hena.dev"
@@ -55,15 +81,18 @@ jobs:
           git diff --cached --quiet || git commit -m "chore(data): $(date -u +%Y-%m-%d) [skip ci]"
           git push
       - name: Resolve deployment metadata
+        if: inputs.dry_run != true
         id: deploy-meta
         run: |
           sha="$(git rev-parse HEAD)"
           echo "sha=${sha}" >> "$GITHUB_OUTPUT"
           echo "version_tag=${sha}-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v5
+        if: inputs.dry_run != true
         with:
           node-version: 24
       - name: Upload Cloudflare version
+        if: inputs.dry_run != true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           DEPLOY_SHA: ${{ steps.deploy-meta.outputs.sha }}
@@ -73,6 +102,7 @@ jobs:
           --tag "$VERSION_TAG"
           --message "Deploy $DEPLOY_SHA"
       - name: Deploy Cloudflare version
+        if: inputs.dry_run != true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           VERSION_TAG: ${{ steps.deploy-meta.outputs.version_tag }}

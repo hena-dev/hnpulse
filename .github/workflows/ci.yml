@@ -7,6 +7,19 @@ permissions:
   contents: read
 
 jobs:
+  snapshots:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - name: Verify immutable snapshots and date coverage
+        env:
+          SNAPSHOT_BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: bun run snapshots:check "${SNAPSHOT_BASE:-HEAD}"
+
   typecheck:
     runs-on: ubuntu-latest
     steps:

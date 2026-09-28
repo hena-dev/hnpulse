@@ -2,6 +2,7 @@ import { parseUtcDay } from "../dates/utc-day.ts";
 
 export interface SqlBuildArgs {
   parquetGlob: string;
+  parquetPaths?: readonly string[];
   windowStart: string;
   windowEnd: string;
 }
@@ -17,7 +18,10 @@ const validateArgs = (
   return {
     start: args.windowStart,
     endExclusive,
-    glob: escapeSqlLiteral(args.parquetGlob),
+    glob:
+      args.parquetPaths === undefined
+        ? `'${escapeSqlLiteral(args.parquetGlob)}'`
+        : `[${args.parquetPaths.map((path) => `'${escapeSqlLiteral(path)}'`).join(",")}]`,
   };
 };
 
@@ -26,7 +30,7 @@ const dedupCte = (glob: string, start: string, endExclusive: string): string => 
     SELECT * FROM (
       SELECT *,
         ROW_NUMBER() OVER (PARTITION BY id ORDER BY timestamp DESC) AS rn
-      FROM read_parquet('${glob}')
+      FROM read_parquet(${glob})
       WHERE timestamp >= TIMESTAMP '${start} 00:00:00'
         AND timestamp <  TIMESTAMP '${endExclusive} 00:00:00'
     ) t WHERE rn = 1

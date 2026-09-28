@@ -22,6 +22,8 @@ export interface BuildSourcePlanArgs {
   existingDays: readonly string[];
   bqCompleteThrough: string;
   stabilizationDays: number;
+  /** Refresh the finalization boundary and days left provisional by a missed run. */
+  refreshFrom?: string;
 }
 
 const dayOffset = (day: string, offset: number): string =>
@@ -57,7 +59,7 @@ export const buildSourcePlan = (args: BuildSourcePlanArgs): SourcePlan => {
   const missingImmutableDays: string[] = [];
 
   for (const day of enumerateUtcDays(parseUtcDay(args.windowStart), parseUtcDay(args.windowEnd))) {
-    const mutable = day >= provisionalFrom;
+    const mutable = day >= (args.refreshFrom ?? provisionalFrom);
     if (!mutable && existing.has(day)) continue;
 
     if (day <= args.bqCompleteThrough) {

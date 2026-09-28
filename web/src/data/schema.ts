@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { RANGE_IDS } from "../lib/range/range.ts";
+import { isSnapshotDay } from "../lib/snapshots/date.ts";
 import type { KpisJson, MetaJson, MetricKey } from "./types.ts";
 import { METRIC_KEYS } from "./types.ts";
 
@@ -25,7 +26,7 @@ const TopDomainsDay = z.object({
   domains: z.array(TopDomain).max(10),
 });
 
-const TopDomainsByRange = z.object(
+export const TopDomainsByRange = z.object(
   Object.fromEntries(RANGE_IDS.map((id) => [id, z.array(TopDomain).max(10)] as const)),
 );
 
@@ -86,6 +87,14 @@ export const MetaJsonSchema = z.object({
   dataSources: z.array(z.enum(["bigquery", "hacker-news-api"])).min(1),
   stabilizationDays: z.number().int().positive(),
   provisionalFrom: date,
+  snapshots: z
+    .object({
+      first: z.string().refine(isSnapshotDay),
+      finalThrough: z.string().refine(isSnapshotDay),
+      last: z.string().refine(isSnapshotDay),
+    })
+    .refine((v) => v.first <= v.last && v.finalThrough <= v.last)
+    .optional(),
 });
 
 export const parseKpis = (raw: unknown): KpisJson =>

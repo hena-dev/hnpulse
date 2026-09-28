@@ -56,4 +56,23 @@ export interface MetaJson {
   dataSources: readonly ("bigquery" | "hacker-news-api")[];
   stabilizationDays: number;
   provisionalFrom: string;
+  snapshots?: SnapshotBounds;
 }
+
+export interface SnapshotBounds {
+  first: string;
+  finalThrough: string;
+  last: string;
+}
+
+export interface SnapshotJson {
+  schemaVersion: 1;
+  windowStart: string;
+  windowEnd: string;
+  metrics: MetricSeries;
+  topDomainsByRange: TopDomainsByRange;
+  lastUpdated: string;
+  status: "final" | "provisional";
+}
+
+export type DashboardKpis = Pick<KpisJson, "days" | "metrics" | "topDomainsByRange">;

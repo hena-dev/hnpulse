@@ -8,10 +8,11 @@ import type { ReleaseAsset, ReleaseManager } from "./types.ts";
 const TAG = "data-snapshot";
 const MAX_ATTEMPTS = 3;
 
-interface RealManagerArgs {
+export interface RealManagerArgs {
   owner: string;
   repo: string;
   token: string;
+  tag?: string;
 }
 
 const delay = (ms: number): Promise<void> => new Promise((resolve) => setTimeout(resolve, ms));
@@ -44,16 +45,20 @@ const ensureRelease = async (
   octokit: Octokit,
   owner: string,
   repo: string,
-): Promise<{ id: number; uploadUrl: string }> => {
+  tag: string,
+  create: boolean,
+): Promise<{ id: number; uploadUrl: string } | null> => {
   try {
-    const r = await octokit.rest.repos.getReleaseByTag({ owner, repo, tag: TAG });
+    const r = await octokit.rest.repos.getReleaseByTag({ owner, repo, tag });
     return { id: r.data.id, uploadUrl: r.data.upload_url };
-  } catch {
+  } catch (error) {
+    if ((error as { status?: number }).status !== 404) throw error;
+    if (!create) return null;
     const r = await octokit.rest.repos.createRelease({
       owner,
       repo,
-      tag_name: TAG,
-      name: TAG,
+      tag_name: tag,
+      name: tag,
       prerelease: false,
       draft: false,
     });
@@ -64,10 +69,20 @@ const ensureRelease = async (
 export const createRealReleaseManager = (args: RealManagerArgs): ReleaseManager => {
   const octokit = new Octokit({ auth: args.token });
   const { owner, repo } = args;
+  const tag = args.tag ?? TAG;
   let cachedAssets: Promise<readonly GitHubReleaseAssetPageItem[]> | undefined;
+  let cachedRelease: Awaited<ReturnType<typeof ensureRelease>> | undefined;
+  const loadRelease = async (create: boolean) => {
+    if (cachedRelease === undefined || (cachedRelease === null && create)) {
+      cachedRelease = await ensureRelease(octokit, owner, repo, tag, create);
+    }
+    return cachedRelease;
+  };
 
   const listAssetsForRelease = async () => {
-    const { id } = await ensureRelease(octokit, owner, repo);
+    const release = await loadRelease(false);
+    if (release === null) return [];
+    const { id } = release;
     return listReleaseAssetsAllPages(async (page, perPage) => {
       const r = await octokit.rest.repos.listReleaseAssets({
         owner,
@@ -105,7 +120,10 @@ export const createRealReleaseManager = (args: RealManagerArgs): ReleaseManager 
       }));
     },
     async uploadAsset(name, localPath) {
-      const { id } = await ensureRelease(octokit, owner, repo);
+      const assets = await loadAssetsForRelease();
+      const release = await loadRelease(true);
+      if (release === null) throw new Error(`Unable to create release ${tag}`);
+      const { id } = release;
       const fileStat = await stat(localPath);
       const data = createReadStream(localPath) as unknown as string;
       const r = await octokit.rest.repos.uploadReleaseAsset({
@@ -116,14 +134,15 @@ export const createRealReleaseManager = (args: RealManagerArgs): ReleaseManager 
         data,
         headers: { "content-length": fileStat.size, "content-type": "application/octet-stream" },
       });
-      invalidateAssets();
+      cachedAssets = Promise.resolve([...assets, r.data]);
       return { name: r.data.name, size: r.data.size, url: r.data.browser_download_url };
     },
     async deleteAsset(name) {
-      const asset = (await loadAssetsForRelease()).find((a) => a.name === name);
+      const assets = await loadAssetsForRelease();
+      const asset = assets.find((a) => a.name === name);
       if (asset === undefined) return;
       await octokit.rest.repos.deleteReleaseAsset({ owner, repo, asset_id: asset.id });
-      invalidateAssets();
+      cachedAssets = Promise.resolve(assets.filter((a) => a.id !== asset.id));
     },
     async downloadAsset(name, destPath) {
       const asset = (await loadAssetsForRelease()).find((a) => a.name === name);

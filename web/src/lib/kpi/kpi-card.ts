@@ -1,4 +1,4 @@
-import type { KpisJson, MetricKey } from "../../data/types.ts";
+import type { DashboardKpis, MetricKey } from "../../data/types.ts";
 import { computeDelta, currentWindow, previousWindow, sliceSeries } from "../range/index.ts";
 import { computeKpiValue } from "./value.ts";
 
@@ -13,7 +13,7 @@ const slicePrev = (xs: readonly number[], start: number, end: number): number[] 
 
 type SeriesByKey = Record<MetricKey, number[]>;
 
-const buildPrevMetrics = (kpis: KpisJson, start: number, end: number): SeriesByKey => ({
+const buildPrevMetrics = (kpis: DashboardKpis, start: number, end: number): SeriesByKey => ({
   stories: slicePrev(kpis.metrics.stories, start, end),
   comments: slicePrev(kpis.metrics.comments, start, end),
   activeCommenters: slicePrev(kpis.metrics.activeCommenters, start, end),
@@ -29,7 +29,7 @@ const buildPrevMetrics = (kpis: KpisJson, start: number, end: number): SeriesByK
   deadFlaggedTotal: slicePrev(kpis.metrics.deadFlaggedTotal, start, end),
 });
 
-export const kpiSummary = (key: MetricKey, kpis: KpisJson, days: number): KpiSummary => {
+export const kpiSummary = (key: MetricKey, kpis: DashboardKpis, days: number): KpiSummary => {
   const value = computeKpiValue(key, kpis.metrics, days);
   const total = kpis.days.length;
   const prev = previousWindow(total, days);

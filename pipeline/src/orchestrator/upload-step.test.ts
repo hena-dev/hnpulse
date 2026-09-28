@@ -72,7 +72,7 @@ describe("runUploadStep", () => {
     expect(duckdb.execute).toHaveBeenCalledTimes(2);
   });
 
-  it("deletes assets older than retentionDays", async () => {
+  it("permanently retains archived assets older than retentionDays", async () => {
     const { release, deletes } = stubRelease();
     const duckdb: DuckdbRunner = {
       execute: vi.fn(async () => ""),
@@ -88,8 +88,8 @@ describe("runUploadStep", () => {
       retentionDays: 730,
       existingAssets: [old],
     });
-    expect(out.deleted).toContain("items-2023-01-01.parquet");
-    expect(deletes).toContain("items-2023-01-01.parquet");
+    expect(out.deleted).toEqual([]);
+    expect(deletes).toEqual([]);
   });
 
   it("replaces an existing asset before uploading the same day", async () => {

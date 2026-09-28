@@ -45,12 +45,20 @@ const cwaToken = (import.meta.env as Record<string, string | undefined>).PUBLIC_
     <link rel="apple-touch-icon" href="/favicon.png" />
     <link rel="alternate" type="application/json" href="/data/meta.json" title={dataFeedTitle} />
     <script is:inline>
+      if (new URLSearchParams(window.location.search).has("date")) {
+        document.documentElement.setAttribute("data-dated-link", "");
+      }
       try {
         const stored = localStorage.getItem("hnpulse.theme");
         const dark = stored ? stored === "dark" : window.matchMedia("(prefers-color-scheme: dark)").matches;
         document.documentElement.classList.toggle("dark", dark);
       } catch {}
     </script>
+    <style is:global>
+      html[data-dated-link] [data-dashboard-values]:not([data-date-ready="true"]) {
+        display: none !important;
+      }
+    </style>
     {cwaToken && (
       <script
         is:inline

@@ -15,6 +15,7 @@ export interface WriteDataArgs {
   dataSources: readonly DataSource[];
   stabilizationDays: number;
   provisionalFrom: string;
+  snapshots?: MetaJson["snapshots"];
 }
 
 export interface WriteDataResult {
@@ -42,6 +43,7 @@ export const writeData = async (args: WriteDataArgs): Promise<WriteDataResult> =
     dataSources: args.dataSources,
     stabilizationDays: args.stabilizationDays,
     provisionalFrom: args.provisionalFrom,
+    snapshots: args.snapshots,
   });
   await writeFile(join(args.outDir, "meta.json"), `${JSON.stringify(meta, null, 2)}\n`, "utf8");
 

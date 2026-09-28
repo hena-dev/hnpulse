@@ -22,6 +22,7 @@ export const MetaJsonSchema = z.object({
   dataSources: z.array(DataSourceSchema).min(1),
   stabilizationDays: z.number().int().positive(),
   provisionalFrom: dateString,
+  snapshots: z.object({ first: dateString, finalThrough: dateString, last: dateString }).optional(),
 });
 
 export type MetaJson = z.infer<typeof MetaJsonSchema>;

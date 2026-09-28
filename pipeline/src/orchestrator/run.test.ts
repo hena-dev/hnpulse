@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { BqClient, BqQueryOptions } from "../bq/types.ts";
+import { offsetDay } from "../snapshots/dates.ts";
 import {
   bqRow,
   NOW,
@@ -30,15 +31,15 @@ const baseCfg = (overrides: Partial<Parameters<typeof runOrchestrator>[1]> = {})
   pipelineVersion: "1.0.0",
   now: NOW,
   windowDays: 7,
+  snapshotFirst: "2026-05-03",
+  archiveFirst: offsetDay("2026-05-03", 1 - (overrides.windowDays ?? 7)),
   ...overrides,
 });
 
 describe("runOrchestrator — happy path (incremental)", () => {
   it("uploads parquets, runs aggregations, emits kpis & meta", async () => {
     const bq = stubBq(
-      Array.from({ length: 10 }, (_, i) =>
-        bqRow(i + 1, "2026-05-03T12:00:00Z", i % 2 === 0 ? "story" : "comment"),
-      ),
+      trailingDays(7, "2026-05-03").map((day, i) => bqRow(i + 1, `${day}T12:00:00Z`)),
     );
     const release = stubRelease([
       { name: "items-2024-05-04.parquet", size: 1, url: "u" },
@@ -60,7 +61,9 @@ describe("runOrchestrator — happy path (incremental)", () => {
         if (sql.includes("MAX(timestamp)")) {
           return [{ max_ts: NOW.toISOString() }] as unknown as readonly T[];
         }
-        return [bqRow(1, "2026-05-03T12:00:00Z")] as unknown as readonly T[];
+        return trailingDays(7, "2026-05-03").map((day, i) =>
+          bqRow(i + 1, `${day}T12:00:00Z`),
+        ) as unknown as readonly T[];
       },
     };
     const release = stubRelease([{ name: "items-2026-05-02.parquet", size: 1, url: "u" }]);
@@ -73,7 +76,9 @@ describe("runOrchestrator — happy path (incremental)", () => {
       since: Date.parse("2026-04-27T00:00:00Z") / 1000,
       until: Date.parse("2026-05-04T00:00:00Z") / 1000,
     });
-    expect(release.uploads).toEqual(["items-2026-05-03.parquet"]);
+    expect(release.uploads).toEqual(
+      trailingDays(7, "2026-05-03").map((day) => `items-${day}.parquet`),
+    );
   });
 });
 
@@ -90,7 +95,7 @@ describe("runOrchestrator — bootstrap path", () => {
   });
 
   it("defaults bootstrap output to the full retention window", async () => {
-    const { windowDays: _windowDays, ...cfg } = baseCfg();
+    const { windowDays: _windowDays, ...cfg } = baseCfg({ windowDays: 730 });
     const days = trailingDays(730, "2026-05-03");
     const bq = stubBq(days.map((d, i) => bqRow(i + 1, `${d}T12:00:00Z`)));
     const result = await runOrchestrator(
@@ -98,7 +103,7 @@ describe("runOrchestrator — bootstrap path", () => {
       cfg,
     );
     expect(result.rowsExtracted).toBe(730);
-    expect(result.filesUploaded).toBe(730);
+    expect(result.filesUploaded).toBe(400);
   });
 });
 

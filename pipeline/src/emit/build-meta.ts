@@ -10,6 +10,7 @@ export interface BuildMetaArgs {
   dataSources: readonly DataSource[];
   stabilizationDays: number;
   provisionalFrom: string;
+  snapshots?: MetaJson["snapshots"];
 }
 
 export const buildMeta = (args: BuildMetaArgs): MetaJson => {
@@ -25,6 +26,7 @@ export const buildMeta = (args: BuildMetaArgs): MetaJson => {
     dataSources: [...args.dataSources],
     stabilizationDays: args.stabilizationDays,
     provisionalFrom: args.provisionalFrom,
+    ...(args.snapshots === undefined ? {} : { snapshots: args.snapshots }),
   };
   return MetaJsonSchema.parse(meta);
 };

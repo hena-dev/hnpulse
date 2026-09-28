@@ -1,4 +1,9 @@
-import { type KpisJson, METRIC_KEYS, type MetricKey, type TopDomainEntry } from "../data/types.ts";
+import {
+  type DashboardKpis,
+  METRIC_KEYS,
+  type MetricKey,
+  type TopDomainEntry,
+} from "../data/types.ts";
 import type { KpiSummary } from "./kpi/kpi-card.ts";
 import { kpiSummary } from "./kpi/kpi-card.ts";
 import { type BucketPoint, bucketForRange, bucketSeries } from "./range/bucket.ts";
@@ -41,10 +46,12 @@ const compactSummary = (summary: KpiSummary): KpiSummary => ({
   sparkline: downsample(summary.sparkline, MAX_SPARKLINE_POINTS),
 });
 
-const topDomainsForDashboardRange = (kpis: KpisJson, range: RangeId): readonly TopDomainEntry[] =>
-  kpis.topDomainsByRange[range];
+const topDomainsForDashboardRange = (
+  kpis: DashboardKpis,
+  range: RangeId,
+): readonly TopDomainEntry[] => kpis.topDomainsByRange[range];
 
-export const buildDashboardData = (kpis: KpisJson, range: RangeId): DashboardData => {
+export const buildDashboardData = (kpis: DashboardKpis, range: RangeId): DashboardData => {
   const days = RANGE_DAYS[range];
   const bucket = bucketForRange(range);
   const dayLabels = sliceSeries(kpis.days, days);
@@ -70,7 +77,7 @@ export const buildDashboardData = (kpis: KpisJson, range: RangeId): DashboardDat
   };
 };
 
-export const buildDashboardDataByRange = (kpis: KpisJson): DashboardDataByRange =>
+export const buildDashboardDataByRange = (kpis: DashboardKpis): DashboardDataByRange =>
   Object.fromEntries(RANGE_IDS.map((range) => [range, buildDashboardData(kpis, range)])) as Record<
     RangeId,
     DashboardData

@@ -15,10 +15,11 @@
     "lint:fix": "biome check --write .",
     "knip": "knip --no-progress --reporter compact",
     "filesize": "bun run scripts/check-file-size.ts",
+    "snapshots:check": "bun run scripts/check-snapshots.ts",
     "test": "vitest run --coverage",
     "test:watch": "vitest",
     "build": "bun run --cwd web build",
-    "ci": "bun run typecheck && bun run lint && bun run knip && bun run filesize && bun run test && bun run build"
+    "ci": "bun run typecheck && bun run lint && bun run knip && bun run filesize && bun run snapshots:check && bun run test && bun run build"
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.14",
