@@ -10,7 +10,8 @@
     "Month",
     "Year",
     "Previous month",
-    "Next month"
+    "Next month",
+    "Historical snapshots are being prepared. Date selection will be available after the backfill is published."
   ],
   "zh": [
     "快照日期",
@@ -23,7 +24,8 @@
     "月",
     "年",
     "上个月",
-    "下个月"
+    "下个月",
+    "正在准备历史快照。历史数据发布后即可选择日期。"
   ],
   "zh-tw": [
     "快照日期",
@@ -36,7 +38,8 @@
     "月",
     "年",
     "上個月",
-    "下個月"
+    "下個月",
+    "正在準備歷史快照。歷史資料發布後即可選擇日期。"
   ],
   "es": [
     "Fecha de la instantánea",
@@ -49,7 +52,8 @@
     "Mes",
     "Año",
     "Mes anterior",
-    "Mes siguiente"
+    "Mes siguiente",
+    "Se están preparando las instantáneas históricas. Podrás elegir una fecha cuando se publiquen los datos."
   ],
   "hi": [
     "स्नैपशॉट की तारीख",
@@ -62,7 +66,8 @@
     "महीना",
     "वर्ष",
     "पिछला महीना",
-    "अगला महीना"
+    "अगला महीना",
+    "ऐतिहासिक स्नैपशॉट तैयार किए जा रहे हैं। पुराने डेटा के प्रकाशित होने के बाद तारीख चुन सकेंगे।"
   ],
   "ar": [
     "تاريخ اللقطة",
@@ -75,7 +80,8 @@
     "الشهر",
     "السنة",
     "الشهر السابق",
-    "الشهر التالي"
+    "الشهر التالي",
+    "جارٍ إعداد اللقطات التاريخية. سيتاح اختيار التاريخ بعد نشر البيانات السابقة."
   ],
   "pt": [
     "Data do retrato",
@@ -88,7 +94,8 @@
     "Mês",
     "Ano",
     "Mês anterior",
-    "Próximo mês"
+    "Próximo mês",
+    "Os retratos históricos estão sendo preparados. A seleção de data estará disponível após a publicação dos dados."
   ],
   "id": [
     "Tanggal cuplikan",
@@ -101,7 +108,8 @@
     "Bulan",
     "Tahun",
     "Bulan sebelumnya",
-    "Bulan berikutnya"
+    "Bulan berikutnya",
+    "Cuplikan historis sedang disiapkan. Pemilihan tanggal tersedia setelah data historis diterbitkan."
   ],
   "ja": [
     "スナップショットの日付",
@@ -114,7 +122,8 @@
     "月",
     "年",
     "前の月",
-    "次の月"
+    "次の月",
+    "過去のスナップショットを準備中です。過去のデータが公開されると日付を選択できます。"
   ],
   "ru": [
     "Дата снимка",
@@ -127,7 +136,8 @@
     "Месяц",
     "Год",
     "Предыдущий месяц",
-    "Следующий месяц"
+    "Следующий месяц",
+    "Исторические снимки готовятся. Выбор даты станет доступен после публикации исторических данных."
   ],
   "fr": [
     "Date de l’instantané",
@@ -140,7 +150,8 @@
     "Mois",
     "Année",
     "Mois précédent",
-    "Mois suivant"
+    "Mois suivant",
+    "Les instantanés historiques sont en préparation. Le choix de la date sera disponible après leur publication."
   ],
   "de": [
     "Datum des Datenstands",
@@ -153,7 +164,8 @@
     "Monat",
     "Jahr",
     "Vorheriger Monat",
-    "Nächster Monat"
+    "Nächster Monat",
+    "Historische Datenstände werden vorbereitet. Nach ihrer Veröffentlichung können Sie ein Datum auswählen."
   ],
   "ko": [
     "스냅샷 날짜",
@@ -166,7 +178,8 @@
     "월",
     "연도",
     "이전 달",
-    "다음 달"
+    "다음 달",
+    "과거 스냅샷을 준비하고 있습니다. 과거 데이터가 게시되면 날짜를 선택할 수 있습니다."
   ],
   "tr": [
     "Anlık görüntü tarihi",
@@ -179,7 +192,8 @@
     "Ay",
     "Yıl",
     "Önceki ay",
-    "Sonraki ay"
+    "Sonraki ay",
+    "Geçmiş anlık görüntüler hazırlanıyor. Geçmiş veriler yayımlandığında tarih seçilebilecek."
   ],
   "vi": [
     "Ngày chụp dữ liệu",
@@ -192,7 +206,8 @@
     "Tháng",
     "Năm",
     "Tháng trước",
-    "Tháng sau"
+    "Tháng sau",
+    "Đang chuẩn bị dữ liệu lịch sử. Bạn có thể chọn ngày sau khi dữ liệu được công bố."
   ],
   "it": [
     "Data dell’istantanea",
@@ -205,7 +220,8 @@
     "Mese",
     "Anno",
     "Mese precedente",
-    "Mese successivo"
+    "Mese successivo",
+    "Le istantanee storiche sono in preparazione. Potrai scegliere una data dopo la pubblicazione dei dati."
   ],
   "pl": [
     "Data migawki",
@@ -218,7 +234,8 @@
     "Miesiąc",
     "Rok",
     "Poprzedni miesiąc",
-    "Następny miesiąc"
+    "Następny miesiąc",
+    "Trwa przygotowywanie historycznych migawek. Wybór daty będzie dostępny po opublikowaniu danych."
   ],
   "nl": [
     "Datum momentopname",
@@ -231,7 +248,8 @@
     "Maand",
     "Jaar",
     "Vorige maand",
-    "Volgende maand"
+    "Volgende maand",
+    "Historische momentopnamen worden voorbereid. Na publicatie van de gegevens kun je een datum kiezen."
   ],
   "th": [
     "วันที่บันทึกข้อมูล",
@@ -244,7 +262,8 @@
     "เดือน",
     "ปี",
     "เดือนก่อนหน้า",
-    "เดือนถัดไป"
+    "เดือนถัดไป",
+    "กำลังเตรียมข้อมูลย้อนหลัง จะเลือกวันที่ได้หลังจากเผยแพร่ข้อมูลแล้ว"
   ],
   "fa": [
     "تاریخ تصویر داده‌ها",
@@ -257,7 +276,8 @@
     "ماه",
     "سال",
     "ماه قبل",
-    "ماه بعد"
+    "ماه بعد",
+    "داده‌های تاریخی در حال آماده‌سازی هستند. پس از انتشار داده‌ها، انتخاب تاریخ فعال می‌شود."
   ],
   "uk": [
     "Дата знімка",
@@ -270,6 +290,7 @@
     "Місяць",
     "Рік",
     "Попередній місяць",
-    "Наступний місяць"
+    "Наступний місяць",
+    "Історичні знімки готуються. Вибір дати стане доступним після публікації історичних даних."
   ]
 }

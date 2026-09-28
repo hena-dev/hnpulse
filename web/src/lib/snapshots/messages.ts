@@ -2,20 +2,33 @@ import type { Locale } from "../i18n/config.ts";
 import copy from "./messages.json";
 
 export const snapshotMessages = (locale: Locale) => {
-  const [date, latest, provisional, estimate, loading, error, retry, month, year, previous, next] =
-    copy[locale] as [
-      string,
-      string,
-      string,
-      string,
-      string,
-      string,
-      string,
-      string,
-      string,
-      string,
-      string,
-    ];
+  const [
+    date,
+    latest,
+    provisional,
+    estimate,
+    loading,
+    error,
+    retry,
+    month,
+    year,
+    previous,
+    next,
+    preparing,
+  ] = copy[locale] as [
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+    string,
+  ];
   return {
     date,
     latest,
@@ -28,6 +41,7 @@ export const snapshotMessages = (locale: Locale) => {
     year,
     previous,
     next,
+    preparing,
   };
 };
 

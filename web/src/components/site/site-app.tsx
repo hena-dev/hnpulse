@@ -17,6 +17,7 @@ import { datedPath } from "../../lib/snapshots/date.ts";
 import { snapshotIntlLocale, snapshotMessages } from "../../lib/snapshots/messages.ts";
 import { LanguageSwitcher } from "../language-switcher/language-switcher.tsx";
 import { RangeSelector } from "../range-selector/range-selector.tsx";
+import { SnapshotPending } from "../snapshot-picker/snapshot-pending.tsx";
 import { SnapshotPicker } from "../snapshot-picker/snapshot-picker.tsx";
 import { DashboardView } from "./dashboard-view.tsx";
 import { SiteHeader } from "./site-header.tsx";
@@ -109,7 +110,7 @@ export const SiteApp = ({
         themeToggleLabel={messages.theme.toggle}
         onHomeNavigate={onHomeNavigate}
       />
-      {meta.snapshots && (
+      {meta.snapshots ? (
         <SnapshotPicker
           date={date}
           bounds={meta.snapshots}
@@ -118,6 +119,8 @@ export const SiteApp = ({
           status={snapshot?.status}
           onChange={(next) => navigate({ locale, range, date: next })}
         />
+      ) : (
+        <SnapshotPending locale={locale} />
       )}
       {dashboard ? (
         <div data-dashboard-values data-date-ready={ready ? "true" : "false"}>

@@ -41,8 +41,9 @@ longer interval, so the pipeline computes these from full domain counts.
 3. Run `daily` normally to publish the archive and activate the picker.
 4. Subsequent runs finish any raw-data backfill left by the upload cap.
 
-The picker is activated by `meta.snapshots`. Deploying code before the backfill
-does not advertise dates whose snapshots have not been published.
+The picker is activated by `meta.snapshots`. Before the backfill is published,
+the date control is visible but disabled, with a message explaining that
+historical snapshots are being prepared.
 
 For local execution, the pipeline uses its existing BigQuery and GitHub
 credentials. `PIPELINE_DRY_RUN=true` writes its output to

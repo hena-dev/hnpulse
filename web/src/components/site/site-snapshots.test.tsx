@@ -26,11 +26,12 @@ afterEach(() => {
   window.history.replaceState(null, "", "/1w");
 });
 describe("dated dashboard navigation", () => {
-  it("hides the picker without metadata and normalizes invalid/duplicate dates", () => {
+  it("explains the pending backfill without metadata and normalizes invalid/duplicate dates", () => {
     window.history.replaceState(null, "", "/1w?date=bad&keep=1#anchor");
     const { snapshots: _, ...meta } = metaFixture;
     renderApp(meta);
-    expect(screen.queryByRole("button", { name: /Snapshot date/ })).toBeNull();
+    expect(screen.getByRole("button", { name: /Snapshot date/ })).toBeDisabled();
+    expect(screen.getByRole("status")).toHaveTextContent("Historical snapshots are being prepared");
     expect(window.location.search).toBe("?keep=1");
     expect(window.location.hash).toBe("#anchor");
     expect(screen.getByTestId("chart")).toHaveTextContent("999");
