@@ -107,4 +107,18 @@ describe("immutable snapshot guard", () => {
     write(join(data, "provisional/2025-01-01.json"), snapshot("2025-01-01", "provisional"));
     expect(() => checkSnapshots(root)).toThrow("backward");
   });
+  it("validates mixed frozen v1 and extended v2 history and rejects truncated v2 windows", () => {
+    seed();
+    const path = join(data, "provisional/2025-01-08.json");
+    const count = (Date.parse("2025-01-08") - Date.parse("2023-01-01")) / 86_400_000 + 1;
+    write(path, {
+      ...snapshot("2025-01-08", "provisional"),
+      schemaVersion: 2,
+      windowStart: "2023-01-01",
+      metrics: Object.fromEntries(METRIC_KEYS.map((key) => [key, Array(count).fill(1)])),
+    });
+    expect(checkSnapshotCoverage(data)).toBe(8);
+    write(path, { ...snapshot("2025-01-08", "provisional"), schemaVersion: 2 });
+    expect(() => checkSnapshotCoverage(data)).toThrow("Invalid snapshot");
+  });
 });

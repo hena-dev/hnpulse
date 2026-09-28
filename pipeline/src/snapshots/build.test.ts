@@ -22,7 +22,7 @@ describe("snapshot aggregation", () => {
     const snapshots = [...built.snapshots()];
     expect(snapshots).toHaveLength(7);
     expect(snapshots[0]?.metrics.stories).toEqual([10, 11, 12]);
-    expect(snapshots.at(-1)?.metrics.stories).toEqual([16, 17, 18]);
+    expect(snapshots.at(-1)?.metrics.stories).toEqual([13, 14, 15, 16, 17, 18]);
     expect(snapshots.map((s) => s.status)).toEqual([
       "final",
       "final",
@@ -44,15 +44,15 @@ describe("snapshot aggregation", () => {
       ]);
       expect(Object.keys(value.metrics)).toEqual(METRIC_KEYS);
     }
-    expect(built.latest.days).toEqual(days.slice(-3));
+    expect(built.latest.days).toEqual(days.slice(-6));
     expect(built.latest.metrics).toEqual(snapshots.at(-1)?.metrics);
   });
 
   it("matches independent full aggregation across leap days and all range boundaries", () => {
     const first = "2025-01-01";
     const last = "2025-01-09";
-    const aggregateStart = offsetDay(first, -729);
-    const p = { ...plan(first, last), aggregateStart };
+    const aggregateStart = "2023-01-01";
+    const p = { ...plan(first, last), archiveFirst: aggregateStart, aggregateStart };
     const days = daysBetween(aggregateStart, last);
     expect(days).toContain("2024-02-29");
     const dailyRows = days.map((day) => stableDailyRow(day));
@@ -70,14 +70,15 @@ describe("snapshot aggregation", () => {
     });
     for (const value of built.snapshots()) {
       const reference = assembleKpisJson({
-        days: daysBetween(value.windowStart, value.windowEnd),
+        days: daysBetween(offsetDay(value.windowEnd, -729), value.windowEnd),
         dailyRows,
         domainRows,
       });
       expect(value.topDomainsByRange).toEqual(reference.topDomainsByRange);
-      expect(value.metrics).toEqual(reference.metrics);
+      for (const key of METRIC_KEYS)
+        expect(value.metrics[key].slice(-730)).toEqual(reference.metrics[key]);
     }
-    expect(built.latest.topDomainsByDay).toHaveLength(730);
+    expect(built.latest.topDomainsByDay).toHaveLength(days.length);
     expect(built.latest.topDomainsByRange).toEqual(
       assembleKpisJson({ days: days.slice(-730), dailyRows, domainRows }).topDomainsByRange,
     );
@@ -99,7 +100,7 @@ describe("snapshot aggregation", () => {
   });
 
   it("handles fully reused history without generating snapshots", () => {
-    const p = { ...plan(), pending: [], aggregateStart: "2026-05-01" };
+    const p = { ...plan(), pending: [], archiveFirst: "2026-05-01", aggregateStart: "2026-05-01" };
     const built = buildSnapshots({
       plan: p,
       windowDays: 3,

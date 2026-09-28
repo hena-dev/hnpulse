@@ -14,7 +14,7 @@ const day = z.string().refine((value) => {
 
 export const SnapshotJsonSchema = z
   .object({
-    schemaVersion: z.literal(1),
+    schemaVersion: z.union([z.literal(1), z.literal(2)]),
     windowStart: day,
     windowEnd: day,
     metrics: MetricSeriesSchema,

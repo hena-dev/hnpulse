@@ -15,7 +15,7 @@ import { runOrchestrator } from "./orchestrator/run.ts";
 import { createArchiveManager, paceArchiveWrites } from "./release/archive.ts";
 import { createRealReleaseManager, releaseEnvCoords } from "./release/real-manager.ts";
 
-const PIPELINE_VERSION = "1.0.0";
+const PIPELINE_VERSION = "1.1.0";
 const MAX_BYTES_BILLED = 50 * 2 ** 30; // 50 GB cap (§8.3)
 
 const repoRoot = process.env.GITHUB_WORKSPACE ?? join(import.meta.dir, "..", "..");

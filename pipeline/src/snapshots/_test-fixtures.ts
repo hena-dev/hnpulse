@@ -23,6 +23,7 @@ export const snapshot = (day = "2026-05-01", windowDays = 3): SnapshotJson => {
 };
 
 export const plan = (first = "2026-04-27", last = "2026-05-03"): SnapshotPlan => ({
+  archiveFirst: offsetDay(first, -2),
   first,
   last,
   finalThrough: offsetDay(last, -2),

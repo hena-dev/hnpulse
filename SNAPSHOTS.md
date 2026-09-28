@@ -1,9 +1,23 @@
 # Reference-date snapshots
 
 A dashboard link such as `/1m?date=2025-06-01` pins its reference date. Each
-snapshot contains a 730-day window ending on that UTC date. The existing range
-buttons select a view within that window. Links without `date` follow the latest
+new snapshot retains up to 1,460 days ending on that UTC date: the selected
+730-day period plus its equally long comparison period. History is bounded by
+the raw archive start, **2023-01-01**. The existing range buttons still display
+at most 730 days. Links without `date` follow the latest
 published analysis.
+
+The percentage change requires two complete, adjacent periods. For `2y`, it
+appears automatically once 1,460 daily observations are available. With the
+fixed 730-day range definition and the 2023 archive start, the first eligible
+reference date is **2026-12-30** (the count includes February 29, 2024). Earlier
+dates show no `2y` change rather than comparing against an incomplete period.
+
+New snapshots use **schema version 2** for this extended history. Existing final
+version-1 snapshots retain their original 730 days and remain byte-identical.
+Both versions are supported by the web loader and snapshot validation guard.
+The latest-data feed also retains the extra history, while chart and domain
+rankings remain limited to the selected range.
 
 ## Publication lifecycle
 

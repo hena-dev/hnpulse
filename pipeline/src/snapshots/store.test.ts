@@ -19,6 +19,7 @@ const args = () => ({
   last: "2026-05-03",
   windowDays: 3,
   stabilizationDays: 2,
+  archiveFirst: "2026-04-25",
 });
 const put = async (folder: string, name: string, value: unknown) => {
   await mkdir(join(dir, folder), { recursive: true });
@@ -36,7 +37,7 @@ describe("snapshot storage", () => {
     await put(".", "meta.json", { provisionalFrom: "2026-04-28" });
     const p = await planSnapshots(args());
     expect(p.pending[0]).toBe("2026-04-28");
-    expect(p.aggregateStart).toBe("2026-04-26");
+    expect(p.aggregateStart).toBe("2026-04-25");
     expect(p.refreshFrom).toBe("2026-04-28");
     expect(p.existing.size).toBe(1);
     await put(".", "meta.json", {});

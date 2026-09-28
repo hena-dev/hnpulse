@@ -1,7 +1,9 @@
 import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
+import { ARCHIVE_START } from "../release/archive.ts";
 import { SnapshotJsonSchema } from "../schema/snapshot.ts";
 import { daysBetween, offsetDay } from "./dates.ts";
+import { comparisonHistoryStart, snapshotWindowStart } from "./history.ts";
 
 export const readOptional = async (path: string): Promise<string | undefined> => {
   try {
@@ -23,18 +25,25 @@ const provisionalDays = async (dataDir: string): Promise<string[]> => {
   }
 };
 
-export const verifyFinal = (text: string, day: string, windowDays: number): void => {
+export const verifyFinal = (
+  text: string,
+  day: string,
+  windowDays: number,
+  archiveFirst = ARCHIVE_START,
+): void => {
   const snapshot = SnapshotJsonSchema.parse(JSON.parse(text));
   if (
     snapshot.status !== "final" ||
     snapshot.windowEnd !== day ||
-    snapshot.windowStart !== offsetDay(day, 1 - windowDays)
+    snapshot.windowStart !==
+      snapshotWindowStart(snapshot.schemaVersion, day, windowDays, archiveFirst)
   ) {
     throw new Error(`Invalid existing final snapshot: ${day}`);
   }
 };
 
 export interface SnapshotPlan {
+  archiveFirst: string;
   first: string;
   last: string;
   finalThrough: string;
@@ -68,8 +77,11 @@ export const planSnapshots = async (args: {
   last: string;
   windowDays: number;
   stabilizationDays: number;
+  archiveFirst?: string;
 }): Promise<SnapshotPlan> => {
   const { first, last, windowDays, dataDir } = args;
+  const archiveFirst = args.archiveFirst ?? ARCHIVE_START;
+  offsetDay(archiveFirst, 0);
   offsetDay(first, 0);
   if (
     first > last ||
@@ -80,6 +92,9 @@ export const planSnapshots = async (args: {
   ) {
     throw new Error("Invalid snapshot range/window configuration");
   }
+  if (archiveFirst > offsetDay(first, 1 - windowDays)) {
+    throw new Error("Archive must cover the entire selected snapshot window");
+  }
   const finalThrough = offsetDay(last, -args.stabilizationDays);
   let refreshFrom = await previousRefreshFrom(dataDir, last, finalThrough);
   const existing = new Map<string, string>();
@@ -88,7 +103,7 @@ export const planSnapshots = async (args: {
     const path = join(dataDir, "snapshots", `${day}.json`);
     const text = await readOptional(path);
     if (text !== undefined) {
-      verifyFinal(text, day, windowDays);
+      verifyFinal(text, day, windowDays, archiveFirst);
       if (day > finalThrough) throw new Error(`Final snapshot inside provisional window: ${day}`);
       existing.set(day, path);
     } else pending.push(day);
@@ -97,12 +112,13 @@ export const planSnapshots = async (args: {
     refreshFrom = pending[0];
   }
   return {
+    archiveFirst,
     first,
     last,
     finalThrough,
     existing,
     pending,
     refreshFrom,
-    aggregateStart: offsetDay(pending[0] ?? last, 1 - windowDays),
+    aggregateStart: comparisonHistoryStart(pending[0] ?? last, windowDays, archiveFirst),
   };
 };

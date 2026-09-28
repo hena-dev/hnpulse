@@ -37,14 +37,15 @@ describe("snapshot publication orchestration", () => {
       await readJson(join(cfg.dataOutDir, "snapshots/2026-05-01.json")),
     );
     expect(final.status).toBe("final");
-    expect(final.windowStart).toBe("2026-04-29");
+    expect(final.windowStart).toBe("2026-04-26");
+    expect(final.schemaVersion).toBe(2);
     const meta = MetaJsonSchema.parse(await readJson(join(cfg.dataOutDir, "meta.json")));
     expect(meta.snapshots).toEqual({
       first: "2026-04-27",
       finalThrough: "2026-05-01",
       last: "2026-05-03",
     });
-    expect((await readJson(join(cfg.dataOutDir, "kpis-current.json"))).days).toHaveLength(3);
+    expect((await readJson(join(cfg.dataOutDir, "kpis-current.json"))).days).toHaveLength(6);
   });
 
   it("catches up old provisional days after missed runs and never changes a final", async () => {
@@ -112,9 +113,9 @@ describe("snapshot publication orchestration", () => {
 
   it("rejects aggregate windows outside available raw coverage and missing API dependencies", async () => {
     const cfg = snapshotConfig(dir);
-    const result = await runOrchestrator(snapshotDeps(), { ...cfg, archiveFirst: "2026-04-27" });
-    expect(result.status).toBe("incomplete-source");
-    expect(result.message).toMatch(/Missing aggregation day/);
+    await expect(
+      runOrchestrator(snapshotDeps(), { ...cfg, archiveFirst: "2026-04-27" }),
+    ).rejects.toThrow(/Archive must cover/);
     const deps = snapshotDeps();
     deps.bq.query = async <T>() => [{ max_ts: "2026-05-02T00:00:00Z" }] as T[];
     expect((await runOrchestrator(deps, cfg)).message).toMatch(/HN API client is required/);

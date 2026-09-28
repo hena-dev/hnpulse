@@ -56,7 +56,7 @@ describe.skipIf(!available)("snapshot orchestration with real DuckDB", () => {
       expect(final.topDomainsByRange["2y"]).toEqual([{ name: "github.com", stories: 3, share: 1 }]);
       const provisional = await readSnapshot("provisional/2026-05-03.json");
       expect(provisional.status).toBe("provisional");
-      expect(provisional.metrics.stories).toEqual([1, 1, 1]);
+      expect(provisional.metrics.stories).toEqual([1, 1, 1, 1, 1, 1]);
       expect(await readdir(join(cfg.dataOutDir, "snapshots"))).toHaveLength(5);
       expect(await readdir(join(cfg.dataOutDir, "provisional"))).toHaveLength(2);
     } finally {

@@ -33,6 +33,7 @@ export const runOrchestrator = async (
     last,
     windowDays,
     stabilizationDays,
+    archiveFirst,
   });
   const maxTs = await fetchMaxTimestamp(deps.bq, { maxBytesBilled: cfg.maxBytesBilled });
   const initialAssets = await deps.release.listAssets();

@@ -23,7 +23,7 @@ export interface OrchestratorConfig {
   pipelineVersion: string;
   /** "Now" — injected for deterministic testing. */
   now: Date;
-  /** Optional window size override (default 730 = trailing 2y). */
+  /** Maximum displayed period (default 730). New feeds retain up to two periods for comparisons. */
   windowDays?: number;
   /** Legacy compatibility option; archived raw days are retained permanently. */
   retentionDays?: number;

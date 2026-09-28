@@ -66,7 +66,7 @@ export interface SnapshotBounds {
 }
 
 export interface SnapshotJson {
-  schemaVersion: 1;
+  schemaVersion: 1 | 2;
   windowStart: string;
   windowEnd: string;
   metrics: MetricSeries;

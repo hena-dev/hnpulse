@@ -7,7 +7,7 @@ import { METRIC_KEYS, type SnapshotBounds, type SnapshotJson } from "./types.ts"
 const day = z.string().refine(isSnapshotDay);
 export const SnapshotSchema = z
   .object({
-    schemaVersion: z.literal(1),
+    schemaVersion: z.union([z.literal(1), z.literal(2)]),
     windowStart: day,
     windowEnd: day,
     metrics: z.object(Object.fromEntries(METRIC_KEYS.map((key) => [key, z.array(z.number())]))),

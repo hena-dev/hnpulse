@@ -4,6 +4,7 @@ import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { enumerateUtcDays, parseUtcDay } from "../pipeline/src/dates/utc-day.ts";
 import { SnapshotJsonSchema } from "../pipeline/src/schema/snapshot.ts";
+import { snapshotWindowStart } from "../pipeline/src/snapshots/history.ts";
 
 export const assertFinalsUnchanged = (diff: string): void => {
   const changed = diff
@@ -36,7 +37,7 @@ export const checkSnapshotCoverage = (dataDir: string): number => {
     const snapshot = SnapshotJsonSchema.parse(JSON.parse(readFileSync(path, "utf8")));
     if (
       snapshot.windowEnd !== day ||
-      snapshot.metrics.stories.length !== 730 ||
+      snapshot.windowStart !== snapshotWindowStart(snapshot.schemaVersion, day, 730) ||
       snapshot.status !== (final ? "final" : "provisional")
     ) {
       throw new Error(`Invalid snapshot: ${path}`);

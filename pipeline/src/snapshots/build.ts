@@ -3,8 +3,9 @@ import { computeDomainShares } from "../domains/extract.ts";
 import type { KpisJson } from "../schema/kpis.ts";
 import { METRIC_KEYS, type MetricSeries } from "../schema/metrics.ts";
 import type { SnapshotJson } from "../schema/snapshot.ts";
-import { daysBetween, offsetDay } from "./dates.ts";
+import { daysBetween } from "./dates.ts";
 import { countDomains, slidingDomains } from "./domains.ts";
+import { comparisonHistoryStart } from "./history.ts";
 import type { SnapshotPlan } from "./store.ts";
 
 export const buildSnapshots = (args: {
@@ -23,10 +24,11 @@ export const buildSnapshots = (args: {
   const lastUpdated = args.now.toISOString();
   const build = (day: string): SnapshotJson => {
     const end = indexByDay.get(day) as number;
-    const start = end - windowDays + 1;
+    const windowStart = comparisonHistoryStart(day, windowDays, plan.archiveFirst);
+    const start = indexByDay.get(windowStart) as number;
     return {
-      schemaVersion: 1,
-      windowStart: offsetDay(day, 1 - windowDays),
+      schemaVersion: 2,
+      windowStart,
       windowEnd: day,
       metrics: Object.fromEntries(
         METRIC_KEYS.map((key) => [key, metrics[key].slice(start, end + 1)]),
@@ -36,15 +38,16 @@ export const buildSnapshots = (args: {
       status: day <= plan.finalThrough ? "final" : "provisional",
     };
   };
-  // Materialize one snapshot at a time: backfills otherwise multiply 730-day arrays in memory.
+  // Materialize one snapshot at a time to keep historical backfills bounded in memory.
   function* snapshots(): Generator<SnapshotJson> {
     for (const day of plan.pending) yield build(day);
   }
   const latestDomains = slidingDomains(dailyDomains, windowDays)(days.length - 1);
-  const latestStart = Math.max(0, days.length - windowDays);
+  const latestWindowStart = comparisonHistoryStart(plan.last, windowDays, plan.archiveFirst);
+  const latestStart = indexByDay.get(latestWindowStart) as number;
   const latest: KpisJson = {
     schemaVersion: 1,
-    windowStart: offsetDay(plan.last, 1 - windowDays),
+    windowStart: latestWindowStart,
     windowEnd: plan.last,
     days: days.slice(latestStart),
     metrics: Object.fromEntries(
