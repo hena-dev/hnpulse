@@ -4,7 +4,7 @@ import { assembleKpisJson, type DailyRow, type DomainRow } from "../aggregate/as
 import { buildDailyMetricsSql, buildDomainRowsSql } from "../aggregate/sql.ts";
 import { enumerateUtcDays, parseUtcDay } from "../dates/utc-day.ts";
 import type { DuckdbRunner } from "../duckdb/types.ts";
-import { pickParquetAssets } from "../release/policy.ts";
+import { parseParquetAssetDate, pickParquetAssets } from "../release/policy.ts";
 import type { ReleaseAsset, ReleaseManager } from "../release/types.ts";
 import type { KpisJson } from "../schema/kpis.ts";
 
@@ -18,6 +18,7 @@ export interface AggregateStepArgs {
   windowEnd: string;
   /** Asset names already known; we'll download every parquet asset. */
   assets: readonly ReleaseAsset[];
+  localFiles?: ReadonlyMap<string, string>;
 }
 
 export const downloadAllParquet = async (
@@ -47,14 +48,27 @@ export const downloadAllParquet = async (
   return files;
 };
 
-export const runAggregateStep = async (args: AggregateStepArgs): Promise<KpisJson> => {
+export const runAggregateRows = async (args: AggregateStepArgs) => {
   const localDir = join(args.tmpDir, "parquet-local");
-  await downloadAllParquet(args.release, args.assets, localDir);
+  const inWindow = (name: string): boolean => {
+    const day = parseParquetAssetDate(name);
+    return day !== null && day >= args.windowStart && day <= args.windowEnd;
+  };
+  const assets = args.assets.filter(
+    (asset) => inWindow(asset.name) && !args.localFiles?.has(asset.name),
+  );
+  const downloaded = await downloadAllParquet(args.release, assets, localDir);
+  const local = [...(args.localFiles ?? [])]
+    .filter(([name]) => inWindow(name))
+    .map(([, path]) => path);
+  const parquetPaths = [...downloaded, ...local];
+  if (parquetPaths.length === 0) throw new Error("No parquet inputs for aggregation");
   const glob = join(localDir, "items-*.parquet");
 
   const dailyRows = await args.duckdb.queryJson<DailyRow>(
     buildDailyMetricsSql({
       parquetGlob: glob,
+      parquetPaths,
       windowStart: args.windowStart,
       windowEnd: args.windowEnd,
     }),
@@ -62,10 +76,16 @@ export const runAggregateStep = async (args: AggregateStepArgs): Promise<KpisJso
   const domainRows = await args.duckdb.queryJson<DomainRow>(
     buildDomainRowsSql({
       parquetGlob: glob,
+      parquetPaths,
       windowStart: args.windowStart,
       windowEnd: args.windowEnd,
     }),
   );
+  return { dailyRows, domainRows };
+};
+
+export const runAggregateStep = async (args: AggregateStepArgs): Promise<KpisJson> => {
+  const rows = await runAggregateRows(args);
   const days = enumerateUtcDays(parseUtcDay(args.windowStart), parseUtcDay(args.windowEnd));
-  return assembleKpisJson({ days, dailyRows, domainRows });
+  return assembleKpisJson({ days, ...rows });
 };

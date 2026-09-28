@@ -3,6 +3,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { BqClient, BqQueryOptions } from "../bq/types.ts";
+import { offsetDay } from "../snapshots/dates.ts";
 import {
   bqRow,
   NOW,
@@ -30,6 +31,11 @@ const baseCfg = (overrides: Partial<Parameters<typeof runOrchestrator>[1]> = {})
   pipelineVersion: "1.0.0",
   now: NOW,
   windowDays: 7,
+  snapshotFirst: offsetDay((overrides.now ?? NOW).toISOString().slice(0, 10), -1),
+  archiveFirst: offsetDay(
+    (overrides.now ?? NOW).toISOString().slice(0, 10),
+    -(overrides.windowDays ?? 7),
+  ),
   ...overrides,
 });
 
@@ -80,11 +86,12 @@ describe("runOrchestrator — source planning", () => {
     expect(result.status).toBe("completed");
     expect(bqCalls).toEqual([
       {
-        since: Date.parse("2026-05-05T00:00:00Z") / 1000,
+        since: Date.parse("2026-05-04T00:00:00Z") / 1000,
         until: Date.parse("2026-05-10T00:00:00Z") / 1000,
       },
     ]);
     expect(release.uploads).toEqual([
+      "items-2026-05-04.parquet",
       "items-2026-05-05.parquet",
       "items-2026-05-06.parquet",
       "items-2026-05-07.parquet",

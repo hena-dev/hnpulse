@@ -4,18 +4,27 @@
  * Wires real BQ + GitHub Release + DuckDB clients into the orchestrator,
  * then prints the result and exits with the appropriate status code.
  */
+
+import { rm } from "node:fs/promises";
 import { join } from "node:path";
 import { createRealBqClient } from "./bq/real-client.ts";
 import { createRealDuckdbRunner } from "./duckdb/real-runner.ts";
 import { createRealHnApiClient } from "./hn-api/real-client.ts";
+import { parseUploadCap } from "./orchestrator/config.ts";
 import { runOrchestrator } from "./orchestrator/run.ts";
+import { createArchiveManager, paceArchiveWrites } from "./release/archive.ts";
 import { createRealReleaseManager, releaseEnvCoords } from "./release/real-manager.ts";
 
-const PIPELINE_VERSION = "1.0.0";
+const PIPELINE_VERSION = "1.1.0";
 const MAX_BYTES_BILLED = 50 * 2 ** 30; // 50 GB cap (§8.3)
 
 const repoRoot = process.env.GITHUB_WORKSPACE ?? join(import.meta.dir, "..", "..");
 const buildSha = process.env.GITHUB_SHA ?? "local";
+const dryRun = process.env.PIPELINE_DRY_RUN === "true";
+const uploadCap = parseUploadCap(process.env.PIPELINE_UPLOAD_CAP);
+const publishedDataDir = join(repoRoot, "web", "public", "data");
+const dataOutDir = dryRun ? join(repoRoot, "pipeline", "tmp", "dry-run-data") : publishedDataDir;
+if (dryRun) await rm(dataOutDir, { recursive: true, force: true });
 
 const pipelineNow = (): Date => {
   const raw = process.env.PIPELINE_NOW;
@@ -29,13 +38,20 @@ const result = await runOrchestrator(
   {
     bq: createRealBqClient(),
     hnApi: createRealHnApiClient(),
-    release: createRealReleaseManager(releaseEnvCoords()),
+    release: createArchiveManager(
+      (tag) => createRealReleaseManager({ ...releaseEnvCoords(), tag }),
+      new Date().getUTCFullYear(),
+      paceArchiveWrites(),
+    ),
     duckdb: createRealDuckdbRunner(),
   },
   {
     maxBytesBilled: MAX_BYTES_BILLED,
     tmpDir: join(repoRoot, "pipeline", "tmp"),
-    dataOutDir: join(repoRoot, "web", "public", "data"),
+    dataOutDir,
+    existingDataDir: publishedDataDir,
+    dryRun,
+    uploadCap,
     buildSha,
     pipelineVersion: PIPELINE_VERSION,
     now: pipelineNow(),

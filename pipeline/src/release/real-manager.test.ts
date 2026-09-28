@@ -69,10 +69,10 @@ describe("createRealReleaseManager", () => {
     expect(fetch).toHaveBeenCalledTimes(2);
   });
 
-  it("invalidates cached release asset listings after delete", async () => {
-    mocks.repos.listReleaseAssets
-      .mockResolvedValueOnce({ data: [asset(1, "items-old.parquet")] })
-      .mockResolvedValueOnce({ data: [asset(2, "items-new.parquet")] });
+  it("updates cached release asset listings after delete without another API listing", async () => {
+    mocks.repos.listReleaseAssets.mockResolvedValue({
+      data: [asset(1, "items-old.parquet"), asset(2, "items-new.parquet")],
+    });
     const releaseManager = createRealReleaseManager({
       owner: "hena-dev",
       repo: "hnpulse",
@@ -87,16 +87,14 @@ describe("createRealReleaseManager", () => {
       repo: "hnpulse",
       asset_id: 1,
     });
-    expect(mocks.repos.listReleaseAssets).toHaveBeenCalledTimes(2);
+    expect(mocks.repos.listReleaseAssets).toHaveBeenCalledTimes(1);
     expect(assets.map((a) => a.name)).toEqual(["items-new.parquet"]);
   });
 
-  it("invalidates cached release asset listings after upload", async () => {
+  it("updates cached release asset listings after upload without another API listing", async () => {
     const localPath = join(dir, "items-new.parquet");
     await writeFile(localPath, "parquet");
-    mocks.repos.listReleaseAssets
-      .mockResolvedValueOnce({ data: [asset(1, "items-old.parquet")] })
-      .mockResolvedValueOnce({ data: [asset(2, "items-new.parquet")] });
+    mocks.repos.listReleaseAssets.mockResolvedValue({ data: [asset(1, "items-old.parquet")] });
     mocks.repos.uploadReleaseAsset.mockResolvedValue({ data: asset(2, "items-new.parquet") });
     const releaseManager = createRealReleaseManager({
       owner: "hena-dev",
@@ -111,8 +109,9 @@ describe("createRealReleaseManager", () => {
     expect(mocks.repos.uploadReleaseAsset).toHaveBeenCalledWith(
       expect.objectContaining({ owner: "hena-dev", repo: "hnpulse", release_id: 42 }),
     );
-    expect(mocks.repos.listReleaseAssets).toHaveBeenCalledTimes(2);
-    expect(assets.map((a) => a.name)).toEqual(["items-new.parquet"]);
+    expect(mocks.repos.listReleaseAssets).toHaveBeenCalledTimes(1);
+    expect(mocks.repos.getReleaseByTag).toHaveBeenCalledTimes(1);
+    expect(assets.map((a) => a.name)).toEqual(["items-old.parquet", "items-new.parquet"]);
   });
 
   it("retries transient download failures before succeeding", async () => {

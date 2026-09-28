@@ -54,6 +54,8 @@ describe("runOrchestrator — aggregation path", () => {
         pipelineVersion: "1.0.0",
         now: new Date("2026-05-12T14:00:00Z"),
         windowDays: 5,
+        snapshotFirst: "2026-05-11",
+        archiveFirst: "2026-05-07",
         stabilizationDays: 7,
       },
     );

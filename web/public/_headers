@@ -1,5 +1,11 @@
-# Daily data is updated in place; revalidate after five minutes, with at most one hour stale.
-/data/*
+# Published final snapshots never change. Other feeds remain revalidatable.
+/data/snapshots/*
+  Cache-Control: public, max-age=31536000, immutable
+/data/provisional/*
+  Cache-Control: public, max-age=0, must-revalidate
+/data/meta.json
+  Cache-Control: public, max-age=300, stale-while-revalidate=3600
+/data/kpis*
   Cache-Control: public, max-age=300, stale-while-revalidate=3600
 
 # HTML paths are explicit so they cannot overlap build-generated immutable asset rules.

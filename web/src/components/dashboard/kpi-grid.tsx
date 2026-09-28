@@ -1,4 +1,4 @@
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 import type { MetaJson, TopDomainEntry } from "../../data/types.ts";
 import type { KpiSummaries } from "../../lib/dashboard-data.ts";
 import { formatDateOnly } from "../../lib/format/date.ts";
@@ -20,6 +20,7 @@ export interface KpiGridProps {
   intlLocale: string;
   hrefForRange: (range: RangeId) => string;
   onRangeChange?: (range: RangeId) => void;
+  dateControl?: ReactNode;
 }
 
 const localizeEntry = (entry: KpiEntry, messages: Messages): KpiEntry => {
@@ -95,6 +96,7 @@ export const KpiGrid = ({
   intlLocale,
   hrefForRange,
   onRangeChange,
+  dateControl,
 }: KpiGridProps): JSX.Element => (
   <div className="flex flex-col gap-4">
     <div className="flex items-center justify-between flex-wrap gap-2">
@@ -105,11 +107,13 @@ export const KpiGrid = ({
         hrefForRange={hrefForRange}
         {...(onRangeChange === undefined ? {} : { onRangeChange })}
       />
-      <span className="text-xs text-muted-foreground">
-        {formatMessage(messages.dashboard.asOf, {
-          date: formatDateOnly(meta.dataAsOf, intlLocale),
-        })}
-      </span>
+      {dateControl ?? (
+        <span className="text-xs text-muted-foreground">
+          {formatMessage(messages.dashboard.asOf, {
+            date: formatDateOnly(meta.dataAsOf, intlLocale),
+          })}
+        </span>
+      )}
     </div>
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
       {[...primaryKpis, ...secondaryKpis].map((e) =>

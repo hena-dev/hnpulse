@@ -40,15 +40,17 @@ describe("pickParquetAssets", () => {
 });
 
 describe("pickAssetsToDelete", () => {
-  it("returns assets older than today - retentionDays", () => {
+  it("keeps the permanent archive even beyond the old rolling cutoff", () => {
     const today = new Date("2026-05-04T00:00:00Z");
     const assets = [
       { name: "items-2024-05-04.parquet", size: 1, url: "u" }, // exactly 730 days ago, KEEP
-      { name: "items-2024-05-03.parquet", size: 1, url: "u" }, // 731 days ago, DELETE
+      { name: "items-2024-05-03.parquet", size: 1, url: "u" },
+      { name: "items-2023-01-01.parquet", size: 1, url: "u" },
+      { name: "items-2022-12-31.parquet", size: 1, url: "u" },
       { name: "items-2026-05-03.parquet", size: 1, url: "u" }, // recent, KEEP
       { name: "noise.txt", size: 1, url: "u" }, // ignored
     ];
-    expect(pickAssetsToDelete(assets, today, 730)).toEqual(["items-2024-05-03.parquet"]);
+    expect(pickAssetsToDelete(assets, today, 730)).toEqual(["items-2022-12-31.parquet"]);
   });
 
   it("returns empty array when no asset is too old", () => {

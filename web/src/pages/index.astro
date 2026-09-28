@@ -66,7 +66,7 @@ const redirectTargets = localeRedirectTargets();
           break;
         }
       }
-      window.location.replace(target);
+      window.location.replace(target + window.location.search + window.location.hash);
     </script>
   </head>
   <body class="min-h-screen bg-background text-foreground">

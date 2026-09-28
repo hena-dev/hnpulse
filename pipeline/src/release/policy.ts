@@ -31,7 +31,8 @@ export const pickAssetsToDelete = (
   for (const a of assets) {
     const day = parseParquetAssetDate(a.name);
     if (day === null) continue;
-    if (parseUtcDay(day).getTime() < cutoff) out.push(a.name);
+    // Historical raw inputs are permanent from the archive's fixed start date.
+    if (day < "2023-01-01" && parseUtcDay(day).getTime() < cutoff) out.push(a.name);
   }
   return out;
 };

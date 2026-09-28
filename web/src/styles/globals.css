@@ -166,3 +166,14 @@
     border: 0;
   }
 }
+/* A dot marks mutable snapshots without relying on color alone. */
+.snapshot-provisional button::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.snapshot-provisional button { position: relative; }
