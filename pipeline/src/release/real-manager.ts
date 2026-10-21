@@ -1,6 +1,7 @@
 import { createReadStream } from "node:fs";
 import { stat, writeFile } from "node:fs/promises";
 import { Octokit } from "@octokit/rest";
+import { retryGitHubRead } from "./github-read.ts";
 import type { GitHubReleaseAssetPageItem } from "./paginate.ts";
 import { listReleaseAssetsAllPages } from "./paginate.ts";
 import type { ReleaseAsset, ReleaseManager } from "./types.ts";
@@ -49,7 +50,7 @@ const ensureRelease = async (
   create: boolean,
 ): Promise<{ id: number; uploadUrl: string } | null> => {
   try {
-    const r = await octokit.rest.repos.getReleaseByTag({ owner, repo, tag });
+    const r = await retryGitHubRead(() => octokit.rest.repos.getReleaseByTag({ owner, repo, tag }));
     return { id: r.data.id, uploadUrl: r.data.upload_url };
   } catch (error) {
     if ((error as { status?: number }).status !== 404) throw error;
@@ -84,13 +85,15 @@ export const createRealReleaseManager = (args: RealManagerArgs): ReleaseManager 
     if (release === null) return [];
     const { id } = release;
     return listReleaseAssetsAllPages(async (page, perPage) => {
-      const r = await octokit.rest.repos.listReleaseAssets({
-        owner,
-        repo,
-        release_id: id,
-        per_page: perPage,
-        page,
-      });
+      const r = await retryGitHubRead(() =>
+        octokit.rest.repos.listReleaseAssets({
+          owner,
+          repo,
+          release_id: id,
+          per_page: perPage,
+          page,
+        }),
+      );
       return r.data;
     });
   };
